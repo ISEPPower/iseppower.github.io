@@ -115,4 +115,4 @@ Shared blog copy, translated categories and route helpers live in `src/utils/blo
 
 ## Home loading indicator
 
-`src/components/HomeLoader.astro` uses the supplied circular `public/logos/ISEPOWERLOGO-circle.png` logo. Astro generates a small WebP asset for the loader. The overlay appears only while the home page loads and is removed on the load event, with a six-second fallback. It remains hidden without JavaScript, respects reduced-motion preferences, and dismisses on back/forward cache restoration. No artificial minimum waiting time is added.
+`src/components/HomeLoader.astro` uses the supplied circular `public/logos/ISEPOWERLOGO-circle.png` logo. Astro generates a small WebP asset for the loader. The overlay stays visible for at least 1.5 seconds and dismisses after the page has loaded, with a six-second fallback. It remains hidden without JavaScript, respects reduced-motion preferences, and dismisses on back/forward cache restoration. The minimum display duration is controlled by minimumDuration in HomeLoader.astro.

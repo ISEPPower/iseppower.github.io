@@ -14,20 +14,28 @@ import circleLogo from '../../public/logos/ISEPOWERLOGO-circle.png';
 <script is:inline>
   (() => {
     const loader = document.getElementById('home-loader');
-    if (!loader || document.readyState === 'complete') return;
+    if (!loader) return;
     // Progressive enhancement: without JavaScript, the overlay stays hidden.
     loader.hidden = false;
+    const minimumDuration = 1500;
+    const startedAt = performance.now();
+    let minimumTimer;
     let dismissed = false;
     const dismiss = () => {
       if (dismissed) return;
       dismissed = true;
       clearTimeout(fallback);
+      clearTimeout(minimumTimer);
       loader.hidden = true;
-      window.removeEventListener('load', dismiss);
+      window.removeEventListener('load', finishLoading);
+    };
+    const finishLoading = () => {
+      minimumTimer = setTimeout(dismiss, Math.max(0, minimumDuration - (performance.now() - startedAt)));
     };
     // A slow or failed asset must never leave the page covered indefinitely.
     const fallback = setTimeout(dismiss, 6000);
-    window.addEventListener('load', dismiss, { once: true });
+    if (document.readyState === 'complete') finishLoading();
+    else window.addEventListener('load', finishLoading, { once: true });
     window.addEventListener('pageshow', event => {
       if (event.persisted) dismiss();
     }, { once: true });
