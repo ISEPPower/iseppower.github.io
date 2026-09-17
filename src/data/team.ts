@@ -36,4 +36,15 @@ export const team: TeamMember[] = [{
   bio: [],
   email: '1220717@ISEP.IPP.PT',
   image: 'images/team/laura-branco-murias.jpg',
+}, {
+  name: 'Sepehr Shojaee',
+  role: 'Software Engineer & Researcher · GECAD',
+  bio: [
+    'Sepehr Shojaee is a Software Engineer and Researcher with over 10 years of professional experience in software development, particularly in backend systems and .NET technologies.',
+    'He is currently a Researcher at GECAD-Research Group on Intelligent Engineering and Computing for Advanced Innovation and Development, ISEP/IPP, Portugal, and is pursuing a Master’s degree in Artificial Intelligence at the Polytechnic Institute of Porto.',
+    'His current work focuses on the development of intelligent software solutions for energy systems and energy communities, including data integration, simulation, data analysis, and performance evaluation. His research interests include artificial intelligence, software engineering, intelligent systems, data analytics, optimization, distributed energy resources, energy communities, and smart energy systems.',
+  ],
+  linkedin: 'https://www.linkedin.com/in/sepehrshojaee/',
+  email: '1260448@ISEP.IPP.PT',
+  image: 'images/team/sepehr-shojaee.png',
 }];
