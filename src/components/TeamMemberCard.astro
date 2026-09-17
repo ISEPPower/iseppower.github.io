@@ -10,7 +10,14 @@ const { member } = Astro.props;
   </div>
   <h3>{member.name}</h3>
   {member.role && <p><strong>{member.role}</strong></p>}
-  {member.bio.map(paragraph => <p>{paragraph}</p>)}
+  {member.bio.map(paragraph => <p>{paragraph.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map(part =>
+    part.startsWith('**') && part.endsWith('**')
+      ? <strong>{part.slice(2, -2)}</strong>
+      : part.startsWith('*') && part.endsWith('*')
+        ? <em>{part.slice(1, -1)}</em>
+        : part
+  )}</p>)}
+  {member.sources?.length && <p class="team-sources">Sources: {member.sources.map((source, index) => <><span>{index > 0 ? ' · ' : ''}</span><a href={source.url}>{source.label}</a></>)}</p>}
   <div class="team-links">
     {member.linkedin && <a href={member.linkedin} aria-label={member.name + ' on LinkedIn'}>LinkedIn ↗</a>}
     {member.github && <a href={member.github} aria-label={member.name + ' on GitHub'}>GitHub ↗</a>}
