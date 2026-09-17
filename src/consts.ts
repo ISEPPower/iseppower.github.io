@@ -5,5 +5,5 @@ export const SITE_TITLE = 'ISEPower';
 export const PROJECT_TITLE = 'Demand Response Advisor for Smart Grids';
 export const SITE_DESCRIPTION =
 	'An intelligent advisory system for demand response in smart grids.';
-export const REPOSITORY_URL = 'https://github.com/Equipa-10-MEIA/demand-response-advisor';
+export const REPOSITORY_URL = 'https://github.com/ISEPPower/iseppower.github.io';
 export const BLOG_CATEGORIES = ['Project Updates', 'Knowledge Acquisition', 'Knowledge Representation', 'Prototype', 'Research', 'Results'] as const;

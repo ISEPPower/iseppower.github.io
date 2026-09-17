@@ -15,7 +15,7 @@ npm ci
 npm run dev -- --background
 ```
 
-Open http://localhost:4321/ (use the port reported by Astro if different). The development server uses `/`; production builds retain the GitHub Pages project path `/demand-response-advisor/`.
+Open http://localhost:4321/ (use the port reported by Astro if different). Both local development and production use the root path `/`.
 
 ```sh
 npm run astro -- dev status
@@ -65,16 +65,16 @@ Navy, blue, cyan and energy-green accents; locally hosted sans-serif fonts; rest
 
 ## GitHub Pages preparation
 
-`astro.config.mjs` uses the organization site `https://Equipa-10-MEIA.github.io`, repository base `/demand-response-advisor`, static output and trailing slashes. Use `sitePath()` for new internal links and public assets. The base also applies locally.
+`astro.config.mjs` uses the organization site `https://iseppower.github.io`, base `/`, static output and trailing slashes. Use `sitePath()` for new internal links and public assets. The base also applies locally.
 
 The workflow in `.github/workflows/deploy.yml` runs **only on manual dispatch**. Nothing has been deployed by this change. When ready:
 
 1. Review the content and commit/push the website and lockfile to the repository's default branch.
-2. In GitHub Settings ? Pages, select GitHub Actions as the source.
-3. In Actions, manually run ?Deploy to GitHub Pages?.
+2. In GitHub Settings > Pages, select GitHub Actions as the source.
+3. In Actions, manually run `Deploy to GitHub Pages`.
 4. Verify the published routes, styles, RSS and sitemap under the repository base.
 
-Prepared publication URL: https://equipa-10-meia.github.io/demand-response-advisor/
+Prepared publication URL: https://iseppower.github.io/
 
 Reference: [Astro's GitHub Pages guide](https://docs.astro.build/en/guides/deploy/github/).
 

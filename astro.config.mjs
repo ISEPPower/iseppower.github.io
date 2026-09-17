@@ -6,9 +6,8 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://Equipa-10-MEIA.github.io',
-	// Serve local development at / while retaining the GitHub project path in builds.
-	base: process.env.NODE_ENV === 'development' ? '/' : '/demand-response-advisor',
+	site: 'https://iseppower.github.io',
+	base: '/',
 	trailingSlash: 'always',
 	output: 'static',
 	integrations: [mdx(), sitemap()],
