@@ -15,7 +15,7 @@ npm ci
 npm run dev -- --background
 ```
 
-Open http://localhost:4321/demand-response-advisor/ (use the port reported by Astro if different).
+Open http://localhost:4321/ (use the port reported by Astro if different). The development server uses `/`; production builds retain the GitHub Pages project path `/demand-response-advisor/`.
 
 ```sh
 npm run astro -- dev status
