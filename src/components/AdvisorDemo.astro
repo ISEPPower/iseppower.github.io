@@ -1,0 +1,92 @@
+---
+import type { Locale } from '../utils/i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const pt = locale === 'pt';
+const t = {
+  now: pt ? 'Preço agora (€/kWh)' : 'Price now (€/kWh)',
+  later: pt ? 'Preço mais tarde (€/kWh)' : 'Price later (€/kWh)',
+  energy: pt ? 'Energia da tarefa (kWh)' : 'Task energy (kWh)',
+  flexible: pt ? 'A tarefa pode esperar pelo período seguinte, respeitando o prazo e as minhas necessidades.' : 'The task can wait for the later window, within my deadline and needs.',
+  rule: pt ? 'Regra aplicada' : 'Rule applied',
+  R1: pt ? 'Manter o horário. A restrição do utilizador tem prioridade sobre o preço.' : 'Keep the schedule. The user constraint takes priority over price.',
+  R2: pt ? 'Manter o horário. O período seguinte não tem um preço inferior.' : 'Keep the schedule. The later window is not cheaper.',
+  R3: pt ? 'Considerar adiar a tarefa. Existe flexibilidade e o preço seguinte é inferior.' : 'Consider delaying the task. Flexibility is available and the later price is lower.',
+  difference: pt ? 'Diferença de custo ilustrativa (agora − mais tarde)' : 'Illustrative cost difference (now − later)',
+};
+---
+<div class="advisor-demo" data-advisor-demo data-locale={locale} data-copy={JSON.stringify(t)}>
+  <span class="badge">{pt ? 'Exemplo educativo · Dados fictícios' : 'Educational example · Fictional inputs'}</span>
+  <h3>{pt ? 'E se uma tarefa pudesse esperar?' : 'What if a task could wait?'}</h3>
+  <p>{pt ? 'Explore três regras simples. Este exemplo explica o conceito; não é o protótipo de investigação nem utiliza tarifas reais.' : 'Explore three simple rules. This example explains the concept; it is not the research prototype and does not use live tariffs.'}</p>
+  <form hidden>
+    <fieldset>
+      <legend>{pt ? 'Altere o cenário' : 'Adjust the scenario'}</legend>
+      <div class="demo-inputs">
+        <label>{t.now}<input name="now" type="number" min="0" max="2" step="0.01" value="0.30" required /></label>
+        <label>{t.later}<input name="later" type="number" min="0" max="2" step="0.01" value="0.15" required /></label>
+        <label>{t.energy}<input name="energy" type="number" min="0.1" max="50" step="0.1" value="2" required /></label>
+      </div>
+      <label class="flexibility"><input name="flexible" type="checkbox" checked />{t.flexible}</label>
+      <button class="button" type="submit">{pt ? 'Ver recomendação' : 'Show recommendation'}</button>
+    </fieldset>
+  </form>
+  <noscript><p>{pt ? 'Ative o JavaScript para alterar os dados. O exemplo abaixo usa 2 kWh a 0,30 €/kWh agora e 0,15 €/kWh mais tarde, com flexibilidade.' : 'Enable JavaScript to adjust the inputs. The example below uses 2 kWh at €0.30/kWh now and €0.15/kWh later, with flexibility.'}</p></noscript>
+  <div class="demo-result" role="status" aria-live="polite" aria-atomic="true">
+    <p class="eyebrow" data-rule>{t.rule}: R3</p>
+    <p data-recommendation>{t.R3}</p>
+    <div class="cost-row"><span>{pt ? 'Agora' : 'Now'}</span><strong data-now-cost>{pt ? '0,60 €' : '€0.60'}</strong><span class="cost-bar" aria-hidden="true"><i data-now-bar style="width:100%"></i></span></div>
+    <div class="cost-row"><span>{pt ? 'Mais tarde' : 'Later'}</span><strong data-later-cost>{pt ? '0,30 €' : '€0.30'}</strong><span class="cost-bar" aria-hidden="true"><i data-later-bar style="width:50%"></i></span></div>
+    <p data-difference>{t.difference}: {pt ? '0,30 €' : '€0.30'}</p>
+  </div>
+  <details><summary>{pt ? 'Regras e pressupostos' : 'Rules and assumptions'}</summary>
+    <ol><li>R1: {t.R1}</li><li>R2: {t.R2}</li><li>R3: {t.R3}</li></ol>
+    <p>{pt ? 'Custo = energia × preço. A energia consumida é igual nos dois períodos. Não se modelam impostos, potência, duração, conforto ou restrições da rede; a flexibilidade é declarada pelo utilizador. A diferença calculada não é uma poupança medida nem uma redução de energia.' : 'Cost = energy × price. Energy use is the same in both windows. Taxes, power, duration, comfort and grid constraints are not modelled; flexibility is declared by the user. The calculated difference is not measured savings or an energy reduction.'}</p>
+  </details>
+</div>
+<script>
+  import { evaluateScenario } from '../utils/advisor-demo';
+  document.querySelectorAll<HTMLElement>('[data-advisor-demo]').forEach(root => {
+    const form = root.querySelector<HTMLFormElement>('form')!;
+    const copy = JSON.parse(root.dataset.copy!);
+    const money = new Intl.NumberFormat(root.dataset.locale === 'pt' ? 'pt-PT' : 'en-IE', { style: 'currency', currency: 'EUR' });
+    const set = (selector: string, value: string) => { root.querySelector<HTMLElement>(selector)!.textContent = value; };
+    const update = () => {
+      const input = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+      const result = evaluateScenario(input('now').valueAsNumber, input('later').valueAsNumber, input('energy').valueAsNumber, input('flexible').checked);
+      set('[data-rule]', `${copy.rule}: ${result.rule}`);
+      set('[data-recommendation]', copy[result.rule]);
+      set('[data-now-cost]', money.format(result.currentCost));
+      set('[data-later-cost]', money.format(result.laterCost));
+      set('[data-difference]', `${copy.difference}: ${money.format(result.difference)}`);
+      const maximum = Math.max(result.currentCost, result.laterCost, 0.01);
+      root.querySelector<HTMLElement>('[data-now-bar]')!.style.width = `${result.currentCost / maximum * 100}%`;
+      root.querySelector<HTMLElement>('[data-later-bar]')!.style.width = `${result.laterCost / maximum * 100}%`;
+    };
+    form.addEventListener('submit', event => { event.preventDefault(); if (form.reportValidity()) update(); });
+    update();
+    form.hidden = false;
+  });
+</script>
+<style>
+  .advisor-demo { border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.25rem, 3vw, 2.5rem); background: white; }
+  h3 { margin-top: 1rem; }
+  p, li { color: var(--muted); }
+  fieldset { border: 0; padding: 0; margin: 1.5rem 0; min-width: 0; }
+  legend { font-weight: 700; margin-bottom: 1rem; }
+  .demo-inputs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  label { font-size: .9rem; }
+  input[type=number] { display: block; width: 100%; margin-top: .5rem; border: 1px solid #879aa7; border-radius: 6px; padding: .75rem; color: var(--navy); background: white; font: inherit; }
+  .flexibility { display: flex; align-items: flex-start; gap: .7rem; margin: 1.25rem 0; cursor: pointer; }
+  input[type=checkbox] { width: 20px; height: 20px; flex-shrink: 0; accent-color: var(--blue); }
+  button { cursor: pointer; font-family: inherit; }
+  .demo-result { padding: 1.5rem; background: var(--surface); border-radius: 8px; margin-bottom: 1.5rem; }
+  .cost-row { display: grid; grid-template-columns: 5.5rem 5rem 1fr; align-items: center; gap: .5rem; margin: .75rem 0; font-size: .9rem; }
+  .cost-bar { background: #dbe5e9; height: 10px; border-radius: 6px; overflow: hidden; }
+  .cost-bar i { display: block; height: 100%; background: var(--blue); }
+  .cost-bar [data-later-bar] { background: #219753; }
+  [data-difference] { font-size: .85rem; margin: 1rem 0 0; }
+  summary { cursor: pointer; font-weight: 700; padding: .4rem 0; }
+  details p, details li { font-size: .9rem; }
+  @media(max-width: 560px) { .demo-inputs { grid-template-columns: 1fr; }.cost-row { grid-template-columns: 5rem 4.5rem 1fr; }.demo-result { padding: 1rem; } }
+</style>

@@ -5,7 +5,7 @@ import SiteLayout from './SiteLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { blogText, blogIndexPath, categoryLabel, type LanguageLink } from '../utils/blog';
 type Props = CollectionEntry<'blog'>['data'] & { alternates: LanguageLink[] };
-const { title, description, pubDate, updatedDate, heroImage, category, lang, alternates } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, lang, alternates, week, reportStatus, authors, contributions } = Astro.props;
 const text = blogText[lang];
 ---
 <SiteLayout title={title} description={description} type="article" locale={lang} alternates={alternates}>
@@ -15,11 +15,17 @@ const text = blogText[lang];
       <h1>{title}</h1><p class="lead">{description}</p>
       <div class="post-meta">
         <span class="badge">{categoryLabel(category, lang)}</span>
-        <FormattedDate date={pubDate} locale={lang} /><span>Equipa 10</span>
+        <FormattedDate date={pubDate} locale={lang} /><span>{authors.join(', ')}</span>
+        {week && <span>{lang === 'pt' ? 'Semana' : 'Week'} {week}</span>}
+        {reportStatus && <span>{reportStatus === 'in-progress' ? (lang === 'pt' ? 'Em curso' : 'In progress') : (lang === 'pt' ? 'Concluído' : 'Complete')}</span>}
         {updatedDate && <span>{text.updated} <FormattedDate date={updatedDate} locale={lang} /></span>}
       </div>
     </header>
     {heroImage && <Image src={heroImage} width={780} alt="" />}
     <div class="prose"><slot /></div>
+    <section class="callout" aria-labelledby="contributions-heading">
+      <h2 id="contributions-heading">{lang === 'pt' ? 'Contributos da equipa' : 'Team contributions'}</h2>
+      {contributions.length ? <ul>{contributions.map(item => <li><strong>{item.name}</strong>: {item.task}</li>)}</ul> : <p>{lang === 'pt' ? 'Os contributos individuais desta semana ainda não estão registados.' : 'Individual contributions for this week have not yet been recorded.'}</p>}
+    </section>
   </article>
 </SiteLayout>

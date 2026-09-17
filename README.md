@@ -57,7 +57,17 @@ Add one object per confirmed person in `src/data/team.ts`. Use an array of parag
 
 ## Remaining content
 
-Confirm team identities and responsibilities; project scope and scenarios; knowledge sources, datasets and any expert participation; knowledge representation and inference strategy; prototype tools and evaluation criteria; actual timeline dates and progress. The six-week timeline is a proposed outline only. The kickoff date is the date the initial post was created and can be edited before publication.
+The project is in week 1. Confirm responsibilities, scope, scenarios, sources and expert participation before recording them as facts. Later stages are proposed and have no dates; the speculative six-week schedule has been removed. The opening report retains its original publication date and is marked in progress.
+
+## Weekly reporting and project documentation
+
+- `src/data/project.ts` holds the shared English/Portuguese week 1 status and proposed stages.
+- `src/components/ProjectHub.astro` groups the project question, stages, available documents, educational demo and contribution/session notes. Add deliverables only when real links exist, and label the file language and format.
+- `docs/templates/` contains paired English/Portuguese weekly report and expert-session templates. These files are outside the published content collection. Replace every placeholder before copying a template into `src/content/blog/` and `src/content/blog/pt/`.
+- Reports support `week`, `reportStatus` (`in-progress` or `complete`), `authors` and `contributions` (objects with `name` and translated `task`). Keep translation keys paired. Only record confirmed contributions; an empty list displays a short pending note.
+- The initial report stays at `/blog/project-kickoff/` and its Portuguese equivalent, preserving existing links. It contains a conceptual diagram and links to actual website outputs.
+- `AdvisorDemo.astro` uses fictional prices and equal task energy in two windows. Its three rules are educational, not the research inference engine. It shows signed cost differences, respects the declared flexibility constraint and uses native form validation. It has a static explanation without JavaScript.
+- Run `node --test tests/advisor-demo.test.mjs` on Node 24 to check constraint priority, price comparisons, zero prices and invalid inputs.
 
 ## Design and implementation
 

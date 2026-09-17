@@ -1,9 +1,24 @@
----
-import type { Locale } from '../utils/i18n';
+﻿---
+import { projectCopy } from '../data/project';
+import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale?: Locale; }
 const { locale = 'en' } = Astro.props;
-const stages = locale === 'pt'
-  ? [['Âmbito e cenários', 'Por definir'], ['Aquisição de conhecimento', 'Planeada'], ['Representação do conhecimento', 'Planeada'], ['Protótipo e avaliação', 'Planeados']]
-  : [['Scope & scenarios', 'To be defined'], ['Knowledge acquisition', 'Planned'], ['Knowledge representation', 'Planned'], ['Prototype & evaluation', 'Planned']];
+const t = projectCopy[locale];
 ---
-<div class="status-panel"><div><span class="badge">{locale === 'pt' ? 'Em desenvolvimento' : 'Under development'}</span><h3>{locale === 'pt' ? 'Do conceito do projeto a um protótipo de aconselhamento' : 'From project concept to an advisory prototype'}</h3><p>{locale === 'pt' ? 'Este site documenta a abordagem proposta. Os marcos técnicos e as evidências serão acrescentados à medida que o trabalho for concluído.' : 'This site documents the proposed direction. Technical milestones and evidence will be added as work is completed.'}</p></div><dl class="status-list">{stages.map(([stage, status]) => <div><dt>{stage}</dt><dd>{status}</dd></div>)}</dl></div>
+<p>{t.stageIntro}</p>
+<ol class="project-stages">
+  {t.stages.map(([title, description], index) => <li aria-current={index === 0 ? 'step' : undefined}>
+    <span class="stage-number" aria-hidden="true">0{index + 1}</span>
+    <div><span class:list={['badge', { future: index > 0 }]}>{index === 0 ? `${t.week} · ${t.active}` : t.planned}</span><h3>{title}</h3><p>{description}</p>
+    {index === 0 && <a href={localizedPath(locale, 'blog/project-kickoff/')}>{t.read} →</a>}</div>
+  </li>)}
+</ol>
+<style>
+  .project-stages { list-style: none; padding: 0; margin: 2rem 0; }
+  li { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1rem; padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+  .stage-number { font-size: .9rem; color: var(--muted); padding-top: .15rem; }
+  li[aria-current] .stage-number { color: var(--blue); font-weight: 700; }
+  h3 { margin: .8rem 0 .5rem; }
+  p { color: var(--muted); margin-bottom: .6rem; }
+  .future { background: var(--surface); color: var(--muted); }
+</style>

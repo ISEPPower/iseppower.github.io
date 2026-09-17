@@ -2,7 +2,6 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Hero from './Hero.astro';
 import PostCard from './PostCard.astro';
-import { BLOG_CATEGORIES } from '../consts';
 import { blogText, blogIndexPath, categoryLabel, getBlogPosts, type BlogLocale } from '../utils/blog';
 interface Props { locale: BlogLocale; }
 const { locale } = Astro.props;
@@ -15,7 +14,7 @@ const alternates = (['en', 'pt'] as const).map(language => ({ locale: language, 
   <section class="container section">
     <div class="section-title">
       <h2>{text.updates}</h2><p>{text.introduction}</p>
-      <ul class="topic-list" aria-label={text.categories}>{BLOG_CATEGORIES.map(category => <li>{categoryLabel(category, locale)}</li>)}</ul>
+      <ul class="topic-list" aria-label={text.categories}>{[...new Set(posts.map(post => post.data.category))].map(category => <li>{categoryLabel(category, locale)}</li>)}</ul>
     </div>
     <div class="post-list">{posts.length ? posts.map(post => <PostCard post={post} />) : <p>{text.empty}</p>}</div>
   </section>
