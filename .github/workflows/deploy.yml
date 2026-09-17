@@ -1,9 +1,9 @@
 name: Deploy to GitHub Pages
 
-# Publish the website from dev, with manual reruns available in Actions.
+# Release only main. Development changes reach main through a pull request.
 on:
   push:
-    branches: [dev]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -17,6 +17,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -26,6 +27,7 @@ jobs:
         with:
           node-version: 24
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
