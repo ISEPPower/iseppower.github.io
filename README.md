@@ -51,7 +51,7 @@ translationKey: 'your-update'
 
 Replace the sample date with the actual publication date. Optional fields: `updatedDate` and `heroImage`. Categories: Project Updates, Knowledge Acquisition, Knowledge Representation, Prototype, Research, Results. Use the same translationKey for the English and Portuguese versions. All collection entries are published at build time; there is no draft or scheduled-publication mechanism. Index, home and RSS sort by publication date.
 
-Add one object per confirmed person in `src/data/team.ts`. Optional fields are `linkedin`, `github` (full URLs), and `image` (a path relative to `public/`, such as `images/member.jpg`). Missing links do not render dead anchors. The single placeholder does not imply a team size.
+Add one object per confirmed person in `src/data/team.ts`. Use an array of paragraphs for `bio`. Optional fields are `email`, `linkedin`, `github` (full URLs), and `image` (a path relative to `public/`, such as `images/member.jpg`). Missing links do not render dead anchors. Add further members as their details become available.
 
 ## Remaining content
 
