@@ -10,7 +10,7 @@ export interface TeamMember {
 // Replace this placeholder and add one entry per confirmed team member.
 // No team size or identities have been assumed.
 export const team: TeamMember[] = [{
-  name: 'Team member ? to be added',
+  name: 'Team member — to be added',
   role: 'Role to be defined',
   bio: 'Member details and a short biography will be added during the project.',
 }];
