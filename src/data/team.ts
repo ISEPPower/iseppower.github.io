@@ -20,4 +20,14 @@ export const team: TeamMember[] = [{
   linkedin: 'https://www.linkedin.com/in/bernardo-granja-cardoso/',
   email: '1231090@ISEP.IPP.PT',
   image: 'images/team/bernardo-cardoso.jpg',
+}, {
+  name: 'Francisco Lousada',
+  role: 'Researcher · SoftCPS',
+  bio: [
+    'Francisco Lousada is a Portuguese researcher and member of the Software for Cyber Physical Systems (SoftCPS) research group at the School of Engineering of the Polytechnic of Porto (ISEP), where he is currently pursuing his bachelor’s degree in Informatics Engineering.',
+    'Driven by a practical approach to real-world problems, Francisco focuses on software engineering best practices, organization, and teamwork. He is dedicated to building robust software and continuously deepening his technical knowledge through both academic research and personal study. His interests also lie in Artificial Intelligence, specifically in Computer Vision, Neural Networks, and Machine Learning, areas where he is looking to gain more hands-on experience and insight.',
+    'When he is not focused on his studies or research, Francisco enjoys playing and learning the guitar, watching movies, listening to music, and gaming.',
+  ],
+  linkedin: 'https://www.linkedin.com/in/francisco-lousada/',
+  email: '1231092@ISEP.IPP.PT',
 }];
