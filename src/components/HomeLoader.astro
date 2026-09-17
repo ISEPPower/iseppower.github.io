@@ -50,10 +50,10 @@ const { locale = 'en' } = Astro.props;
   .loader-content { text-align: center; padding: 2rem; }
   .loader-logo { position: relative; width: 200px; height: 200px; display: grid; place-items: center; margin: 0 auto 1.5rem; }
   .loader-logo::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid #dbe5e9; border-top-color: #145ccd; border-right-color: #219753; animation: loader-orbit 1.2s linear infinite; }
-  .loader-logo img { border-radius: 50%; width: 176px; height: 176px; }
+  .loader-logo img { border-radius: 50%; width: 176px; height: 176px; animation: loader-orbit 1.5s linear infinite; }
   .loader-content p { font-weight: 700; color: var(--navy); margin-bottom: .4rem; }
   .loader-content span { color: var(--muted); font-size: .85rem; }
   @keyframes loader-orbit { to { transform: rotate(360deg); } }
   @keyframes loader-safety { to { visibility: hidden; } }
-  @media (prefers-reduced-motion: reduce) { .loader-logo::before { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .loader-logo::before, .loader-logo img { animation: none; } }
 </style>
