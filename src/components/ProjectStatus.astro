@@ -1,4 +1,9 @@
 ---
-const stages = [['Scope & scenarios', 'To be defined'], ['Knowledge acquisition', 'Planned'], ['Knowledge representation', 'Planned'], ['Prototype & evaluation', 'Planned']];
+import type { Locale } from '../utils/i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const stages = locale === 'pt'
+  ? [['Âmbito e cenários', 'Por definir'], ['Aquisição de conhecimento', 'Planeada'], ['Representação do conhecimento', 'Planeada'], ['Protótipo e avaliação', 'Planeados']]
+  : [['Scope & scenarios', 'To be defined'], ['Knowledge acquisition', 'Planned'], ['Knowledge representation', 'Planned'], ['Prototype & evaluation', 'Planned']];
 ---
-<div class="status-panel"><div><span class="badge">Under development</span><h3>From project concept to an advisory prototype</h3><p>This site documents the proposed direction. Technical milestones and evidence will be added as work is completed.</p></div><dl class="status-list">{stages.map(([stage, status]) => <div><dt>{stage}</dt><dd>{status}</dd></div>)}</dl></div>
+<div class="status-panel"><div><span class="badge">{locale === 'pt' ? 'Em desenvolvimento' : 'Under development'}</span><h3>{locale === 'pt' ? 'Do conceito do projeto a um protótipo de aconselhamento' : 'From project concept to an advisory prototype'}</h3><p>{locale === 'pt' ? 'Este site documenta a abordagem proposta. Os marcos técnicos e as evidências serão acrescentados à medida que o trabalho for concluído.' : 'This site documents the proposed direction. Technical milestones and evidence will be added as work is completed.'}</p></div><dl class="status-list">{stages.map(([stage, status]) => <div><dt>{stage}</dt><dd>{status}</dd></div>)}</dl></div>

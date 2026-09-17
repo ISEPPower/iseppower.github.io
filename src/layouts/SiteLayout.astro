@@ -4,8 +4,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { languageTag, type BlogLocale, type LanguageLink } from '../utils/blog';
+import { pageAlternates } from '../utils/i18n';
 interface Props { title?: string; description?: string; type?: 'website' | 'article'; locale?: BlogLocale; alternates?: LanguageLink[]; }
-const { title = SITE_TITLE, description = SITE_DESCRIPTION, type = 'website', locale = 'en', alternates = [] } = Astro.props;
+const { title = SITE_TITLE, description = SITE_DESCRIPTION, type = 'website', locale = 'en', alternates = pageAlternates(Astro.url.pathname) } = Astro.props;
 ---
 <!doctype html>
 <html lang={languageTag[locale]}>
@@ -13,7 +14,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION, type = 'website', lo
   <body>
     <slot name="loader" />
     <a class="skip-link" href="#main-content">{locale === 'pt' ? 'Saltar para o conteúdo' : 'Skip to content'}</a>
-    <Header locale={locale} />
+    <Header locale={locale} alternates={alternates} />
     <main id="main-content"><slot /></main>
     <Footer locale={locale} />
   </body>

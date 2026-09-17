@@ -1,4 +1,10 @@
 ---
-const steps = [['Inputs / Context', 'Consumption, flexibility, price signals and grid conditions.'], ['Knowledge Base', 'Domain concepts, constraints and candidate rules.'], ['Reasoning / Inference', 'Evaluate the context against the available knowledge.'], ['Recommendation', 'Suggest an action with a clear explanation.']];
+import type { Locale } from '../utils/i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const steps = locale === 'pt'
+  ? [['Dados / Contexto', 'Consumo, flexibilidade, sinais de preços e condições da rede.'], ['Base de Conhecimento', 'Conceitos do domínio, restrições e regras candidatas.'], ['Raciocínio / Inferência', 'Avaliar o contexto com base no conhecimento disponível.'], ['Recomendação', 'Sugerir uma ação com uma explicação clara.']]
+  : [['Inputs / Context', 'Consumption, flexibility, price signals and grid conditions.'], ['Knowledge Base', 'Domain concepts, constraints and candidate rules.'], ['Reasoning / Inference', 'Evaluate the context against the available knowledge.'], ['Recommendation', 'Suggest an action with a clear explanation.']];
 ---
-<ol class="system-flow">{steps.map(([title, description], i) => <li><span class="step-label">0{i + 1}<span aria-hidden="true"> →</span></span><h3>{title}</h3><p>{description}</p></li>)}</ol><p class="caption">Conceptual architecture · Inputs, representation and inference method are to be defined.</p>
+<ol class="system-flow">{steps.map(([title, description], i) => <li><span class="step-label">0{i + 1}<span aria-hidden="true"> →</span></span><h3>{title}</h3><p>{description}</p></li>)}</ol>
+<p class="caption">{locale === 'pt' ? 'Arquitetura conceptual · Os dados de entrada, a representação e o método de inferência estão por definir.' : 'Conceptual architecture · Inputs, representation and inference method are to be defined.'}</p>

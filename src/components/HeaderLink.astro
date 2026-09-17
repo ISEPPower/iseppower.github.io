@@ -5,6 +5,7 @@ type Props = HTMLAttributes<'a'>;
 const { href, ...props } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '');
 const target = String(href).replace(/\/$/, '');
-const active = path === target || (target !== sitePath().replace(/\/$/, '') && path.startsWith(target + '/'));
+const homePaths = [sitePath(), sitePath('pt/')].map(home => home.replace(/\/$/, ''));
+const active = path === target || (!homePaths.includes(target) && path.startsWith(target + '/'));
 ---
 <a href={href} aria-current={active ? 'page' : undefined} {...props}><slot /></a>

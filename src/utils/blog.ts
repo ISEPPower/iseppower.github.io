@@ -1,10 +1,11 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-import { sitePath } from './paths';
 import { SITE_TITLE } from '../consts';
+import { localizedPath } from './i18n';
+import type { LanguageLink } from './i18n';
+export { languageTag } from './i18n';
+export type { LanguageLink } from './i18n';
 
 export type BlogLocale = 'en' | 'pt';
-export interface LanguageLink { locale: BlogLocale; href: string; }
-export const languageTag = { en: 'en', pt: 'pt-PT' } as const;
 
 export const blogText = {
   en: {
@@ -41,7 +42,7 @@ export function categoryLabel(category: CollectionEntry<'blog'>['data']['categor
 }
 
 export function blogIndexPath(locale: BlogLocale): string {
-  return sitePath(locale === 'pt' ? 'pt/blog/' : 'blog/');
+  return localizedPath(locale, 'blog/');
 }
 
 export function postSlug(post: CollectionEntry<'blog'>): string {

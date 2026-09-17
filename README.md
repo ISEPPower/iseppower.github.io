@@ -105,13 +105,15 @@ Modified:
 
 Removed: the unrelated `about.astro` page, the five demo blog posts, and the six unused `blog-placeholder-*.jpg` assets. The blog dynamic route and date component were preserved. Dependencies, lockfile and Git history were not changed.
 
-Verification performed: production build passed for all eight HTML pages; 165 internal page/asset references and in-page anchors resolved; language-specific lists, paired translation links, canonical and hreflang metadata, and both RSS feeds passed output checks. Loader lifecycle checks covered load completion, timeout, back/forward cache restoration, completed documents and its hidden no-JavaScript default. Browser visual testing and a full TypeScript diagnostic pass were not performed.
+Verification performed: production build passed for all twelve HTML pages; 342 internal page/asset references and in-page anchors resolved; language-specific lists, paired translation links, canonical and hreflang metadata, and both RSS feeds passed output checks. Loader lifecycle checks covered load completion, timeout, back/forward cache restoration, completed documents and its hidden no-JavaScript default. Browser visual testing and a full TypeScript diagnostic pass were not performed.
 
-## Bilingual blog
+## Bilingual site and blog
 
-English keeps the existing routes: `/blog/` and `/blog/project-kickoff/`. European Portuguese uses `/pt/blog/` and `/pt/blog/project-kickoff/`. All routes include the configured repository base. Other project pages remain in English.
+English keeps the existing routes: `/blog/` and `/blog/project-kickoff/`. European Portuguese uses `/pt/blog/` and `/pt/blog/project-kickoff/`. All routes include the configured repository base. Home, Project, Knowledge Engineering and Team also have complete Portuguese routes under /pt/. Each page has Portugal and UK flag links in the top header; switching languages opens the equivalent page. Navigation and the brand home link preserve the selected language. The project name remains Demand Response Advisor for Smart Grids in both languages.
 
 Store Portuguese articles under `src/content/blog/pt/`. Set `lang: 'pt'` and use the same `translationKey` as the English article. The language switch links to the matching article, even if the two filenames differ. Unavailable translations are not linked. Duplicate language/translation-key pairs fail the build. Categories keep their English schema values and are translated for display. No automatic translation is performed when adding future posts.
+
+Shared locale tags and static-page route helpers live in `src/utils/i18n.ts`. Non-blog Portuguese pages are in `src/pages/pt/`; translate both versions when editing their content. Team biography translations are in `src/data/team-pt.ts`, keyed by the email in `src/data/team.ts`; photos and contact details remain shared. Adding a team member without a Portuguese biography fails the build to prevent mixed-language cards. Shared diagrams and status components accept a `locale` prop.
 
 Shared blog copy, translated categories and route helpers live in `src/utils/blog.ts`. Shared index rendering is in `src/components/BlogIndex.astro`; the language selector is in `src/components/LanguageSwitcher.astro`. Both index pages and articles emit language-specific metadata. The English RSS feed is `/rss.xml`; Portuguese is `/pt/rss.xml`.
 

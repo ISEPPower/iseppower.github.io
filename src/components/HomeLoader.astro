@@ -1,14 +1,17 @@
 ---
 import { Image } from 'astro:assets';
 import circleLogo from '../../public/logos/ISEPOWERLOGO-circle.png';
+import type { Locale } from '../utils/i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
 ---
-<div id="home-loader" class="home-loader" hidden role="status" aria-label="Loading the home page">
+<div id="home-loader" class="home-loader" hidden role="status" aria-label={locale === 'pt' ? 'A carregar a página inicial' : 'Loading the home page'}>
   <div class="loader-content">
     <div class="loader-logo">
       <Image src={circleLogo} alt="ISEPower" width={176} height={176} format="webp" loading="eager" fetchpriority="high" />
     </div>
     <p>ISEPower</p>
-    <span>Loading / A carregar</span>
+    <span>{locale === 'pt' ? 'A carregar' : 'Loading'}</span>
   </div>
 </div>
 <script is:inline>
