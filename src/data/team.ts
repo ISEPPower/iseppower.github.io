@@ -30,4 +30,5 @@ export const team: TeamMember[] = [{
   ],
   linkedin: 'https://www.linkedin.com/in/francisco-lousada/',
   email: '1231092@ISEP.IPP.PT',
+  image: 'images/team/francisco-lousada.png',
 }];
