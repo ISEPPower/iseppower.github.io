@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { sitePath } from './paths';
+import { SITE_TITLE } from '../consts';
 
 export type BlogLocale = 'en' | 'pt';
 export interface LanguageLink { locale: BlogLocale; href: string; }
@@ -7,8 +8,8 @@ export const languageTag = { en: 'en', pt: 'pt-PT' } as const;
 
 export const blogText = {
   en: {
-    title: 'Development Blog', eyebrow: 'Development Journal / Equipa 10',
-    heading: 'The work, as it develops.',
+    title: SITE_TITLE, eyebrow: 'Development Journal / Equipa 10',
+    heading: SITE_TITLE,
     description: 'Documenting the questions, decisions and lessons behind the Demand Response Advisor over approximately six weeks.',
     updates: 'Project updates',
     introduction: 'Updates will follow the project from initial scope to knowledge engineering, prototyping and evaluation. Future results will be reported when evidence is available.',
@@ -17,8 +18,8 @@ export const blogText = {
     empty: 'No posts have been published in English yet.',
   },
   pt: {
-    title: 'Blog de Desenvolvimento', eyebrow: 'Diário de Desenvolvimento / Equipa 10',
-    heading: 'O projeto, passo a passo.',
+    title: SITE_TITLE, eyebrow: 'Diário de Desenvolvimento / Equipa 10',
+    heading: SITE_TITLE,
     description: 'Um registo das questões, decisões e aprendizagens do Demand Response Advisor ao longo de aproximadamente seis semanas.',
     updates: 'Atualizações do projeto',
     introduction: 'As publicações acompanharão o projeto desde a definição do âmbito até à engenharia do conhecimento, prototipagem e avaliação. Os resultados serão apresentados quando houver evidências disponíveis.',

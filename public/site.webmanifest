@@ -1,6 +1,6 @@
 {
-  "name": "Demand Response Advisor",
-  "short_name": "DR Advisor",
+  "name": "ISEPower",
+  "short_name": "ISEPower",
   "start_url": "./",
   "scope": "./",
   "icons": [

@@ -1,4 +1,6 @@
-# Demand Response Advisor for Smart Grids
+# ISEPower
+
+Project: Demand Response Advisor for Smart Grids.
 
 A project website and development blog for Equipa 10, Master's Degree in Artificial Intelligence (MEIA), ISEP, 2026.
 
