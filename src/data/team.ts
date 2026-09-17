@@ -47,4 +47,9 @@ export const team: TeamMember[] = [{
   linkedin: 'https://www.linkedin.com/in/sepehrshojaee/',
   email: '1260448@ISEP.IPP.PT',
   image: 'images/team/sepehr-shojaee.png',
+}, {
+  name: 'Sofia Cardoso',
+  bio: [],
+  email: '1221174@ISEP.IPP.PT',
+  image: 'images/team/sofia-cardoso.png',
 }];
