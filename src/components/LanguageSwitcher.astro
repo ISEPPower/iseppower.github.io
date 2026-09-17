@@ -15,8 +15,8 @@ const { locale, links } = Astro.props;
 </nav>
 <style>
   .language-switcher { display: flex; gap: 2px; }
-  a { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-bottom: 2px solid transparent; border-radius: 2px; text-decoration: none; opacity: .65; }
-  a:hover, a:focus-visible { opacity: 1; background: var(--surface); }
-  a[aria-current] { border-bottom-color: var(--blue); opacity: 1; }
+  a { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; border-radius: 2px; background: transparent; text-decoration: none; }
+  a:hover { background: var(--surface); }
+  a:not([aria-current]) .flag { filter: grayscale(1); }
   .flag { display: block; width: 16px; height: 11px; overflow: hidden; border-radius: 1px; box-shadow: 0 0 0 1px #102b401a; }
 </style>
