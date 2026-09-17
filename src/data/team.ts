@@ -1,6 +1,6 @@
 export interface TeamMember {
   name: string;
-  role: string;
+  role?: string;
   bio: string[];
   email?: string;
   linkedin?: string;
@@ -31,4 +31,9 @@ export const team: TeamMember[] = [{
   linkedin: 'https://www.linkedin.com/in/francisco-lousada/',
   email: '1231092@ISEP.IPP.PT',
   image: 'images/team/francisco-lousada.png',
+}, {
+  name: 'Laura Branco Múrias',
+  bio: [],
+  email: '1220717@ISEP.IPP.PT',
+  image: 'images/team/laura-branco-murias.jpg',
 }];

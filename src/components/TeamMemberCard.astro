@@ -9,7 +9,7 @@ const { member } = Astro.props;
     {member.image ? <img src={sitePath(member.image)} alt={member.name} width="72" height="72" loading="lazy" /> : <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="10" r="5"/><path d="M6 29v-3a10 10 0 0 1 20 0v3"/></svg>}
   </div>
   <h3>{member.name}</h3>
-  <p><strong>{member.role}</strong></p>
+  {member.role && <p><strong>{member.role}</strong></p>}
   {member.bio.map(paragraph => <p>{paragraph}</p>)}
   <div class="team-links">
     {member.linkedin && <a href={member.linkedin} aria-label={member.name + ' on LinkedIn'}>LinkedIn ↗</a>}
