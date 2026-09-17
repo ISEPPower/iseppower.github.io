@@ -75,11 +75,11 @@ Navy, blue, cyan and energy-green accents; locally hosted sans-serif fonts; rest
 
 `astro.config.mjs` uses the organization site `https://iseppower.github.io`, base `/`, static output and trailing slashes. Use `sitePath()` for new internal links and public assets. The base also applies locally.
 
-The workflow in `.github/workflows/deploy.yml` publishes on pushes to `dev` and also supports manual dispatch. Configure publishing as follows:
+The workflow in `.github/workflows/deploy.yml` publishes only `main`. Pushing to `dev` does not publish. Manual deployment also runs only for `main`.
 
-1. Review the content and commit/push the website and lockfile to the repository's default branch.
+1. Commit and push changes to `dev`, then open a pull request from `dev` into `main`.
 2. In GitHub Settings > Pages, select GitHub Actions as the source.
-3. In Actions, manually run `Deploy to GitHub Pages`.
+3. Wait for the `Validate site` check and review the pull request. Merge into `main` to publish automatically.
 4. Verify the published routes, styles, RSS and sitemap under the repository base.
 
 Prepared publication URL: https://iseppower.github.io/
