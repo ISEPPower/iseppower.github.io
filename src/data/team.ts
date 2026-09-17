@@ -36,16 +36,13 @@ export const team: TeamMember[] = [{
   name: 'Laura Branco Múrias',
   role: 'Contracted Researcher · ISEP',
   bio: [
-    '**Laura Branco Múrias** is a **Portuguese engineering researcher** who currently works as a **Contracted Researcher** (*Investigador Contratado*) at the **Instituto Superior de Engenharia do Porto (ISEP)**, which is part of the Instituto Politécnico do Porto.',
+    'Laura Branco Múrias is a Portuguese engineering researcher who currently works as a Contracted Researcher (*Investigador Contratado*) at the Instituto Superior de Engenharia do Porto (ISEP), which is part of the Instituto Politécnico do Porto.',
     'Her professional and academic profile includes the following key aspects:',
-    '**Current Academic Pursuit:** She is enrolled in an ongoing **Postgraduate program in Engineering Research and Development** (*Investigação e Desenvolvimento em Engenharia*) for the 2025–2026 academic year at ISEP.',
-    '**Research Role:** Her contracted research position at the institute officially began on **December 5, 2025**.',
-  ],
-  sources: [
-    { label: 'CiênciaVitae (PT)', url: 'https://www.cienciavitae.pt/6C18-4BCC-9CDF' },
-    { label: 'CiênciaVitae (EN)', url: 'https://www.cienciavitae.pt/portal/en/6C18-4BCC-9CDF' },
+    'Current Academic Pursuit: She is enrolled in an ongoing Postgraduate program in Engineering Research and Development (*Investigação e Desenvolvimento em Engenharia*) for the 2025–2026 academic year at ISEP.',
+    'Research Role: Her contracted research position at the institute officially began on December 5, 2025.',
   ],
   email: '1220717@ISEP.IPP.PT',
+  linkedin: 'https://www.linkedin.com/in/laura-m%C3%BArias/',
   image: 'images/team/laura-branco-murias.jpg',
 }, {
   name: 'Sepehr Shojaee',
@@ -62,7 +59,7 @@ export const team: TeamMember[] = [{
   name: 'Sofia Moreira Cardoso',
   role: 'Contracted Researcher · GECAD',
   bio: [
-    'Sofia Moreira Cardoso is a **contracted researcher at GECAD (Research Group on Intelligent Engineering and Computing for Innovation and Development)**, which is based at the **ISEP** (Instituto Superior de Engenharia do Porto) / Polytechnic of Porto.',
+    'Sofia Moreira Cardoso is a contracted researcher at GECAD (Research Group on Intelligent Engineering and Computing for Innovation and Development), which is based at the ISEP (Instituto Superior de Engenharia do Porto) / Polytechnic of Porto.',
   ],
   email: '1221174@ISEP.IPP.PT',
   linkedin: 'https://www.linkedin.com/in/sofia-cardoso-b7354432b/',

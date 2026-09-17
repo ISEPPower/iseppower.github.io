@@ -28,10 +28,10 @@ const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
   '1220717@ISEP.IPP.PT': {
     role: 'Investigadora Contratada · ISEP',
     bio: [
-      '**Laura Branco Múrias** é uma **investigadora portuguesa na área da engenharia** que trabalha atualmente como **Investigadora Contratada** no **Instituto Superior de Engenharia do Porto (ISEP)**, integrado no Instituto Politécnico do Porto.',
+      'Laura Branco Múrias é uma investigadora portuguesa na área da engenharia que trabalha atualmente como Investigadora Contratada no Instituto Superior de Engenharia do Porto (ISEP), integrado no Instituto Politécnico do Porto.',
       'O seu percurso profissional e académico inclui os seguintes aspetos:',
-      '**Formação atual:** Frequenta uma **pós-graduação em Investigação e Desenvolvimento em Engenharia** no ISEP, no ano letivo de 2025–2026.',
-      '**Atividade de investigação:** A sua função de investigadora contratada na instituição teve início em **5 de dezembro de 2025**.',
+      'Formação atual: Frequenta uma pós-graduação em Investigação e Desenvolvimento em Engenharia no ISEP, no ano letivo de 2025–2026.',
+      'Atividade de investigação: A sua função de investigadora contratada na instituição teve início em 5 de dezembro de 2025.',
     ],
   },
   '1260448@ISEP.IPP.PT': {
@@ -45,7 +45,7 @@ const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
   '1221174@ISEP.IPP.PT': {
     role: 'Investigadora Contratada · GECAD',
     bio: [
-      'Sofia Moreira Cardoso é **investigadora contratada no GECAD (Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento)**, sediado no **ISEP** (Instituto Superior de Engenharia do Porto) / Instituto Politécnico do Porto.',
+      'Sofia Moreira Cardoso é investigadora contratada no GECAD (Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento), sediado no ISEP (Instituto Superior de Engenharia do Porto) / Instituto Politécnico do Porto.',
     ],
   },
 };
