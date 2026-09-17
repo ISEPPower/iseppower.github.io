@@ -10,14 +10,13 @@ const { locale, links } = Astro.props;
     return link && <a href={link.href} lang={languageTag[language]} hreflang={languageTag[language]} aria-label={label} title={label} aria-current={language === locale ? 'true' : undefined}>
       {language === 'pt' ? <svg class="flag" viewBox="0 0 60 40" width="27" height="18" aria-hidden="true" focusable="false"><path fill="#d71920" d="M0 0h60v40H0z"/><path fill="#006b3f" d="M0 0h24v40H0z"/><g transform="translate(24 20)"><circle r="9" fill="none" stroke="#ffcf32" stroke-width="2"/><ellipse rx="5" ry="9" fill="none" stroke="#ffcf32"/><path d="M-9 0H9M-7-5H7M-7 5H7" stroke="#ffcf32"/><path d="M-6-7H6v9c0 5-6 7-6 7s-6-2-6-7Z" fill="#fff" stroke="#d71920" stroke-width="2"/><g fill="#06418a"><path d="M-1-5h2v3h-2zM-4-1h2v3h-2zM2-1h2v3H2zM-1-1h2v3h-2zM-1 3h2v3h-2z"/></g></g></svg>
       : <svg class="flag" viewBox="0 0 60 30" width="27" height="18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path fill="#012169" d="M0 0h60v30H0z"/><path stroke="#fff" stroke-width="6" d="m0 0 60 30M60 0 0 30"/><path stroke="#c8102e" stroke-width="2" d="m0 0 60 30M60 0 0 30"/><path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/><path stroke="#c8102e" stroke-width="6" d="M30 0v30M0 15h60"/></svg>}
-      <span>{language.toUpperCase()}</span>
     </a>;
   })}
 </nav>
 <style>
-  .language-switcher { display: flex; gap: .4rem; }
-  a { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 44px; padding: .4rem .65rem; border: 1px solid transparent; border-radius: 6px; color: var(--muted); text-decoration: none; font-size: .75rem; font-weight: 700; }
-  a:hover { background: var(--surface); color: var(--blue); }
-  a[aria-current] { border-color: var(--blue); color: var(--blue); background: #eaf3ff; }
-  .flag { display: block; overflow: hidden; border-radius: 2px; box-shadow: 0 0 0 1px #102b401a; }
+  .language-switcher { display: flex; gap: 2px; }
+  a { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-bottom: 2px solid transparent; border-radius: 2px; text-decoration: none; opacity: .65; }
+  a:hover, a:focus-visible { opacity: 1; background: var(--surface); }
+  a[aria-current] { border-bottom-color: var(--blue); opacity: 1; }
+  .flag { display: block; width: 16px; height: 11px; overflow: hidden; border-radius: 1px; box-shadow: 0 0 0 1px #102b401a; }
 </style>
