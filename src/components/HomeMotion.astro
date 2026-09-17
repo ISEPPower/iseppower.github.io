@@ -1,0 +1,63 @@
+<div id="home-motion"><slot /></div>
+
+<script>
+  const root = document.getElementById('home-motion');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (root && !motion.matches && 'IntersectionObserver' in window) {
+    const targets = root.querySelectorAll<HTMLElement>(
+      '.section-title, .grid-2 > div, .feature-card, .system-flow, .caption, .outcomes li, .post-card, .section-heading-row > a, .section > .text-link',
+    );
+    const reveal = (element: HTMLElement) => {
+      element.classList.remove('reveal-pending');
+      observer.unobserve(element);
+    };
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) reveal(entry.target as HTMLElement);
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -32px 0px' });
+
+    for (const element of targets) {
+      // Keep the initial viewport and restored scroll position immediately readable.
+      if (element.getBoundingClientRect().top < window.innerHeight) continue;
+      const siblings = element.parentElement?.children;
+      const index = siblings ? Array.from(siblings).indexOf(element) : 0;
+      element.style.setProperty('--reveal-delay', `${Math.min(index, 3) * 80}ms`);
+      element.classList.add('scroll-reveal', 'reveal-pending');
+      observer.observe(element);
+    }
+
+    // Keyboard navigation must never land on an invisible link.
+    root.addEventListener('focusin', event => {
+      if (!(event.target instanceof Element)) return;
+      const element = event.target.closest<HTMLElement>('.reveal-pending');
+      if (element) {
+        element.style.setProperty('--reveal-delay', '0ms');
+        reveal(element);
+      }
+    });
+    motion.addEventListener('change', event => {
+      if (event.matches) {
+        targets.forEach(element => element.classList.remove('reveal-pending'));
+        observer.disconnect();
+      }
+    });
+  }
+</script>
+
+<style is:global>
+  #home-motion { display: contents; }
+  #home-motion .scroll-reveal {
+    transition: opacity 700ms ease, transform 700ms cubic-bezier(.22, 1, .36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  #home-motion .reveal-pending { opacity: 0; transform: translateY(28px); }
+  #home-motion .reveal-pending:focus-within { opacity: 1; transform: none; transition: none; }
+  @media (max-width: 560px) {
+    #home-motion .reveal-pending { transform: translateY(18px); }
+  }
+  @media (prefers-reduced-motion: reduce), print {
+    #home-motion .scroll-reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
