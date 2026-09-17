@@ -1,0 +1,6 @@
+---
+import type { BlogLocale } from '../utils/blog';
+interface Props { date: Date; locale?: BlogLocale; }
+const { date, locale = 'en' } = Astro.props;
+---
+<time datetime={date.toISOString()}>{date.toLocaleDateString(locale === 'pt' ? 'pt-PT' : 'en-GB', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' })}</time>

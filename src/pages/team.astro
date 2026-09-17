@@ -1,0 +1,8 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Hero from '../components/Hero.astro';
+import TeamMemberCard from '../components/TeamMemberCard.astro';
+import { team } from '../data/team';
+import { REPOSITORY_URL } from '../consts';
+---
+<SiteLayout title="Team" description="Equipa 10, the MEIA student group behind the Demand Response Advisor project at ISEP."><Hero eyebrow="The Team / MEIA ? ISEP" title="Equipa 10" description="A group project for the Master's Degree in Artificial Intelligence at ISEP." /><section class="container section"><div class="section-title"><h2>The people behind the project</h2><p>Team member details and responsibilities will be added here. The card below is a placeholder.</p></div><div class="grid-3">{team.map(member => <TeamMemberCard member={member} />)}</div><div class="callout"><h3>Follow our work</h3><p>The project repository brings together the website and its development history.</p><a class="text-link" href={REPOSITORY_URL}>Visit the GitHub repository ?</a></div></section></SiteLayout>

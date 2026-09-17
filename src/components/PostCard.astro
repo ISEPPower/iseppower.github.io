@@ -1,0 +1,15 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from './FormattedDate.astro';
+import { blogPostPath, blogText, categoryLabel } from '../utils/blog';
+interface Props { post: CollectionEntry<'blog'>; }
+const { post } = Astro.props;
+const locale = post.data.lang;
+const text = blogText[locale];
+---
+<article class="post-card">
+  <div class="post-meta"><span class="badge">{categoryLabel(post.data.category, locale)}</span><FormattedDate date={post.data.pubDate} locale={locale} /></div>
+  <h3><a href={blogPostPath(post)}>{post.data.title}</a></h3>
+  <p>{post.data.description}</p>
+  <a class="text-link" href={blogPostPath(post)} aria-label={text.read + ': ' + post.data.title}>{text.read} <span aria-hidden="true">↗</span></a>
+</article>

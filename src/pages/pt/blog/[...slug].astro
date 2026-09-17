@@ -1,0 +1,16 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import BlogPost from '../../../layouts/BlogPost.astro';
+import { getBlogPosts, postSlug, translationLinks, type LanguageLink } from '../../../utils/blog';
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  return posts.filter(post => post.data.lang === 'pt').map(post => ({
+    params: { slug: postSlug(post) },
+    props: { post, alternates: translationLinks(post, posts) },
+  }));
+}
+interface Props { post: CollectionEntry<'blog'>; alternates: LanguageLink[]; }
+const { post, alternates } = Astro.props;
+const { Content } = await render(post);
+---
+<BlogPost {...post.data} alternates={alternates}><Content /></BlogPost>

@@ -1,0 +1,69 @@
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { sitePath } from './paths';
+
+export type BlogLocale = 'en' | 'pt';
+export interface LanguageLink { locale: BlogLocale; href: string; }
+export const languageTag = { en: 'en', pt: 'pt-PT' } as const;
+
+export const blogText = {
+  en: {
+    title: 'Development Blog', eyebrow: 'Development Journal / Equipa 10',
+    heading: 'The work, as it develops.',
+    description: 'Documenting the questions, decisions and lessons behind the Demand Response Advisor over approximately six weeks.',
+    updates: 'Project updates',
+    introduction: 'Updates will follow the project from initial scope to knowledge engineering, prototyping and evaluation. Future results will be reported when evidence is available.',
+    categories: 'Planned blog categories', read: 'Read the update',
+    back: 'All project updates', updated: 'Updated', language: 'Blog language',
+    empty: 'No posts have been published in English yet.',
+  },
+  pt: {
+    title: 'Blog de Desenvolvimento', eyebrow: 'Diário de Desenvolvimento / Equipa 10',
+    heading: 'O projeto, passo a passo.',
+    description: 'Um registo das questões, decisões e aprendizagens do Demand Response Advisor ao longo de aproximadamente seis semanas.',
+    updates: 'Atualizações do projeto',
+    introduction: 'As publicações acompanharão o projeto desde a definição do âmbito até à engenharia do conhecimento, prototipagem e avaliação. Os resultados serão apresentados quando houver evidências disponíveis.',
+    categories: 'Categorias previstas do blog', read: 'Ler a publicação',
+    back: 'Todas as atualizações', updated: 'Atualizado em', language: 'Idioma do blog',
+    empty: 'Ainda não existem publicações em português.',
+  },
+} as const;
+
+const portugueseCategories: Record<CollectionEntry<'blog'>['data']['category'], string> = {
+  'Project Updates': 'Atualizações do Projeto',
+  'Knowledge Acquisition': 'Aquisição de Conhecimento',
+  'Knowledge Representation': 'Representação do Conhecimento',
+  Prototype: 'Protótipo', Research: 'Investigação', Results: 'Resultados',
+};
+
+export function categoryLabel(category: CollectionEntry<'blog'>['data']['category'], locale: BlogLocale) {
+  return locale === 'pt' ? portugueseCategories[category] : category;
+}
+
+export function blogIndexPath(locale: BlogLocale): string {
+  return sitePath(locale === 'pt' ? 'pt/blog/' : 'blog/');
+}
+
+export function postSlug(post: CollectionEntry<'blog'>): string {
+  return post.id.replace(/^(en|pt)\//, '');
+}
+
+export function blogPostPath(post: CollectionEntry<'blog'>): string {
+  return blogIndexPath(post.data.lang) + postSlug(post) + '/';
+}
+
+/** Fail early on ambiguous translation pairs instead of linking to the wrong article. */
+export async function getBlogPosts() {
+  const posts = await getCollection('blog');
+  const translations = new Set<string>();
+  for (const post of posts) {
+    const key = `${post.data.lang}:${post.data.translationKey}`;
+    if (translations.has(key)) throw new Error(`Duplicate blog translation: ${key}`);
+    translations.add(key);
+  }
+  return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+}
+
+export function translationLinks(post: CollectionEntry<'blog'>, posts: CollectionEntry<'blog'>[]): LanguageLink[] {
+  return posts.filter(candidate => candidate.data.translationKey === post.data.translationKey)
+    .map(candidate => ({ locale: candidate.data.lang, href: blogPostPath(candidate) }));
+}

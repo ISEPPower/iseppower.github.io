@@ -1,0 +1,20 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Hero from '../components/Hero.astro';
+import SystemConcept from '../components/SystemConcept.astro';
+import ProjectStatus from '../components/ProjectStatus.astro';
+const sections = ['Overview', 'Motivation', 'Problem Definition', 'Objectives', 'Proposed Solution', 'System Concept', 'Expected Outcomes', 'Project Progress'];
+const id = (title: string) => title.toLowerCase().replaceAll(' ', '-');
+---
+<SiteLayout title="Project" description="The motivation, objectives and proposed system concept for the Demand Response Advisor for Smart Grids.">
+<Hero eyebrow="The Project / Equipa 10" title="Supporting informed energy decisions." description="A Master's project exploring how knowledge-based recommendations could support consumers and prosumers in smart grids." />
+<div class="container section editorial"><aside class="contents" aria-label="On this page"><p>On this page</p>{sections.map(title => <a href={'#' + id(title)}>{title}</a>)}</aside><div>
+<section id="overview" class="document-section"><h2>Overview</h2><p>Demand Response Advisor for Smart Grids is a project for the Master's Degree in Artificial Intelligence (MEIA) at ISEP, developed by Equipa 10. It brings together knowledge engineering, intelligent reasoning and energy decision support.</p><p>The aim is to explore an advisory system that interprets a user's energy context and suggests understandable demand response actions. The project is under development.</p></section>
+<section id="motivation" class="document-section"><h2>Motivation</h2><p>Energy decisions involve more than a price signal. A household or prosumer also has schedules, comfort preferences and limits on what can be shifted. Our motivation is to connect these practical constraints with demand response opportunities through explicit reasoning.</p></section>
+<section id="problem-definition" class="document-section"><h2>Problem Definition</h2><p>Given an energy context and a set of user constraints, how can an advisor identify an appropriate demand response action and explain why it fits the situation?</p><p>The target users, available inputs and exact scope of the decision problem are to be defined. The proposed system supports human decisions; automatic control is not an established project capability.</p></section>
+<section id="objectives" class="document-section"><h2>Objectives</h2><ul><li>Define a bounded set of consumer or prosumer demand response scenarios.</li><li>Identify and document relevant domain knowledge and its sources.</li><li>Represent concepts, constraints and decision logic in a knowledge base.</li><li>Develop a prototype that produces understandable recommendations.</li><li>Define an evaluation method and document limitations and lessons learned.</li></ul></section>
+<section id="proposed-solution" class="document-section"><h2>Proposed Solution</h2><p>The proposed advisor would combine contextual inputs with domain knowledge, examine feasible actions and present a recommendation with an explanation. Representation choices and the inference method are to be defined.</p><div class="callout"><h3>Example scenarios ? Not implemented results</h3><ul><li>Shift a flexible appliance load within a user-approved time window.</li><li>Avoid a peak consumption period when a task can safely wait.</li><li>Respond to electricity price signals while respecting user constraints.</li><li>Adapt discretionary consumption to a specified grid condition.</li></ul></div></section>
+<section id="system-concept" class="document-section"><h2>System Concept</h2><SystemConcept /></section>
+<section id="expected-outcomes" class="document-section"><h2>Expected Outcomes</h2><p>Intended outputs include a documented knowledge model, an advisory prototype, example decision traces and a discussion of evaluation findings. No performance results or measured energy savings are available yet.</p></section>
+<section id="project-progress" class="document-section"><h2>Project Progress</h2><ProjectStatus /></section>
+</div></div></SiteLayout>

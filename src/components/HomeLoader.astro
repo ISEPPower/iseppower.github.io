@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import circleLogo from '../../public/logos/ISEPOWERLOGO-circle.png';
+---
+<div id="home-loader" class="home-loader" hidden role="status" aria-label="Loading the home page">
+  <div class="loader-content">
+    <div class="loader-logo">
+      <Image src={circleLogo} alt="ISEPower" width={176} height={176} format="webp" loading="eager" fetchpriority="high" />
+    </div>
+    <p>Demand Response Advisor</p>
+    <span>Loading / A carregar</span>
+  </div>
+</div>
+<script is:inline>
+  (() => {
+    const loader = document.getElementById('home-loader');
+    if (!loader || document.readyState === 'complete') return;
+    // Progressive enhancement: without JavaScript, the overlay stays hidden.
+    loader.hidden = false;
+    let dismissed = false;
+    const dismiss = () => {
+      if (dismissed) return;
+      dismissed = true;
+      clearTimeout(fallback);
+      loader.hidden = true;
+      window.removeEventListener('load', dismiss);
+    };
+    // A slow or failed asset must never leave the page covered indefinitely.
+    const fallback = setTimeout(dismiss, 6000);
+    window.addEventListener('load', dismiss, { once: true });
+    window.addEventListener('pageshow', event => {
+      if (event.persisted) dismiss();
+    }, { once: true });
+  })();
+</script>
+<style>
+  .home-loader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: #f7fafc; pointer-events: none; animation: loader-safety 0s 6s forwards; }
+  .home-loader[hidden] { display: none; }
+  .loader-content { text-align: center; padding: 2rem; }
+  .loader-logo { position: relative; width: 200px; height: 200px; display: grid; place-items: center; margin: 0 auto 1.5rem; }
+  .loader-logo::before { content: ''; position: absolute; inset: 0; border-radius: 50%; border: 3px solid #dbe5e9; border-top-color: #145ccd; border-right-color: #219753; animation: loader-orbit 1.2s linear infinite; }
+  .loader-logo img { border-radius: 50%; width: 176px; height: 176px; }
+  .loader-content p { font-weight: 700; color: var(--navy); margin-bottom: .4rem; }
+  .loader-content span { color: var(--muted); font-size: .85rem; }
+  @keyframes loader-orbit { to { transform: rotate(360deg); } }
+  @keyframes loader-safety { to { visibility: hidden; } }
+  @media (prefers-reduced-motion: reduce) { .loader-logo::before { animation: none; } }
+</style>

@@ -1,0 +1,16 @@
+---
+import { blogText, languageTag, type BlogLocale, type LanguageLink } from '../utils/blog';
+interface Props { locale: BlogLocale; links: LanguageLink[]; }
+const { locale, links } = Astro.props;
+---
+<nav class="language-switcher" aria-label={blogText[locale].language}>
+  {(['en', 'pt'] as const).map(language => {
+    const link = links.find(item => item.locale === language);
+    return link && <a href={link.href} lang={languageTag[language]} hreflang={languageTag[language]} aria-current={language === locale ? 'true' : undefined}>{language === 'pt' ? 'Português' : 'English'}</a>;
+  })}
+</nav>
+<style>
+  .language-switcher { display: flex; flex-wrap: wrap; gap: .4rem; margin-block: 1.5rem; }
+  a { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .9rem; border: 1px solid var(--line); border-radius: 6px; text-decoration: none; font-size: .9rem; background: white; }
+  a[aria-current] { background: var(--navy); color: white; border-color: var(--navy); font-weight: 700; }
+</style>
