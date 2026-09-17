@@ -62,12 +62,10 @@ The project is in week 1. Confirm responsibilities, scope, scenarios, sources an
 ## Weekly reporting and project documentation
 
 - `src/data/project.ts` holds the shared English/Portuguese week 1 status and proposed stages.
-- `src/components/ProjectHub.astro` groups the project question, stages, available documents, educational demo and contribution/session notes. Add deliverables only when real links exist, and label the file language and format.
+- `src/components/ProjectHub.astro` groups the project question, stages, available documents and contribution/session notes. Add deliverables only when real links exist, and label the file language and format.
 - `docs/templates/` contains paired English/Portuguese weekly report and expert-session templates. These files are outside the published content collection. Replace every placeholder before copying a template into `src/content/blog/` and `src/content/blog/pt/`.
 - Reports support `week`, `reportStatus` (`in-progress` or `complete`), `authors` and `contributions` (objects with `name` and translated `task`). Keep translation keys paired. Only record confirmed contributions; an empty list displays a short pending note.
 - The initial report stays at `/blog/project-kickoff/` and its Portuguese equivalent, preserving existing links. It contains a conceptual diagram and links to actual website outputs.
-- `AdvisorDemo.astro` uses fictional prices and equal task energy in two windows. Its three rules are educational, not the research inference engine. It shows signed cost differences, respects the declared flexibility constraint and uses native form validation. It has a static explanation without JavaScript.
-- Run `node --test tests/advisor-demo.test.mjs` on Node 24 to check constraint priority, price comparisons, zero prices and invalid inputs.
 
 ## Design and implementation
 

@@ -2,7 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import Hero from './Hero.astro';
 import SystemConcept from './SystemConcept.astro';
-import { localizedPath, type Locale } from '../utils/i18n';
+import { type Locale } from '../utils/i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const pt = locale === 'pt';
@@ -22,7 +22,6 @@ const questions = pt ? [
   <Hero eyebrow={pt ? 'Notas de trabalho / Semana 1' : 'Working notes / Week 1'} title={pt ? 'As perguntas antes das regras.' : 'The questions before the rules.'} description={pt ? 'Um mapa inicial do que precisamos de esclarecer. As escolhas técnicas ainda estão em aberto.' : 'An opening map of what we need to clarify. Technical choices remain open.'} />
   <section class="section container"><SystemConcept locale={locale} /><div class="grid-2">{questions.map(([title, description]) => <article class="feature-card"><h2>{title}</h2><p>{description}</p></article>)}</div>
   <div class="callout"><h2>{pt ? 'Registo de fontes' : 'Source record'}</h2><p>{pt ? 'Ainda não foi publicada uma lista de fontes técnicas. Cada entrada deverá indicar a referência, o conceito sustentado e as limitações identificadas.' : 'A technical source list has not yet been published. Each entry should identify the reference, the concept it supports and any limitations.'}</p></div>
-  <a class="text-link" href={localizedPath(locale, 'project/#try-advisor')}>{pt ? 'Explorar o exemplo educativo e as suas regras' : 'Explore the educational example and its rules'} →</a>
   </section>
 </SiteLayout>
 <style>h2 { font-size: 1.4rem; }</style>

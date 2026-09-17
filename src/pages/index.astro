@@ -1,7 +1,6 @@
 ---
 import { getBlogPosts } from '../utils/blog';
 import WeekOverview from '../components/WeekOverview.astro';
-import AdvisorDemo from '../components/AdvisorDemo.astro';
 import HomeMotion from '../components/HomeMotion.astro';
 import HomeLoader from '../components/HomeLoader.astro';
 import SiteLayout from '../layouts/SiteLayout.astro';
@@ -21,7 +20,6 @@ const posts = (await getBlogPosts()).filter(post => post.data.lang === 'en').sli
 <section class="section container"><div class="grid-2"><SectionTitle eyebrow="01 / The Problem" title="When should energy use change?" /><div><p class="lead">Demand response asks consumers to adapt electricity use to changing prices and grid conditions. Deciding what to change also depends on everyday needs.</p><p>Our project explores how an intelligent advisor could make those decisions easier to understand for consumers and prosumers.</p></div></div></section>
 <section class="section soft"><div class="container"><SectionTitle eyebrow="02 / Our Approach" title="Context. Knowledge. A reason to act." description="We propose a knowledge-based approach that connects an energy situation to an understandable recommendation." /><div class="grid-3"><FeatureCard number="01" title="Understand the context"><p>Identify relevant consumption patterns, flexible loads and user constraints.</p></FeatureCard><FeatureCard number="02" title="Structure the knowledge"><p>Represent domain concepts and decision logic in a knowledge base.</p></FeatureCard><FeatureCard number="03" title="Explain the recommendation"><p>Propose a suitable action and make its reasoning visible to the user.</p></FeatureCard></div></div></section>
 <section class="section container"><SectionTitle eyebrow="03 / Knowledge Engineering" title="Knowledge at the centre of the system." description="The course's knowledge engineering process shapes how we acquire, represent and apply knowledge about demand response." /><SystemConcept /><a class="text-link" href={sitePath('knowledge-engineering/')}>Explore the knowledge engineering process →</a></section>
-<section id="try-advisor" class="section soft"><div class="container"><SectionTitle eyebrow="04 / Explore" title="A decision you can try." description="An educational example to explore the effect of price and flexibility." /><AdvisorDemo /></div></section>
-<section class="section container"><div class="section-heading-row"><SectionTitle eyebrow="05 / Development Journal" title="Latest Blog Posts" /><a class="text-link" href={sitePath('blog/')}>All project updates →</a></div>{posts.map(post => <PostCard post={post} />)}</section>
+<section class="section container"><div class="section-heading-row"><SectionTitle eyebrow="04 / Development Journal" title="Latest Blog Posts" /><a class="text-link" href={sitePath('blog/')}>All project updates →</a></div>{posts.map(post => <PostCard post={post} />)}</section>
 </HomeMotion>
 </SiteLayout>

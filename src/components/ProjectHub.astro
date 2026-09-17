@@ -3,7 +3,6 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Hero from './Hero.astro';
 import ProjectStatus from './ProjectStatus.astro';
 import SystemConcept from './SystemConcept.astro';
-import AdvisorDemo from './AdvisorDemo.astro';
 import { REPOSITORY_URL } from '../consts';
 import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale: Locale; }
@@ -14,11 +13,10 @@ const sections = [
   ['overview', pt ? 'Questão do projeto' : 'Project question'],
   ['stages', pt ? 'Fases e estado' : 'Stages & status'],
   ['resources', pt ? 'Documentação e entregáveis' : 'Documents & deliverables'],
-  ['try-advisor', pt ? 'Exemplo interativo' : 'Interactive example'],
   ['team-notes', pt ? 'Contributos e especialistas' : 'Contributions & experts'],
 ];
 ---
-<SiteLayout locale={locale} title={pt ? 'Projeto' : 'Project'} description={pt ? 'Semana 1: questão inicial, fases propostas, documentação e exemplo educativo do ISEPower.' : 'Week 1: the opening question, proposed stages, documentation and an educational ISEPower example.'}>
+<SiteLayout locale={locale} title={pt ? 'Projeto' : 'Project'} description={pt ? 'Semana 1: questão inicial, fases propostas, documentação.' : 'Week 1: the opening question, proposed stages, documentation.'}>
 <Hero eyebrow={pt ? 'O Projeto / Semana 1' : 'The Project / Week 1'} title={pt ? 'Uma questão. Um percurso documentado.' : 'One question. A documented journey.'} description={pt ? 'Demand Response Advisor for Smart Grids — acompanhe o trabalho desde o arranque.' : 'Demand Response Advisor for Smart Grids — follow the work from its starting point.'} />
 <div class="container section editorial">
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
@@ -41,9 +39,8 @@ const sections = [
       </ul>
       <p class="caption">{pt ? 'Ainda não foram publicados resultados de avaliação nem poupanças medidas.' : 'No evaluation results or measured savings have been published yet.'}</p>
     </section>
-    <section id="try-advisor" class="document-section"><h2>{sections[3][1]}</h2><AdvisorDemo locale={locale} /></section>
     <section id="team-notes" class="document-section">
-      <h2>{sections[4][1]}</h2>
+      <h2>{sections[3][1]}</h2>
       <p>{pt ? 'Cada relatório pode identificar os autores e os contributos individuais. A distribuição de tarefas da semana 1 ainda não está registada.' : 'Each report can identify its authors and individual contributions. The week 1 task allocation has not yet been recorded.'}</p>
       <p>{pt ? 'Ainda não existem notas de reuniões com especialistas publicadas. Quando houver uma sessão, o registo incluirá a pergunta, o que aprendemos e a decisão alterada, com data e participantes.' : 'No expert meeting notes have been published yet. When a session takes place, its record will include the question, what we learned and the decision it changed, with the date and participants.'}</p>
       <a href={url('team/')}>{pt ? 'Conhecer a equipa' : 'Meet the team'} →</a>
