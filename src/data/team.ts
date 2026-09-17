@@ -67,4 +67,14 @@ export const team: TeamMember[] = [{
   email: '1221174@ISEP.IPP.PT',
   linkedin: 'https://www.linkedin.com/in/sofia-cardoso-b7354432b/',
   image: 'images/team/sofia-cardoso.png',
+}, {
+  name: 'Gonçalo Jesus',
+  role: 'Student & Grant Researcher · GECAD',
+  bio: [
+    'Gonçalo Jesus is a student and researcher at the Instituto Superior de Engenharia do Porto (ISEP). He is pursuing a Master’s Degree in Artificial Intelligence Engineering at ISEP.',
+    'He works as a Grant Researcher at GECAD (Research Group on Intelligent Engineering and Computing for Advanced Innovation and Development), an R&D unit integrated within ISEP.',
+  ],
+  email: '1220822@ISEP.IPP.PT',
+  linkedin: 'https://pt.linkedin.com/in/gon%C3%A7alo-jesus-4865402b5',
+  image: 'images/team/goncalo-jesus.jpg',
 }];

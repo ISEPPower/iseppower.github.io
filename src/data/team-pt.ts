@@ -2,6 +2,13 @@ import { team, type TeamMember } from './team';
 
 // Contact details and photos stay in team.ts; only role and biography are translated.
 const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
+  '1220822@ISEP.IPP.PT': {
+    role: 'Estudante e Bolseiro de Investigação · GECAD',
+    bio: [
+      'Gonçalo Jesus é estudante e investigador no Instituto Superior de Engenharia do Porto (ISEP), onde frequenta o Mestrado em Engenharia de Inteligência Artificial.',
+      'Trabalha como bolseiro de investigação no GECAD (Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento Avançados), uma unidade de investigação e desenvolvimento integrada no ISEP.',
+    ],
+  },
   '1231090@ISEP.IPP.PT': {
     role: 'Investigador · SoftCPS',
     bio: [
