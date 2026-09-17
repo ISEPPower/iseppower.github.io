@@ -67,7 +67,7 @@ Navy, blue, cyan and energy-green accents; locally hosted sans-serif fonts; rest
 
 `astro.config.mjs` uses the organization site `https://iseppower.github.io`, base `/`, static output and trailing slashes. Use `sitePath()` for new internal links and public assets. The base also applies locally.
 
-The workflow in `.github/workflows/deploy.yml` runs **only on manual dispatch**. Nothing has been deployed by this change. When ready:
+The workflow in `.github/workflows/deploy.yml` publishes on pushes to `dev` and also supports manual dispatch. Configure publishing as follows:
 
 1. Review the content and commit/push the website and lockfile to the repository's default branch.
 2. In GitHub Settings > Pages, select GitHub Actions as the source.

@@ -1,7 +1,9 @@
 name: Deploy to GitHub Pages
 
-# Deliberately manual: pushing changes does not publish the website.
+# Publish the website from dev, with manual reruns available in Actions.
 on:
+  push:
+    branches: [dev]
   workflow_dispatch:
 
 permissions:
