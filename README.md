@@ -1,6 +1,8 @@
-# ISEPower
+# ISepPower-Blog
 
-Project: Demand Response Advisor for Smart Grids.
+ISEPower team blog for the MEIA challenges. Challenge 1: Demand Response Advisor for Smart Grids.
+
+Local project folder: `ISepPower-Blog`.
 
 A project website and development blog for Equipa 10, Master's Degree in Artificial Intelligence (MEIA), ISEP, 2026.
 
