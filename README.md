@@ -61,6 +61,8 @@ The project is in week 1. Confirm responsibilities, scope, scenarios, sources an
 
 ## Weekly reporting and project documentation
 
+The site groups work under `/challenges/` and `/pt/challenges/`. Challenge 1 contains Demand Response Advisor; Challenges 2–4 are disabled placeholders with no invented topics or dates. The old `/project/` routes redirect to the challenge pages. The home page introduces ISEPower as the overall team blog. Set `challenge` in post frontmatter to associate each report with its challenge.
+
 - `src/data/project.ts` holds the shared English/Portuguese week 1 status and proposed stages.
 - `src/components/ProjectHub.astro` groups the project question, stages, available documents and contribution/session notes. Add deliverables only when real links exist, and label the file language and format.
 - `docs/templates/` contains paired English/Portuguese weekly report and expert-session templates. These files are outside the published content collection. Replace every placeholder before copying a template into `src/content/blog/` and `src/content/blog/pt/`.

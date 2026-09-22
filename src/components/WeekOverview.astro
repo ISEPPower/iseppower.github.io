@@ -6,12 +6,12 @@ const { locale = 'en' } = Astro.props;
 const t = projectCopy[locale];
 ---
 <section class="section container week-overview" aria-labelledby="week-heading">
-  <p class="eyebrow">{t.week} / ISEPower</p>
+  <p class="eyebrow">{locale === 'pt' ? 'Desafio 1' : 'Challenge 1'} / {t.week}</p>
   <h2 id="week-heading">{t.focus}</h2>
   <div class="grid-3">
     <article class="feature-card"><span class="badge">{t.active}</span><h3>{t.now}</h3><p>{t.nowText}</p></article>
     <article class="feature-card"><h3>{t.journal}</h3><p>{t.journalText}</p><a class="text-link" href={localizedPath(locale, 'blog/project-kickoff/')}>{t.read} →</a></article>
-    <article class="feature-card"><h3>{t.next}</h3><p>{t.nextText}</p><a class="text-link" href={localizedPath(locale, 'project/#stages')}>{locale === 'pt' ? 'Ver as fases do projeto' : 'View project stages'} →</a></article>
+    <article class="feature-card"><h3>{t.next}</h3><p>{t.nextText}</p><a class="text-link" href={localizedPath(locale, 'challenges/#stages')}>{locale === 'pt' ? 'Ver as fases do projeto' : 'View project stages'} →</a></article>
   </div>
 </section>
 <style>

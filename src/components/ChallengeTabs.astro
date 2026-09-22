@@ -1,0 +1,20 @@
+---
+import type { Locale } from '../utils/i18n';
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const pt = locale === 'pt';
+---
+<div class="challenge-tabs" role="tablist" aria-label={pt ? 'Desafios do mestrado' : 'Master’s challenges'}>
+  <button type="button" role="tab" id="challenge-1-tab" aria-selected="true" aria-controls="challenge-1">{pt ? 'Desafio 1' : 'Challenge 1'}<span>{pt ? 'Ativo' : 'Active'}</span></button>
+  {[2, 3, 4].map(number => <button type="button" role="tab" aria-selected="false" disabled>{pt ? 'Desafio' : 'Challenge'} {number}<span>{pt ? 'Em breve' : 'Coming soon'}</span></button>)}
+</div>
+<section id="challenge-1" role="tabpanel" aria-labelledby="challenge-1-tab" tabindex="0"><slot /></section>
+<style>
+  .challenge-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; border-bottom: 1px solid var(--line); padding-top: 2rem; }
+  button { font: inherit; font-weight: 700; color: var(--navy); padding: 1rem; background: white; border: 1px solid var(--line); border-bottom: 3px solid transparent; border-radius: 8px 8px 0 0; }
+  button[aria-selected=true] { border-bottom-color: var(--blue); background: #eaf3ff; }
+  button:disabled { color: #687984; background: var(--surface); cursor: not-allowed; }
+  span { display: block; font-size: .7rem; font-weight: 400; margin-top: .3rem; }
+  button[aria-selected=true] span { color: var(--blue); }
+  @media(max-width: 560px) { .challenge-tabs { gap: .25rem; }button { padding: .8rem .25rem; font-size: .78rem; }span { font-size: .63rem; } }
+</style>

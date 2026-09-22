@@ -1,26 +1,4 @@
 ---
-import { getBlogPosts } from '../../utils/blog';
-import WeekOverview from '../../components/WeekOverview.astro';
-import HomeMotion from '../../components/HomeMotion.astro';
-import HomeLoader from '../../components/HomeLoader.astro';
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import SectionTitle from '../../components/SectionTitle.astro';
-import FeatureCard from '../../components/FeatureCard.astro';
-import GridConcept from '../../components/GridConcept.astro';
-import SystemConcept from '../../components/SystemConcept.astro';
-import PostCard from '../../components/PostCard.astro';
-import { localizedPath } from '../../utils/i18n';
-const sitePath = (path = '') => localizedPath('pt', path);
-const posts = (await getBlogPosts()).filter(post => post.data.lang === 'pt').slice(0,3);
+import HomePage from '../../components/HomePage.astro';
 ---
-<SiteLayout locale="pt" description="Um sistema de aconselhamento inteligente para apoiar decisões de resposta da procura em redes elétricas inteligentes.">
-<HomeLoader slot="loader" locale="pt" />
-<HomeMotion>
-<section class="home-hero"><div class="container"><div class="hero-grid"><div><p class="eyebrow">ISEP · Projeto de mestrado · 2026</p><h1>Demand Response Advisor for <span>Smart Grids</span></h1><p class="lead">Um sistema de aconselhamento inteligente concebido para apoiar decisões de resposta da procura em redes elétricas inteligentes.</p><div class="actions"><a class="button" href={sitePath('project/')}>Explorar o Projeto ↗</a><a class="button secondary" href={sitePath('blog/')}>Acompanhar o Progresso →</a></div></div><GridConcept locale="pt" /></div><div class="hero-note"><span>Mestrado em Inteligência Artificial</span><span><strong>Equipa 10</strong> / MEIA · ISEP</span><span>Semana 1: arranque do projeto</span></div></div></section>
-<WeekOverview locale="pt" />
-<section class="section container"><div class="grid-2"><SectionTitle eyebrow="01 / O Problema" title="Quando deve mudar o consumo de energia?" /><div><p class="lead">A resposta da procura propõe que os consumidores adaptem o uso da eletricidade às mudanças de preços e às condições da rede. Decidir o que alterar depende também das necessidades do dia a dia.</p><p>O nosso projeto explora como um sistema de aconselhamento inteligente poderá tornar estas decisões mais compreensíveis para consumidores e produtores-consumidores.</p></div></div></section>
-<section class="section soft"><div class="container"><SectionTitle eyebrow="02 / A Nossa Abordagem" title="Contexto. Conhecimento. Uma razão para agir." description="Propomos uma abordagem baseada em conhecimento que relaciona uma situação energética com uma recomendação compreensível." /><div class="grid-3"><FeatureCard number="01" title="Compreender o contexto"><p>Identificar padrões de consumo relevantes, cargas flexíveis e restrições dos utilizadores.</p></FeatureCard><FeatureCard number="02" title="Estruturar o conhecimento"><p>Representar conceitos do domínio e lógica de decisão numa base de conhecimento.</p></FeatureCard><FeatureCard number="03" title="Explicar a recomendação"><p>Propor uma ação adequada e tornar o raciocínio visível para o utilizador.</p></FeatureCard></div></div></section>
-<section class="section container"><SectionTitle eyebrow="03 / Engenharia do Conhecimento" title="O conhecimento no centro do sistema." description="O processo de engenharia do conhecimento da unidade curricular orienta a aquisição, representação e aplicação de conhecimento sobre a resposta da procura." /><SystemConcept locale="pt" /><a class="text-link" href={sitePath('knowledge-engineering/')}>Explorar o processo de engenharia do conhecimento →</a></section>
-<section class="section container"><div class="section-heading-row"><SectionTitle eyebrow="04 / Diário de Desenvolvimento" title="Últimas Publicações" /><a class="text-link" href={sitePath('blog/')}>Todas as atualizações do projeto →</a></div>{posts.map(post => <PostCard post={post} />)}</section>
-</HomeMotion>
-</SiteLayout>
+<HomePage locale="pt" />
