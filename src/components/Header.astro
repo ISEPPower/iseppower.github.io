@@ -11,8 +11,8 @@ interface Props { locale?: BlogLocale; alternates: LanguageLink[]; }
 const { locale = 'en', alternates } = Astro.props;
 const sitePath = (path = '') => localizedPath(locale, path);
 const links = locale === 'pt'
-  ? [['', 'Início'], ['project/', 'Projeto'], ['blog/', 'Blog'], ['team/', 'Equipa']]
-  : [['', 'Home'], ['project/', 'Project'], ['blog/', 'Blog'], ['team/', 'Team']];
+  ? [['', 'Início'], ['challenges/', 'Desafios'], ['blog/', 'Blog'], ['team/', 'Equipa']]
+  : [['', 'Home'], ['challenges/', 'Challenges'], ['blog/', 'Blog'], ['team/', 'Team']];
 ---
 <header class="site-header">
 
@@ -25,7 +25,7 @@ const links = locale === 'pt'
 </div>
 <details class="mobile-menu"><summary>Menu <span aria-hidden="true">☰</span></summary><nav aria-label={locale === 'pt' ? 'Navegação móvel' : 'Mobile navigation'}>{links.map(([path, title]) => <HeaderLink href={sitePath(path)}>{title}</HeaderLink>)}</nav></details>
 </div>
-<div class="project-banner"><div class="container"><span>{locale === 'pt' ? 'Projeto' : 'Project'}</span><a href={sitePath('project/')}>{PROJECT_TITLE}</a></div></div>
+<div class="project-banner"><div class="container"><span>{locale === 'pt' ? 'Desafio ativo' : 'Active Challenge'}</span><a href={sitePath('challenges/#challenge-1')}>{locale === 'pt' ? 'Desafio 1' : 'Challenge 1'} · {PROJECT_TITLE}</a></div></div>
 </header>
 <style>
   .brand-logo { display: block; width: 230px; height: auto; }

@@ -8,6 +8,7 @@ const locale = post.data.lang;
 const text = blogText[locale];
 ---
 <article class="post-card">
+  {post.data.challenge && <p class="post-meta">{locale === 'pt' ? 'Desafio' : 'Challenge'} {post.data.challenge}</p>}
   <div class="post-meta"><span class="badge">{categoryLabel(post.data.category, locale)}</span><FormattedDate date={post.data.pubDate} locale={locale} /></div>
   <h3><a href={blogPostPath(post)}>{post.data.title}</a></h3>
   <p class="post-meta">{post.data.authors.join(', ')}{post.data.reportStatus === 'in-progress' && <span>{locale === 'pt' ? 'Em curso' : 'In progress'}</span>}</p>

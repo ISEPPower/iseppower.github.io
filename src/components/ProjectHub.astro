@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import Hero from './Hero.astro';
 import ProjectStatus from './ProjectStatus.astro';
 import SystemConcept from './SystemConcept.astro';
+import ChallengeTabs from './ChallengeTabs.astro';
 import { REPOSITORY_URL } from '../consts';
 import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale: Locale; }
@@ -16,9 +17,11 @@ const sections = [
   ['team-notes', pt ? 'Contributos e especialistas' : 'Contributions & experts'],
 ];
 ---
-<SiteLayout locale={locale} title={pt ? 'Projeto' : 'Project'} description={pt ? 'Semana 1: questão inicial, fases propostas, documentação.' : 'Week 1: the opening question, proposed stages, documentation.'}>
-<Hero eyebrow={pt ? 'O Projeto / Semana 1' : 'The Project / Week 1'} title={pt ? 'Uma questão. Um percurso documentado.' : 'One question. A documented journey.'} description={pt ? 'Demand Response Advisor for Smart Grids — acompanhe o trabalho desde o arranque.' : 'Demand Response Advisor for Smart Grids — follow the work from its starting point.'} />
-<div class="container section editorial">
+<SiteLayout locale={locale} title={pt ? 'Desafios' : 'Challenges'} description={pt ? 'Os desafios de mestrado da ISEPower. Desafio ativo: Demand Response Advisor for Smart Grids.' : 'ISEPower’s master’s challenges. Active challenge: Demand Response Advisor for Smart Grids.'}>
+<Hero eyebrow="ISEPower / MEIA" title={pt ? 'Os nossos desafios.' : 'Our challenges.'} description={pt ? 'Um espaço para acompanhar cada desafio do mestrado, as suas decisões e os seus resultados.' : 'A shared space to follow each master’s challenge, its decisions and its outcomes.'} />
+<div class="container"><ChallengeTabs locale={locale}>
+<div class="challenge-heading"><p class="eyebrow">{pt ? 'Desafio ativo / Desafio 1' : 'Active Challenge / Challenge 1'}</p><h2>Demand Response Advisor for Smart Grids</h2></div>
+<div class="section editorial">
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
   <div>
     <section id="overview" class="document-section">
@@ -47,8 +50,10 @@ const sections = [
     </section>
   </div>
 </div>
+</ChallengeTabs></div>
 </SiteLayout>
 <style>
+  .challenge-heading { padding-top: 3rem; max-width: 850px; }
   .document-section > .badge { margin-bottom: 1rem; }
   .resource-list { list-style: none; padding: 0; }
   .resource-list li { padding: 1rem 0; border-bottom: 1px solid var(--line); }

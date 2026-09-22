@@ -1,11 +1,11 @@
 ---
-import { REPOSITORY_URL, SITE_TITLE, PROJECT_TITLE } from '../consts';
+import { REPOSITORY_URL, SITE_TITLE } from '../consts';
 import { sitePath } from '../utils/paths';
 import type { BlogLocale } from '../utils/blog';
 interface Props { locale?: BlogLocale; }
 const { locale = 'en' } = Astro.props;
 ---
 <footer class="site-footer"><div class="container footer-inner">
-  <div><strong>{SITE_TITLE}</strong><p>{PROJECT_TITLE}</p><p>Equipa 10 · MEIA · ISEP</p></div>
+  <div><strong>{SITE_TITLE}</strong><p>{locale === 'pt' ? 'Desafios e diário de desenvolvimento' : 'Challenges & development journal'}</p><p>Equipa 10 · MEIA · ISEP</p></div>
   <div class="footer-links"><a href={REPOSITORY_URL}>{locale === 'pt' ? 'Repositório no GitHub' : 'GitHub repository'} ↗</a><a href={sitePath(locale === 'pt' ? 'pt/rss.xml' : 'rss.xml')}>{locale === 'pt' ? 'Feed RSS' : 'RSS feed'}</a><span>© 2026 Equipa 10</span></div>
 </div></footer>

@@ -1,4 +1,4 @@
 ---
-import ProjectHub from '../components/ProjectHub.astro';
+import { localizedPath } from '../utils/i18n';
+return Astro.redirect(localizedPath('en', 'challenges/'));
 ---
-<ProjectHub locale="en" />
