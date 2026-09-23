@@ -7,10 +7,10 @@ const t = projectCopy[locale];
 ---
 <p>{t.stageIntro}</p>
 <ol class="project-stages">
-  {t.stages.map(([title, description], index) => <li aria-current={index === 0 ? 'step' : undefined}>
+  {t.stages.map(([title, description], index) => <li aria-current={index === 1 ? 'step' : undefined}>
     <span class="stage-number" aria-hidden="true">0{index + 1}</span>
-    <div><span class:list={['badge', { future: index > 0 }]}>{index === 0 ? `${t.week} · ${t.active}` : t.planned}</span><h3>{title}</h3><p>{description}</p>
-    {index === 0 && <a href={localizedPath(locale, 'blog/project-kickoff/')}>{t.read} →</a>}</div>
+    <div><span class:list={['badge', { future: index !== 1 }]}>{index === 1 ? `${t.week} · ${t.active}` : index === 0 ? t.open : t.planned}</span><h3>{title}</h3><p>{description}</p>
+    {index === 1 && <a href={localizedPath(locale, 'blog/week-2-expert-selection/')}>{t.read} →</a>}</div>
   </li>)}
 </ol>
 <style>

@@ -38,7 +38,7 @@ const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
     role: 'Engenheiro de Software e Investigador · GECAD',
     bio: [
       'Sepehr Shojaee é engenheiro de software e investigador, com mais de 10 anos de experiência profissional em desenvolvimento de software, em particular em sistemas de backend e tecnologias .NET.',
-      'Atualmente, é investigador no GECAD — Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento Avançados, ISEP/IPP, Portugal — e frequenta um mestrado em Inteligência Artificial no Instituto Politécnico do Porto.',
+      'Atualmente, é investigador no GECAD - Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento Avançados, ISEP/IPP, Portugal - e frequenta um mestrado em Inteligência Artificial no Instituto Politécnico do Porto.',
       'O seu trabalho atual centra-se no desenvolvimento de soluções de software inteligentes para sistemas e comunidades de energia, incluindo integração de dados, simulação, análise de dados e avaliação de desempenho. Os seus interesses de investigação incluem inteligência artificial, engenharia de software, sistemas inteligentes, análise de dados, otimização, recursos energéticos distribuídos, comunidades de energia e sistemas energéticos inteligentes.',
     ],
   },

@@ -4,6 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 import SiteLayout from './SiteLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import { blogText, blogIndexPath, categoryLabel, type LanguageLink } from '../utils/blog';
+import { PROJECT_TITLE } from '../consts';
 type Props = CollectionEntry<'blog'>['data'] & { alternates: LanguageLink[] };
 const { title, description, pubDate, updatedDate, heroImage, category, lang, alternates, week, reportStatus, authors, contributions } = Astro.props;
 const text = blogText[lang];
@@ -14,11 +15,11 @@ const text = blogText[lang];
     <header class="article-header">
       <h1>{title}</h1><p class="lead">{description}</p>
       <div class="post-meta">
-        {Astro.props.challenge && <span>{lang === 'pt' ? 'Desafio' : 'Challenge'} {Astro.props.challenge}</span>}
+        {Astro.props.challenge && <span>{lang === 'pt' ? 'Desafio' : 'Challenge'} {Astro.props.challenge}{Astro.props.challenge === 1 && <>: {PROJECT_TITLE}</>}</span>}
         <span class="badge">{categoryLabel(category, lang)}</span>
-        <FormattedDate date={pubDate} locale={lang} /><span>{authors.join(', ')}</span>
+        <FormattedDate date={pubDate} locale={lang} /><span>{lang === 'pt' ? 'Autoria' : 'By'}: {authors.join(', ')}</span>
         {week && <span>{lang === 'pt' ? 'Semana' : 'Week'} {week}</span>}
-        {reportStatus && <span>{reportStatus === 'in-progress' ? (lang === 'pt' ? 'Em curso' : 'In progress') : (lang === 'pt' ? 'Concluído' : 'Complete')}</span>}
+        {reportStatus && <span>{lang === 'pt' ? 'Relatório' : 'Report'}: {reportStatus === 'in-progress' ? (lang === 'pt' ? 'em curso' : 'in progress') : (lang === 'pt' ? 'concluído' : 'complete')}</span>}
         {updatedDate && <span>{text.updated} <FormattedDate date={updatedDate} locale={lang} /></span>}
       </div>
     </header>
