@@ -2,16 +2,17 @@
 import type { CollectionEntry } from 'astro:content';
 import FormattedDate from './FormattedDate.astro';
 import { blogPostPath, blogText, categoryLabel } from '../utils/blog';
+import { PROJECT_TITLE } from '../consts';
 interface Props { post: CollectionEntry<'blog'>; }
 const { post } = Astro.props;
 const locale = post.data.lang;
 const text = blogText[locale];
 ---
 <article class="post-card">
-  {post.data.challenge && <p class="post-meta">{locale === 'pt' ? 'Desafio' : 'Challenge'} {post.data.challenge}</p>}
+  {post.data.challenge && <p class="post-meta">{locale === 'pt' ? 'Desafio' : 'Challenge'} {post.data.challenge}{post.data.challenge === 1 && <>: {PROJECT_TITLE}</>}</p>}
   <div class="post-meta"><span class="badge">{categoryLabel(post.data.category, locale)}</span><FormattedDate date={post.data.pubDate} locale={locale} /></div>
   <h3><a href={blogPostPath(post)}>{post.data.title}</a></h3>
-  <p class="post-meta">{post.data.authors.join(', ')}{post.data.reportStatus === 'in-progress' && <span>{locale === 'pt' ? 'Em curso' : 'In progress'}</span>}</p>
+  <p class="post-meta"><span>{locale === 'pt' ? 'Autoria' : 'By'}: {post.data.authors.join(', ')}</span>{post.data.reportStatus === 'in-progress' && <span>{locale === 'pt' ? 'Relatório: em curso' : 'Report: in progress'}</span>}</p>
   <p>{post.data.description}</p>
   <a class="text-link" href={blogPostPath(post)} aria-label={text.read + ': ' + post.data.title}>{text.read} <span aria-hidden="true">↗</span></a>
 </article>

@@ -11,7 +11,7 @@ export const blogText = {
   en: {
     title: SITE_TITLE, eyebrow: 'Development Journal / Equipa 10',
     heading: SITE_TITLE,
-    description: 'The ISEPower development journal across our master’s challenges. Active challenge: Challenge 1 — Demand Response Advisor.',
+    description: 'The ISEPower development journal across our master’s challenges. Active challenge: Challenge 1 - Demand Response Advisor.',
     updates: 'Project updates',
     introduction: 'Updates will follow the project from initial scope to knowledge engineering, prototyping and evaluation. Future results will be reported when evidence is available.',
     categories: 'Published categories', read: 'Read the update',
@@ -21,7 +21,7 @@ export const blogText = {
   pt: {
     title: SITE_TITLE, eyebrow: 'Diário de Desenvolvimento / Equipa 10',
     heading: SITE_TITLE,
-    description: 'O diário de desenvolvimento da ISEPower ao longo dos desafios do mestrado. Desafio ativo: Desafio 1 — Demand Response Advisor.',
+    description: 'O diário de desenvolvimento da ISEPower ao longo dos desafios do mestrado. Desafio ativo: Desafio 1 - Demand Response Advisor.',
     updates: 'Atualizações do projeto',
     introduction: 'As publicações acompanharão o projeto desde a definição do âmbito até à engenharia do conhecimento, prototipagem e avaliação. Os resultados serão apresentados quando houver evidências disponíveis.',
     categories: 'Categorias publicadas', read: 'Ler a publicação',

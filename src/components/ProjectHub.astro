@@ -25,7 +25,7 @@ const sections = [
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
   <div>
     <section id="overview" class="document-section">
-      <span class="badge">{pt ? 'Semana 1 · Em curso' : 'Week 1 · In progress'}</span>
+      <span class="badge">{pt ? 'Semana 2 · Em curso' : 'Week 2 · In progress'}</span>
       <h2>{sections[0][1]}</h2>
       <p>{pt ? 'Como pode um sistema recomendar uma alteração do consumo de eletricidade e explicar essa decisão, respeitando as necessidades do utilizador?' : 'How can a system recommend a change in electricity use and explain that decision while respecting the user’s needs?'}</p>
       <p>{pt ? 'Este projeto da Equipa 10, no MEIA do ISEP, está na fase inicial. Os utilizadores-alvo, cenários, fontes de conhecimento e método de avaliação ainda precisam de ser acordados.' : 'This Equipa 10 project, within MEIA at ISEP, is at its starting point. Target users, scenarios, knowledge sources and the evaluation method still need to be agreed.'}</p>
@@ -36,6 +36,8 @@ const sections = [
       <h2>{sections[2][1]}</h2>
       <p>{pt ? 'Materiais disponíveis agora. As apresentações, o relatório técnico e o vídeo de demonstração serão acrescentados quando estiverem prontos.' : 'Materials available now. Presentations, the technical report and a demonstration video will be added when they are ready.'}</p>
       <ul class="resource-list">
+        <li><a href={url('blog/week-2-expert-selection/')}>{pt ? 'Relatório da semana 2' : 'Week 2 report'} →</a><span>{pt ? 'Aquisição de conhecimento em curso · Português' : 'Knowledge acquisition in progress · English'}</span></li>
+        <li><a href={url('challenges/1/expert/')}>{pt ? 'Especialista do Desafio 1' : 'Challenge 1 expert'}: João André Pinto Soares →</a></li>
         <li><a href={url('blog/project-kickoff/')}>{pt ? 'Relatório da semana 1' : 'Week 1 report'} →</a><span>{pt ? 'Relatório em curso · Português' : 'Ongoing report · English'}</span></li>
         <li><a href={url('knowledge-engineering/')}>{pt ? 'Mapa conceptual e questões em aberto' : 'Concept map & open questions'} →</a><span>{pt ? 'Documento vivo · Português' : 'Living document · English'}</span></li>
         <li><a href={REPOSITORY_URL}>{pt ? 'Código-fonte do site' : 'Website source code'} ↗</a><span>GitHub · English / Português</span></li>
@@ -44,6 +46,8 @@ const sections = [
     </section>
     <section id="team-notes" class="document-section">
       <h2>{sections[3][1]}</h2>
+      <p>{pt ? 'João André Pinto Soares foi selecionado como especialista para o Desafio 1. A aquisição de conhecimento está em curso.' : 'João André Pinto Soares has been selected as the expert for Challenge 1. Knowledge acquisition is in progress.'}</p>
+      <a href={url('challenges/1/expert/')}>{pt ? 'Conhecer o especialista do Desafio 1' : 'Meet the Challenge 1 expert'} →</a>
       <p>{pt ? 'Cada relatório pode identificar os autores e os contributos individuais. A distribuição de tarefas da semana 1 ainda não está registada.' : 'Each report can identify its authors and individual contributions. The week 1 task allocation has not yet been recorded.'}</p>
       <p>{pt ? 'Ainda não existem notas de reuniões com especialistas publicadas. Quando houver uma sessão, o registo incluirá a pergunta, o que aprendemos e a decisão alterada, com data e participantes.' : 'No expert meeting notes have been published yet. When a session takes place, its record will include the question, what we learned and the decision it changed, with the date and participants.'}</p>
       <a href={url('team/')}>{pt ? 'Conhecer a equipa' : 'Meet the team'} →</a>
