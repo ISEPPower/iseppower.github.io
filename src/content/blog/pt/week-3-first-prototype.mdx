@@ -1,0 +1,114 @@
+---
+title: 'Semana 3: base de conhecimento revista pelo especialista e primeiro protótipo em Prolog/Drools'
+description: 'O Prof. João Soares reviu a nossa lógica baseada em regras, e a primeira regra já funciona de ponta a ponta em SWI-Prolog e em Drools.'
+pubDate: '2026-09-30'
+category: 'Prototype'
+lang: 'pt'
+translationKey: 'week-3-first-prototype'
+week: 3
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+---
+
+import { localizedPath } from '../../../utils/i18n';
+
+## Objetivo desta semana
+
+Validar a base de conhecimento do **Desafio 1: Demand Response Advisor for Smart Grids** com o nosso especialista do domínio e construir um primeiro protótipo funcional que executa a mesma regra em dois motores de inferência: **Prolog** e **Drools**.
+
+## Revisão da base de conhecimento pelo especialista
+
+Apresentámos a lógica baseada em regras ao **Prof. João Soares** (GECAD, ISEP/P.Porto), especialista do Desafio 1, e pedimos-lhe que revisse os pressupostos, as variáveis, as regras de avaliação e as decisões finais.
+
+### O que foi validado
+
+- **A estrutura em dois níveis é adequada.** Os factos de entrada são primeiro convertidos em factos intermédios de avaliação; uma segunda camada decide depois se uma carga deve arrancar já ou ser adiada.
+- **A base de regras atual é útil.** As regras baseadas em flexibilidade, prazo, janela de conforto, disponibilidade solar e tarifa podem manter-se como base simplificada.
+- **O âmbito deve manter-se simples.** Dado o tempo do projeto, o foco são as regras de conhecimento e não uma plataforma completa de gestão de energia.
+
+### Principais observações
+
+- **Definir claramente o caso de estudo:** o cliente residencial-alvo, os equipamentos flexíveis e não flexíveis e o programa de Demand Response (DR) considerado.
+- **Caracterizar cada equipamento flexível:** janela de conforto, hora de início e de fim, duração e outros limites de funcionamento.
+- **Usar o balanço líquido da habitação.** Do ponto de vista da rede, a grandeza essencial é a energia trocada com a rede: *balanço líquido = cargas flexíveis + cargas não flexíveis − produção fotovoltaica*.
+- **Verificar a suficiência solar, e não apenas um indicador.** Uma carga de 10 unidades com apenas 2 unidades de excedente continua a consumir 8 unidades da rede.
+- **Manter o modelo gerível:** poucos tipos de equipamentos flexíveis, com o restante agregado como consumo não flexível, e uma resolução de 15 minutos num horizonte de cerca de 48 horas.
+
+### A ligação em falta mais importante
+
+A observação mais relevante foi que as regras ainda não **representavam o evento de DR pedido pela rede**. Sem isso, o sistema comporta-se mais como um planeador de custos/fotovoltaico doméstico do que como um Demand Response Advisor. A base de conhecimento tem, por isso, de representar:
+
+| Área | Acréscimo |
+| --- | --- |
+| Evento de DR | Se existe um evento ativo e se pede redução ou aumento de carga |
+| Objetivo de DR | A quantidade pedida e a janela temporal do evento |
+| Progresso de DR | Que parte do objetivo já foi cumprida |
+| Suficiência solar | Se o excedente fotovoltaico atual cobre a carga selecionada |
+| Prioridade de decisão | Verificar se o objetivo de DR ainda não foi cumprido antes de deslocar mais equipamentos |
+
+A ordem de decisão revista que acordámos seguir:
+
+1. Equipamento não flexível → arrancar já.
+2. Prazo atingido → arrancar já.
+3. Evento de DR ativo e objetivo ainda não cumprido → preferir ações que ajudem a cumpri-lo, respeitando as restrições do equipamento.
+4. Excedente solar usado como razão para arrancar → apenas se for suficiente para o consumo do equipamento.
+5. Objetivo de DR já cumprido → voltar à lógica doméstica normal (uso solar, conforto, tarifa, prazos).
+
+## Base de conhecimento conceptual
+
+As regras são escritas primeiro num documento independente da tecnologia, que é a fonte única de verdade para ambos os motores. Atualmente define onze regras, R001–R011, que abrangem excedente renovável, adiamento em horas de ponta, prazos, potência contratada, ordem explícita do utilizador, cargas interrompíveis, período tarifário mais barato, conforto e armazenamento térmico de água quente, e prioridade entre cargas concorrentes.
+
+As regras de evento, objetivo e progresso de DR resultantes da revisão **ainda não foram acrescentadas**; esta é a principal tarefa da próxima semana.
+
+## Primeiro protótipo funcional
+
+Temos agora um protótipo de ponta a ponta em que a mesma regra produz a mesma recomendação a partir de dois motores de inferência diferentes.
+
+**Arquitetura:** conjunto de dados histórico → parser CSV → modelo de energia comum → inferência Prolog / Drools → recomendação normalizada → API REST → interface web.
+
+- **Backend:** Java com Spring Boot. Os dois motores implementam a mesma interface e podem ser trocados em cada pedido.
+- **Prolog:** a regra está escrita em SWI-Prolog; o backend consulta-a em cada passo temporal.
+- **Drools:** a mesma regra está escrita em DRL e é avaliada numa sessão Drools.
+- **Frontend:** uma página React onde o utilizador escolhe o motor e percorre a simulação, vendo o estado energético e a recomendação, com o identificador da regra e a explicação.
+
+### Regra implementada em ambos os motores: R001
+
+> **R001 – Arrancar a carga com excedente renovável.** Se uma carga flexível está em espera, a hora atual está dentro da sua janela de funcionamento e o excedente renovável local é **suficiente para alimentar a carga**, então arrancar a carga (START).
+
+A R001 já aplica a observação do especialista sobre a suficiência solar: compara o excedente com a potência da carga, em vez de apenas verificar se existe algum excedente. Quando nenhuma regra é ativada, ambos os motores devolvem POSTPONE (adiar).
+
+### Exemplo de execução
+
+Um dia de exemplo com uma carga flexível: uma máquina de lavar de 2,0 kW, com 90 minutos de funcionamento, permitida entre as 09:00 e as 16:00. Excedente = produção − consumo (nunca inferior a zero).
+
+| Hora | Consumo | Produção | Excedente | Tarifa | Recomendação |
+| --- | --- | --- | --- | --- | --- |
+| 08:00 | 4,5 kW | 1,2 kW | 0,0 kW | Normal | POSTPONE – antes da janela |
+| 09:00 | 4,0 kW | 2,0 kW | 0,0 kW | Normal | POSTPONE – sem excedente |
+| 10:00 | 3,0 kW | 5,5 kW | 2,5 kW | Vazio | **START (R001)** |
+| 11:00 | 2,5 kW | 6,0 kW | 3,5 kW | Vazio | START (R001) |
+| 18:00 | 6,0 kW | 0,5 kW | 0,0 kW | Ponta | POSTPONE – depois do prazo |
+
+O Prolog e o Drools produzem as mesmas recomendações para este conjunto de dados. Trata-se de dados de exemplo ilustrativos, não de dados medidos numa habitação, e não são reivindicadas poupanças.
+
+### Limitações conhecidas
+
+- Apenas a R001 está implementada nos motores; as regras R002–R011 estão definidas, mas não codificadas.
+- O estado da carga não é atualizado entre passos, pelo que a R001 volta a recomendar START às 11:00.
+- Sem a regra de prazo (R003), a carga continua apenas a ser adiada às 18:00, depois do prazo.
+- O evento, o objetivo e o progresso de DR ainda não estão modelados.
+- O conjunto de dados de exemplo usa passos horários, e não a resolução de 15 minutos sugerida pelo especialista.
+
+## Próximos passos propostos
+
+- Definir o caso de estudo: cliente residencial, equipamentos flexíveis e não flexíveis e programa de DR.
+- Acrescentar à base de conhecimento conceptual os factos de evento, objetivo e progresso de DR e o cálculo do balanço líquido.
+- Implementar a regra de prazo (R003) e as regras de DR em Prolog e em Drools, e atualizar o estado da carga entre passos.
+- Construir um cenário de dados com resolução de 15 minutos e horizonte de 48 horas.
+- Analisar as regras atualizadas com o Prof. Soares numa reunião online de acompanhamento.
+
+<a href={localizedPath('pt', 'challenges/1/expert/')}>Conhecer o Prof. João Soares - especialista do Desafio 1 →</a>
+
+Este relatório será atualizado à medida que o trabalho avançar.

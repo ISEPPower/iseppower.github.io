@@ -59,13 +59,13 @@ Add one object per confirmed person in `src/data/team.ts`. Use an array of parag
 
 ## Remaining content
 
-The project is in week 2. João André Pinto Soares is the selected expert for Challenge 1; knowledge acquisition is in progress. His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
+The project is in week 3. João André Pinto Soares, the Challenge 1 expert, has reviewed the knowledge base; the week 3 report records his feedback and the first Prolog/Drools prototype (developed in a separate repository). His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
 
 ## Weekly reporting and project documentation
 
 The site groups work under `/challenges/` and `/pt/challenges/`. Challenge 1 contains Demand Response Advisor; Challenges 2–4 are disabled placeholders with no invented topics or dates. The old `/project/` routes redirect to the challenge pages. The home page introduces ISEPower as the overall team blog. Set `challenge` in post frontmatter to associate each report with its challenge.
 
-- `src/data/project.ts` holds the shared English/Portuguese week 2 status and proposed stages.
+- `src/data/project.ts` holds the shared English/Portuguese current-week status, the latest report path (`latestReport`), per-stage status (`stageStatus`) and proposed stages.
 - `src/components/ProjectHub.astro` groups the project question, stages, available documents and contribution/session notes. Add deliverables only when real links exist, and label the file language and format.
 - `docs/templates/` contains paired English/Portuguese weekly report and expert-session templates. These files are outside the published content collection. Replace every placeholder before copying a template into `src/content/blog/` and `src/content/blog/pt/`.
 - Reports support `week`, `reportStatus` (`in-progress` or `complete`), `authors` and `contributions` (objects with `name` and translated `task`). Keep translation keys paired. Only record confirmed contributions; an empty list displays a short pending note.
