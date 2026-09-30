@@ -9,17 +9,17 @@ const pt = locale === 'pt';
 const questions = pt ? [
   ['Problema', 'Quem irá utilizar o sistema e que tarefa poderá alterar? Que prazos e necessidades devem ser respeitados?'],
   ['Conhecimento', 'Que fontes sustentam cada conceito? Que informação falta e deve ser validada com um especialista?'],
-  ['Representação e raciocínio', 'Como representar restrições e justificar uma recomendação? O formato das regras e o método de inferência estão por definir.'],
+  ['Representação e raciocínio', 'Como representar restrições e justificar uma recomendação? As regras são escritas num documento conceptual e implementadas em Prolog e em Drools; a lógica do evento de DR está a ser acrescentada.'],
   ['Avaliação', 'Que cenários permitirão verificar se as recomendações respeitam as restrições? Ainda não existem testes de investigação ou resultados publicados.'],
 ] : [
   ['Problem', 'Who will use the system, and which task could they change? What deadlines and needs must be respected?'],
   ['Knowledge', 'Which sources support each concept? What information is missing and should be validated with an expert?'],
-  ['Representation & reasoning', 'How should constraints be represented and a recommendation justified? The rule format and inference method remain to be defined.'],
+  ['Representation & reasoning', 'How should constraints be represented and a recommendation justified? Rules are written in a conceptual document and implemented in both Prolog and Drools; the DR event logic is being added.'],
   ['Evaluation', 'Which scenarios will check whether recommendations respect constraints? No research tests or results have been published yet.'],
 ];
 ---
 <SiteLayout locale={locale} title={pt ? 'Engenharia do Conhecimento' : 'Knowledge Engineering'}>
-  <Hero eyebrow={pt ? 'Desafio 1 / Semana 2' : 'Challenge 1 / Week 2'} title={pt ? 'Aquisição de conhecimento em curso.' : 'Knowledge acquisition in progress.'} description={pt ? 'João André Pinto Soares é o especialista selecionado para o Desafio 1. As escolhas técnicas ainda estão em aberto.' : 'João André Pinto Soares is the selected expert for Challenge 1. Technical choices remain open.'} />
+  <Hero eyebrow={pt ? 'Desafio 1 / Semana 3' : 'Challenge 1 / Week 3'} title={pt ? 'Base de conhecimento revista pelo especialista.' : 'Knowledge base reviewed by the expert.'} description={pt ? 'O Prof. João Soares validou a estrutura das regras em dois níveis e pediu que o evento de Demand Response da rede passe a fazer parte explícita da inferência.' : 'Prof. João Soares validated the two-level rule structure and asked for the grid’s Demand Response event to become an explicit part of the inference.'} />
   <div class="container"><a href={localizedPath(locale, 'challenges/1/expert/')}>{pt ? 'Conhecer o especialista do Desafio 1' : 'Meet the Challenge 1 expert'} →</a></div>
   <section class="section container"><SystemConcept locale={locale} /><div class="grid-2">{questions.map(([title, description]) => <article class="feature-card"><h2>{title}</h2><p>{description}</p></article>)}</div>
   <div class="callout"><h2>{pt ? 'Registo de fontes' : 'Source record'}</h2><p>{pt ? 'Ainda não foi publicada uma lista de fontes técnicas. Cada entrada deverá indicar a referência, o conceito sustentado e as limitações identificadas.' : 'A technical source list has not yet been published. Each entry should identify the reference, the concept it supports and any limitations.'}</p></div>

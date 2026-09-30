@@ -1,0 +1,114 @@
+---
+title: 'Week 3: expert-reviewed knowledge base and first Prolog/Drools prototype'
+description: 'Prof. João Soares reviewed our rule-based logic, and the first rule now runs end to end in both SWI-Prolog and Drools.'
+pubDate: '2026-09-30'
+category: 'Prototype'
+lang: 'en'
+translationKey: 'week-3-first-prototype'
+week: 3
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+---
+
+import { localizedPath } from '../../utils/i18n';
+
+## Goal for this week
+
+Validate the knowledge base for **Challenge 1: Demand Response Advisor for Smart Grids** with our domain expert, and build a first working prototype that runs the same rule in two inference engines: **Prolog** and **Drools**.
+
+## Expert review of the knowledge base
+
+We presented the current rule-based logic to **Prof. João Soares** (GECAD, ISEP/P.Porto), our expert for Challenge 1, and asked him to review the assumptions, variables, assessment rules and final decisions.
+
+### What was validated
+
+- **The two-level structure is reasonable.** Input facts are first turned into intermediate assessment facts; a second layer then decides whether a load should start now or be deferred.
+- **The current rule basis is useful.** Rules based on flexibility, deadline, comfort window, solar availability and tariff can remain as a simplified foundation.
+- **The scope should stay simple.** Given the project time, the focus is the knowledge rules, not a complete real-world energy management platform.
+
+### Main feedback
+
+- **Define the case study clearly:** the target residential customer, which appliances are flexible or non-flexible, and which Demand Response (DR) program is considered.
+- **Characterise each flexible appliance:** comfort window, start and end time, duration and other operating limits.
+- **Use the household net balance.** From the grid's perspective, the key quantity is the energy exchanged with the grid: *Net balance = flexible loads + non-flexible loads − PV generation*.
+- **Check solar adequacy, not just a flag.** A 10-unit load with only 2 units of surplus still draws 8 units from the grid.
+- **Keep the model manageable:** a few flexible device types, with the rest aggregated as non-flexible demand, and a 15-minute resolution over a horizon of about 48 hours.
+
+### The most important missing link
+
+The strongest point was that the rules did not yet **represent the DR event requested by the grid**. Without it, the system behaves more like a household cost/PV scheduler than a Demand Response Advisor. The knowledge base therefore needs to represent:
+
+| Area | Addition |
+| --- | --- |
+| DR event | Whether an event is active and whether it asks for load reduction or increase |
+| DR target | The requested amount and the event time window |
+| DR progress | How much of the target has already been met |
+| Solar adequacy | Whether the current PV surplus covers the selected load |
+| Decision priority | Check whether the DR target is still unmet before shifting more appliances |
+
+The revised decision order we agreed to work towards:
+
+1. Non-flexible appliance → start now.
+2. Deadline reached → start now.
+3. DR event active and target not yet met → prefer actions that help meet it, within the appliance's constraints.
+4. Solar surplus used as a reason to start → only if it is sufficient for the appliance's demand.
+5. DR target already met → return to normal household logic (solar use, comfort, tariff, deadlines).
+
+## Conceptual knowledge base
+
+The rules are written first as a technology-independent document, which is the single source of truth for both engines. It currently defines eleven rules, R001–R011, covering renewable surplus, peak-tariff postponement, deadlines, contracted power, user override, interruptible loads, cheapest tariff period, hot-water comfort and thermal storage, and prioritisation between competing loads.
+
+The DR event, target and progress rules from the expert review have **not yet been added**; that is the main task for next week.
+
+## First working prototype
+
+We now have an end-to-end prototype in which the same rule produces the same recommendation from two different inference engines.
+
+**Architecture:** historical dataset → CSV parser → shared energy model → Prolog / Drools inference → normalised recommendation → REST API → web interface.
+
+- **Backend:** Java with Spring Boot. Both engines implement the same interface, so they can be swapped per request.
+- **Prolog:** the rule is written in SWI-Prolog; the backend queries it for each time step.
+- **Drools:** the same rule is written in DRL and evaluated in a Drools session.
+- **Frontend:** a React page where the user picks the engine and steps through the simulation, seeing the energy snapshot and the recommendation with its rule ID and explanation.
+
+### Rule implemented in both engines: R001
+
+> **R001 – Start load using renewable surplus.** If a flexible load is waiting, the current time is inside its operating window, and the local renewable surplus is **sufficient to supply the load**, then START the load.
+
+R001 already applies the expert's solar-adequacy point: it compares the surplus with the load's power, rather than only checking that some surplus exists. When no rule fires, both engines return POSTPONE.
+
+### Example run
+
+A sample day with one flexible load: a 2.0 kW washing machine, running for 90 minutes, allowed between 09:00 and 16:00. Surplus = generation − consumption (never below zero).
+
+| Time | Consumption | Generation | Surplus | Tariff | Recommendation |
+| --- | --- | --- | --- | --- | --- |
+| 08:00 | 4.5 kW | 1.2 kW | 0.0 kW | Normal | POSTPONE – before the window |
+| 09:00 | 4.0 kW | 2.0 kW | 0.0 kW | Normal | POSTPONE – no surplus |
+| 10:00 | 3.0 kW | 5.5 kW | 2.5 kW | Off-peak | **START (R001)** |
+| 11:00 | 2.5 kW | 6.0 kW | 3.5 kW | Off-peak | START (R001) |
+| 18:00 | 6.0 kW | 0.5 kW | 0.0 kW | Peak | POSTPONE – after the deadline |
+
+Prolog and Drools produce the same recommendations for this dataset. These are illustrative sample data, not measured household data, and no savings are claimed.
+
+### Known limitations
+
+- Only R001 is implemented in the engines; R002–R011 are defined but not coded.
+- The load's state is not updated between steps, so R001 recommends START again at 11:00.
+- Without the deadline rule (R003), the load is still only postponed at 18:00, after its deadline.
+- The DR event, target and progress are not yet modelled.
+- The sample dataset uses hourly steps, not the 15-minute resolution the expert suggested.
+
+## Proposed next steps
+
+- Define the case study: residential customer, flexible and non-flexible appliances, and DR program.
+- Add the DR event, target and progress facts, and the net-balance calculation, to the conceptual knowledge base.
+- Implement the deadline (R003) and DR rules in both Prolog and Drools, and update load state between steps.
+- Build a 15-minute, 48-hour scenario dataset.
+- Review the revised rules with Prof. Soares in a follow-up online meeting.
+
+<a href={localizedPath('en', 'challenges/1/expert/')}>Meet Prof. João Soares - Challenge 1 expert →</a>
+
+This report will be updated as the work progresses.

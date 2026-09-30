@@ -68,6 +68,7 @@ const sections = pt ? [
     <aside class="contents" aria-label={pt ? 'Navegação do desafio' : 'Challenge navigation'}>
       <p>{pt ? 'Desafio 1' : 'Challenge 1'}</p>
       <a href={localizedPath(locale, 'challenges/')}>Demand Response Advisor for Smart Grids</a>
+      <a href={localizedPath(locale, 'blog/week-3-first-prototype/')}>{pt ? 'Relatório da semana 3: revisão do especialista' : 'Week 3 report: expert review'} →</a>
       <a href={localizedPath(locale, 'blog/week-2-expert-selection/')}>{pt ? 'Relatório da semana 2' : 'Week 2 report'} →</a>
     </aside>
     <div>
@@ -75,7 +76,7 @@ const sections = pt ? [
         <span class="badge">{pt ? 'Especialista selecionado' : 'Expert selected'}</span>
         <h2>{pt ? 'Participação no Desafio 1' : 'Role in Challenge 1'}</h2>
         <p>{pt ? 'João André Pinto Soares foi selecionado como especialista para o Demand Response Advisor for Smart Grids. Esta participação diz respeito exclusivamente ao Desafio 1.' : 'João André Pinto Soares has been selected as the expert for Demand Response Advisor for Smart Grids. This role is specific to Challenge 1.'}</p>
-        <p>{pt ? 'A aquisição de conhecimento está em curso. A sua experiência em otimização, redes inteligentes e IA explicável é relevante para as questões de decisão e explicação deste desafio.' : 'Knowledge acquisition is in progress. His experience in optimization, smart grids and explainable AI is relevant to this challenge’s decision and explanation questions.'}</p>
+        <p>{pt ? 'Na semana 3, reviu a lógica baseada em regras do sistema: validou a estrutura em dois níveis e identificou o evento de Demand Response da rede como a principal ligação em falta. A sua experiência em otimização, redes inteligentes e IA explicável é relevante para as questões de decisão e explicação deste desafio.' : 'In week 3 he reviewed the system’s rule-based logic, validating its two-level structure and identifying the grid’s Demand Response event as the main missing link. His experience in optimization, smart grids and explainable AI is relevant to this challenge’s decision and explanation questions.'}</p>
       </section>
       {sections.map(([title, paragraphs]) => <section class="document-section"><h2>{title}</h2>{Array.isArray(paragraphs) && paragraphs.map(paragraph => <p>{paragraph}</p>)}</section>)}
     </div>

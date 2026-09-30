@@ -1,5 +1,5 @@
 ﻿---
-import { projectCopy } from '../data/project';
+import { latestReport, projectCopy, stageStatus } from '../data/project';
 import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale?: Locale; }
 const { locale = 'en' } = Astro.props;
@@ -7,11 +7,11 @@ const t = projectCopy[locale];
 ---
 <p>{t.stageIntro}</p>
 <ol class="project-stages">
-  {t.stages.map(([title, description], index) => <li aria-current={index === 1 ? 'step' : undefined}>
+  {t.stages.map(([title, description], index) => { const status = stageStatus[index]; const active = status === 'active'; return <li aria-current={active ? 'step' : undefined}>
     <span class="stage-number" aria-hidden="true">0{index + 1}</span>
-    <div><span class:list={['badge', { future: index !== 1 }]}>{index === 1 ? `${t.week} · ${t.active}` : index === 0 ? t.open : t.planned}</span><h3>{title}</h3><p>{description}</p>
-    {index === 1 && <a href={localizedPath(locale, 'blog/week-2-expert-selection/')}>{t.read} →</a>}</div>
-  </li>)}
+    <div><span class:list={['badge', { future: status === 'planned' || status === 'open' }]}>{active ? `${t.week} · ${t.status.active}` : t.status[status]}</span><h3>{title}</h3><p>{description}</p>
+    {active && <a href={localizedPath(locale, latestReport)}>{t.read} →</a>}</div>
+  </li>; })}
 </ol>
 <style>
   .project-stages { list-style: none; padding: 0; margin: 2rem 0; }
