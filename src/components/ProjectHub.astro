@@ -25,10 +25,10 @@ const sections = [
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
   <div>
     <section id="overview" class="document-section">
-      <span class="badge">{pt ? 'Semana 3 · Em curso' : 'Week 3 · In progress'}</span>
+      <span class="badge">{pt ? 'Semana 4 · Em curso' : 'Week 4 · In progress'}</span>
       <h2>{sections[0][1]}</h2>
       <p>{pt ? 'Como pode um sistema recomendar uma alteração do consumo de eletricidade e explicar essa decisão, respeitando as necessidades do utilizador?' : 'How can a system recommend a change in electricity use and explain that decision while respecting the user’s needs?'}</p>
-      <p>{pt ? 'Este projeto da Equipa 10, no MEIA do ISEP, tem uma base de conhecimento revista pelo especialista e um primeiro protótipo em Prolog e Drools. O caso de estudo, a lógica do evento de Demand Response e o método de avaliação ainda estão a ser definidos.' : 'This Equipa 10 project, within MEIA at ISEP, has an expert-reviewed knowledge base and a first Prolog and Drools prototype. The case study, the Demand Response event logic and the evaluation method are still being defined.'}</p>
+      <p>{pt ? 'Este projeto da Equipa 10, no MEIA do ISEP, tem uma base de conhecimento em dois níveis, incluindo o evento de Demand Response, que funciona em Prolog e em Drools e explica cada decisão. As regras aguardam nova revisão do especialista e o método de avaliação ainda está a ser definido.' : 'This Equipa 10 project, within MEIA at ISEP, has a two-level knowledge base, including the Demand Response event, that runs in Prolog and Drools and explains each decision. The rules await a follow-up expert review, and the evaluation method is still being defined.'}</p>
       <SystemConcept locale={locale} />
     </section>
     <section id="stages" class="document-section"><h2>{sections[1][1]}</h2><ProjectStatus locale={locale} /><a href={url('knowledge-engineering/')}>{pt ? 'Consultar as questões de engenharia do conhecimento' : 'Explore the knowledge engineering questions'} →</a></section>
@@ -36,6 +36,7 @@ const sections = [
       <h2>{sections[2][1]}</h2>
       <p>{pt ? 'Materiais disponíveis agora. As apresentações, o relatório técnico e o vídeo de demonstração serão acrescentados quando estiverem prontos.' : 'Materials available now. Presentations, the technical report and a demonstration video will be added when they are ready.'}</p>
       <ul class="resource-list">
+        <li><a href={url('blog/week-4-rule-engine-prototype/')}>{pt ? 'Relatório da semana 4' : 'Week 4 report'} →</a><span>{pt ? 'Motor de regras, explicações, cenários de teste e vídeos · Português' : 'Rule engine, explanations, test scenarios and videos · English'}</span></li>
         <li><a href={url('blog/week-3-first-prototype/')}>{pt ? 'Relatório da semana 3' : 'Week 3 report'} →</a><span>{pt ? 'Revisão do especialista e primeiro protótipo · Português' : 'Expert review and first prototype · English'}</span></li>
         <li><a href={url('blog/week-2-expert-selection/')}>{pt ? 'Relatório da semana 2' : 'Week 2 report'} →</a><span>{pt ? 'Aquisição de conhecimento em curso · Português' : 'Knowledge acquisition in progress · English'}</span></li>
         <li><a href={url('challenges/1/expert/')}>{pt ? 'Especialista do Desafio 1' : 'Challenge 1 expert'}: João André Pinto Soares →</a></li>
@@ -43,7 +44,7 @@ const sections = [
         <li><a href={url('knowledge-engineering/')}>{pt ? 'Mapa conceptual e questões em aberto' : 'Concept map & open questions'} →</a><span>{pt ? 'Documento vivo · Português' : 'Living document · English'}</span></li>
         <li><a href={REPOSITORY_URL}>{pt ? 'Código-fonte do site' : 'Website source code'} ↗</a><span>GitHub · English / Português</span></li>
       </ul>
-      <p class="caption">{pt ? 'O protótipo usa dados de exemplo ilustrativos. Ainda não foram publicados resultados de avaliação nem poupanças medidas.' : 'The prototype uses illustrative sample data. No evaluation results or measured savings have been published yet.'}</p>
+      <p class="caption">{pt ? 'O relatório da semana 4 inclui um primeiro resultado simulado para uma habitação. Ainda não foram publicadas poupanças medidas.' : 'The week 4 report includes a first simulated result for one household. No measured savings have been published yet.'}</p>
     </section>
     <section id="team-notes" class="document-section">
       <h2>{sections[3][1]}</h2>

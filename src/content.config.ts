@@ -23,6 +23,8 @@ const blog = defineCollection({
 			authors: z.array(z.string().min(1)).default(['ISEPower']),
 			contributions: z.array(z.object({ name: z.string().min(1), task: z.string().min(1) })).default([]),
 			heroImage: z.optional(image()),
+			// MP4 path relative to public/, shown at the top of the post instead of an image.
+			heroVideo: z.object({ src: z.string().min(1), title: z.string().min(1) }).optional(),
 		}),
 });
 
