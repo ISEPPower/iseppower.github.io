@@ -3,10 +3,11 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import SiteLayout from './SiteLayout.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import PostVideo from '../components/PostVideo.astro';
 import { blogText, blogIndexPath, categoryLabel, type LanguageLink } from '../utils/blog';
 import { PROJECT_TITLE } from '../consts';
 type Props = CollectionEntry<'blog'>['data'] & { alternates: LanguageLink[] };
-const { title, description, pubDate, updatedDate, heroImage, category, lang, alternates, week, reportStatus, authors, contributions } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, heroVideo, category, lang, alternates, week, reportStatus, authors, contributions } = Astro.props;
 const text = blogText[lang];
 ---
 <SiteLayout title={title} description={description} type="article" locale={lang} alternates={alternates}>
@@ -24,6 +25,7 @@ const text = blogText[lang];
       </div>
     </header>
     {heroImage && <Image src={heroImage} width={780} alt="" />}
+    {heroVideo && <PostVideo src={heroVideo.src} title={heroVideo.title} />}
     <div class="prose"><slot /></div>
     <section class="callout" aria-labelledby="contributions-heading">
       <h2 id="contributions-heading">{lang === 'pt' ? 'Contributos da equipa' : 'Team contributions'}</h2>

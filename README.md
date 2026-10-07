@@ -53,13 +53,13 @@ translationKey: 'your-update'
 ---
 ```
 
-Replace the sample date with the actual publication date. Optional fields: `updatedDate` and `heroImage`. Categories: Project Updates, Knowledge Acquisition, Knowledge Representation, Prototype, Research, Results. Use the same translationKey for the English and Portuguese versions. All collection entries are published at build time; there is no draft or scheduled-publication mechanism. Index, home and RSS sort by publication date.
+Replace the sample date with the actual publication date. Optional fields: `updatedDate`, `heroImage` and `heroVideo` (`{ src, title }`, an MP4 path relative to `public/`, shown at the top of the post). Inside MDX posts, `PostVideo` and `PostFigure` (in `src/components/`) embed further videos and full-size-linked diagrams from `public/`. Categories: Project Updates, Knowledge Acquisition, Knowledge Representation, Prototype, Research, Results. Use the same translationKey for the English and Portuguese versions. All collection entries are published at build time; there is no draft or scheduled-publication mechanism. Index, home and RSS sort by publication date.
 
 Add one object per confirmed person in `src/data/team.ts`. Use an array of paragraphs for `bio`. Optional fields are `email`, `linkedin`, `github` (full URLs), and `image` (a path relative to `public/`, such as `images/member.jpg`). Missing links do not render dead anchors. Add further members as their details become available.
 
 ## Remaining content
 
-The project is in week 3. João André Pinto Soares, the Challenge 1 expert, has reviewed the knowledge base; the week 3 report records his feedback and the first Prolog/Drools prototype (developed in a separate repository). His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
+The project is in week 4. João André Pinto Soares, the Challenge 1 expert, reviewed the knowledge base in week 3. The week 4 report documents the two-level rule base, its Prolog/Drools implementation (developed in a separate repository), the test scenarios and the week 4 videos. His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
 
 ## Weekly reporting and project documentation
 

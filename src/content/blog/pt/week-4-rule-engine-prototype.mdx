@@ -1,0 +1,192 @@
+---
+title: 'Semana 4: protótipo do motor de regras e implementação da base de conhecimento'
+description: 'A base de conhecimento em dois níveis já funciona em SWI-Prolog e em Drools: doze regras de avaliação, nove regras de decisão, START_NOW / DEFER com explicações e oito cenários de referência.'
+pubDate: '2026-10-07'
+category: 'Knowledge Representation'
+lang: 'pt'
+translationKey: 'week-4-rule-engine-prototype'
+week: 4
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+heroVideo: { src: 'videos/week-4/week-4-short.mp4', title: 'Vídeo curto da semana 4' }
+---
+
+import PostFigure from '../../../components/PostFigure.astro';
+import PostVideo from '../../../components/PostVideo.astro';
+
+## Objetivo desta semana
+
+Implementar e validar a primeira versão executável da base de conhecimento do **Demand Response Advisor** e da sua lógica de inferência. Para cada pedido de equipamento pendente, o sistema responde a uma questão, **START_NOW ou DEFER** (arrancar já ou adiar), e explica porquê.
+
+## Das observações do especialista à lógica de decisão
+
+Na semana passada, o Prof. João Soares reviu as nossas regras. Esta semana, cada uma das suas observações passou a fazer parte da base de conhecimento:
+
+| Observação do especialista | Onde está agora |
+| --- | --- |
+| Definir claramente o caso de estudo | Habitação `residential4` do conjunto de dados CoSSMic, com um evento de DR do tipo SHIFTING |
+| Caracterizar cada equipamento flexível | Janela de conforto, hora de início e de fim e duração por equipamento |
+| Usar o balanço líquido da habitação | Balanço líquido = cargas flexíveis + cargas não flexíveis − FV, que alimenta a A05 |
+| O excedente solar não é um indicador percentual | A A05 exige que o excedente FV cubra toda a carga (défice da rede ≤ 0,1 kW) |
+| Falta o evento de DR | Regras de avaliação A09–A12 e regras de decisão D08–D09 |
+| Acompanhar o cumprimento do DR | A energia de DR em falta (A09, A10); quando o objetivo é cumprido, os equipamentos deixam de ser deslocados por causa dele |
+| Manter o modelo gerível | Três equipamentos flexíveis: máquina de lavar loiça, máquina de lavar roupa e veículo elétrico |
+| Usar uma resolução temporal simples | Passos de 15 minutos num horizonte de 48 horas |
+
+**Caso de estudo.** Uma habitação com painéis fotovoltaicos (FV) no telhado produz 68,3 kWh em 48 horas, com um pico de 8,1 kW por volta do meio-dia, enquanto o seu consumo não deslocável é de 40,3 kWh. Um ciclo de cada um dos equipamentos (máquina de lavar loiça, máquina de lavar roupa e VE) consome cerca de 8,1 kWh, e nenhum precisa de arrancar num minuto específico, apenas de terminar até à hora definida pelo utilizador.
+
+## Arquitetura
+
+A arquitetura separa dados, conhecimento, raciocínio e resultados. Os ficheiros de entrada são lidos e validados, convertidos em factos de contexto para cada pedido de equipamento e processados pelos dois níveis de regras, até uma decisão com a respetiva explicação. Não existe base de dados; as decisões são registadas num log.
+
+<PostFigure src="images/blog/week-4/architecture.png" width={1552} height={122} alt="Pipeline: conjunto de dados e entradas, parser e validação, factos de contexto (cargas, FV, tarifa, evento de DR), avaliação de Nível 1, decisão de Nível 2, decisão com explicação e log." caption="Figura 1 - Arquitetura global do sistema." />
+
+## Base de conhecimento em Prolog
+
+Cada pedido de equipamento é descrito por factos de evidência, um conjunto por pedido num dado passo temporal. A representação é intencionalmente simples:
+
+| Evidência | Significado | Usada por |
+| --- | --- | --- |
+| `flexible(R)` | O utilizador permite adiar o arranque (ausente = não flexível) | A01 |
+| `slack_steps(R, N)` | Passos de 15 minutos até ao último arranque possível | A02 |
+| `in_comfort_window(R)` | Um ciclo iniciado agora cabe nas horas permitidas | A03, A04 |
+| `grid_shortfall_kw(R, Kw)` | Potência da carga que o excedente FV atual não cobre | A05 |
+| `best_future_solar_share(R, F)` | Melhor fração FV entre os arranques futuros possíveis | A08 |
+| `solar_gain_if_waiting(R, F)` | Melhor fração FV futura menos a fração FV atual | A06, A08 |
+| `tariff_saving_if_waiting(R, F)` | Redução relativa do custo com uma tarifa futura mais barata | A07 |
+| `dr_target_kwh(R, E)` | Energia pedida pelo evento de DR da rede | A10 |
+| `dr_remaining_kwh(R, E)` | Parte do objetivo de DR ainda não cumprida | A09, A10 |
+| `dr_contribution_now_kwh(R, E)` | Contributo de um arranque imediato para o pedido de DR (negativo se o contraria) | A12 |
+| `dr_benefit_if_waiting_kwh(R, E)` | Quanto melhor um arranque posterior serve o pedido de DR | A11, A12 |
+
+A base de conhecimento está dividida em ficheiros pequenos, para que níveis futuros possam ser acrescentados sem reescrever o Nível 1:
+
+- `assessment_rules.pl`: Nível 1, `assessment(Request, Finding, RuleId)` para A01–A12.
+- `decision_rules.pl`: Nível 2, `decision_rule(RuleId, Request, Action)` para D01–D09, com prioridades e resolução de conflitos.
+- `why_not.pl`: explicações e *why not* (porque não).
+- `facts.pl` e `examples.pl`: os cenários de referência e o programa que os verifica.
+
+## Nível 1: regras de avaliação
+
+O Nível 1 não decide nada. Converte a evidência numérica de um pedido em conclusões qualitativas, que o Nível 2 utiliza depois. Todas as regras do Nível 1 têm a mesma prioridade, pelo que todas as conclusões estão disponíveis antes de qualquer decisão.
+
+<PostFigure src="images/blog/week-4/level-1-assessment.png" width={1778} height={1006} alt="Fluxograma do Nível 1: a partir da evidência do pedido, cada teste deriva uma conclusão, como não flexível, prazo atingido, janela de conforto aberta ou fechada, excedente solar suficiente, melhor solar mais tarde, tarifa mais barata mais tarde e as conclusões sobre o pedido da rede." caption="Figura 2 - Fluxograma do Nível 1: avaliação de um pedido de carga." />
+
+| Regra | Condição | Conclusão |
+| --- | --- | --- |
+| A01 | O pedido não é flexível | NOT_FLEXIBLE |
+| A02 | `slackSteps ≤ 0` | DEADLINE_REACHED |
+| A03 | Dentro da janela de conforto | COMFORT_WINDOW_OPEN |
+| A04 | Fora da janela de conforto | COMFORT_WINDOW_CLOSED |
+| A05 | `gridShortfallKw ≤ 0,1` (o FV cobre toda a carga) | SOLAR_SURPLUS_SUFFICIENT |
+| A06 | `solarGainIfWaiting ≥ 0,1` | BETTER_SOLAR_LATER |
+| A07 | `tariffSavingIfWaiting ≥ 0,1` | CHEAPER_TARIFF_LATER |
+| A08 | `bestFutureSolarShare ≥ 0,5` e `0 < solarGainIfWaiting < 0,1` | BETTER_SOLAR_LATER |
+| A09 | `drRemainingKWh > 0` | DR_TARGET_UNMET |
+| A10 | `drTargetKWh > 0` e `drRemainingKWh ≤ 0` | DR_TARGET_MET |
+| A11 | DR_TARGET_UNMET e `drBenefitIfWaitingKWh ≥ 0,01` | DR_DEFER_HELPS |
+| A12 | DR_TARGET_UNMET, `drContributionNowKWh ≥ 0,05` e `drBenefitIfWaitingKWh < 0,01` | DR_START_HELPS |
+
+Em Prolog, uma regra lê-se quase como a sua definição. Por exemplo, a A05:
+
+```prolog
+% The PV surplus must cover the load's power, not just part of it (0.1 kW tolerance).
+assessment(R, solar_surplus_sufficient, a05) :-
+    check(R, grid_shortfall_kw =< 0.1).
+```
+
+## Nível 2: regras de decisão START_NOW / DEFER
+
+O Nível 2 combina as conclusões numa única decisão. Cada regra que recomenda adiar exclui explicitamente os casos que têm de arrancar (prazo atingido, não flexível), pelo que um pedido nunca recebe duas decisões contraditórias.
+
+<PostFigure src="images/blog/week-4/level-2-decision.png" width={1592} height={813} alt="Fluxograma de decisão do Nível 2: verifica a flexibilidade, o prazo, a janela de conforto, o pedido da rede, o excedente FV, o FV futuro e a tarifa mais barata, terminando em START NOW ou DEFER com uma razão." caption="Figura 3 - Fluxograma de decisão do Nível 2 (START_NOW vs DEFER)." />
+
+| Regra | Prioridade | Condições | Decisão |
+| --- | --- | --- | --- |
+| D01 | 6 – restrição do equipamento | NOT_FLEXIBLE | START_NOW |
+| D02 | 6 – restrição do equipamento | DEADLINE_REACHED | START_NOW |
+| D03 | 6 – restrição do equipamento | COMFORT_WINDOW_CLOSED, sem prazo atingido, flexível | DEFER |
+| D08 | 5 – pedido de DR | DR_DEFER_HELPS, sem prazo atingido, flexível | DEFER |
+| D09 | 5 – pedido de DR | DR_START_HELPS e COMFORT_WINDOW_OPEN | START_NOW |
+| D04 | 0 – habitação | SOLAR_SURPLUS_SUFFICIENT, COMFORT_WINDOW_OPEN, sem DR_DEFER_HELPS | START_NOW |
+| D05 | 0 – habitação | BETTER_SOLAR_LATER, sem excedente suficiente agora, sem DR_START_HELPS, sem prazo atingido, flexível | DEFER |
+| D06 | 0 – habitação | CHEAPER_TARIFF_LATER, janela aberta, sem razão FV, sem DR_START_HELPS, sem prazo atingido, flexível | DEFER |
+| D07 | 0 – habitação | Janela aberta e nada a ganhar em esperar (regra por omissão) | START_NOW |
+
+A ordem de prioridade segue a orientação do especialista: primeiro as restrições do equipamento, depois o pedido de DR da rede enquanto não estiver cumprido e, por fim, a lógica doméstica normal (solar, tarifa, regra por omissão). Quando várias regras se aplicam, é ativada a de maior prioridade, pelo que cada pedido recebe exatamente uma decisão.
+
+## Decisões e explicações
+
+A ordem de processamento é: **entrada → base de conhecimento → regras de inferência → decisão → explicação**. Cada decisão indica as conclusões derivadas, a regra ativada e, através do *why not*, porque não foi tomada a outra decisão. A explicação é derivada das próprias regras, inspecionando as suas condições, e não escrita à mão.
+
+Exemplo: cenário **s2**, um equipamento flexível com 20% de cobertura FV agora e 70% esperados mais tarde.
+
+```text
+Request: s2
+Assessments:
+  a03 comfort_window_open
+  a06 better_solar_later
+Decision rule: d05
+Decision: defer
+Why not start_now?
+  d01: blocked – the request is flexible
+  d02: blocked – slack_steps = 4, not ≤ 0
+  d04: blocked – grid_shortfall_kw = 1.8, not ≤ 0.1
+  d07: blocked – better_solar_later was derived (a06)
+```
+
+Em palavras simples: *o equipamento é flexível e ainda há folga suficiente; o excedente FV atual não cobre a carga e esperar dá uma cobertura solar muito melhor, por isso DEFER.*
+
+## Cenários de teste
+
+Oito cenários de referência cobrem as principais situações e as interações entre condições. A mesma evidência é usada pelos testes do backend, que verificam que o Drools chega às mesmas conclusões e decisão que o Prolog.
+
+| Cenário | Situação | Decisão | Regra |
+| --- | --- | --- | --- |
+| s1 | Prazo atingido (folga = 0) | START_NOW | D02 |
+| s2 | Flexível, FV muito melhor mais tarde (20% → 70%) | DEFER | D05 |
+| s3 | Flexível, sem benefício FV, tarifa 45% mais barata mais tarde | DEFER | D06 |
+| s4 | Evento de DR REDUCTION; um arranque posterior evita 1,2 kWh na janela | DEFER | D08 |
+| s5 | Evento de DR INCREASE; arrancar já ajuda, embora a tarifa seja mais barata mais tarde | START_NOW | D09 |
+| s6 | Nada a ganhar em esperar | START_NOW | D07 |
+| s7 | Não flexível durante um evento de DR SHIFTING: prevalece a restrição do utilizador | START_NOW | D01 |
+| s8 | Flexível, mas fora da janela de conforto | DEFER | D03 |
+
+Os cenários s5 e s7 mostram condições que interagem: em s5, o pedido de DR tem prioridade sobre a poupança tarifária; em s7, a restrição do utilizador tem prioridade sobre o pedido de DR.
+
+**Validação:** os oito cenários produzem a decisão esperada em SWI-Prolog:
+
+```sh
+swipl knowledge-base/prolog/examples.pl
+# ... All scenarios produce the expected decision.
+```
+
+## Primeiro resultado de simulação
+
+No caso de estudo de 48 horas, o sistema foi comparado com a ausência de controlo (cada equipamento arranca assim que está disponível). A produção FV, a carga não deslocável e as utilizações dos equipamentos são idênticas; apenas mudam as horas de arranque.
+
+| Execução de referência (48 h) | Sem controlo | Com o sistema |
+| --- | --- | --- |
+| Importação da rede | 31,68 kWh | 24,70 kWh (−22%) |
+| Pico de importação da rede | 7,28 kW | 4,20 kW (−42%) |
+| Custo líquido de eletricidade | 2,62 € | 1,58 € (−39%) |
+| Evento de DR SHIFTING | – | 6,02 de 5,00 kWh entregues |
+
+Trata-se de resultados simulados para um conjunto de dados de uma habitação e uma execução de referência, e não de poupanças medidas.
+
+## Vídeo completo
+
+O vídeo completo apresenta o trabalho da semana 4 com mais pormenor.
+
+<PostVideo src="videos/week-4/week-4-full.mp4" title="Vídeo completo da semana 4" caption="Vídeo completo da semana 4 (cerca de 10 minutos)." />
+
+## Próximos passos propostos
+
+- Analisar as regras, os limiares e os cenários revistos com o Prof. João Soares.
+- Acrescentar um cenário em que o excedente FV atual cobre a carga (D04) e outro com folga negativa.
+- Continuar a comparação entre as implementações em Prolog e em Drools e concluir a alternância de motor no frontend.
+- Acordar os cenários de avaliação e documentar as limitações.
+
+Este relatório será atualizado à medida que o trabalho avançar.

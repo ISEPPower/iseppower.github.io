@@ -1,0 +1,15 @@
+---
+import { sitePath } from '../utils/paths';
+interface Props { src: string; alt: string; caption: string; width: number; height: number; }
+// src is a path relative to public/. The image links to its full-size file for detailed diagrams.
+const { src, alt, caption, width, height } = Astro.props;
+---
+<figure class="post-figure">
+  <a href={sitePath(src)}><img src={sitePath(src)} alt={alt} width={width} height={height} loading="lazy" /></a>
+  <figcaption class="caption">{caption}</figcaption>
+</figure>
+<style>
+  .post-figure { margin: 1.5rem 0 2rem; }
+  img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid var(--line); padding: .5rem; }
+  .caption { margin-top: .6rem; }
+</style>

@@ -1,22 +1,22 @@
 import type { Locale } from '../utils/i18n';
 
 // Update only when the team confirms a change. Stages are not dated commitments.
-export const currentWeek = 3;
-export const latestReport = 'blog/week-3-first-prototype/';
-export type StageStatus = 'open' | 'review' | 'active' | 'started' | 'planned';
+export const currentWeek = 4;
+export const latestReport = 'blog/week-4-rule-engine-prototype/';
+export type StageStatus = 'open' | 'defined' | 'review' | 'active' | 'started' | 'planned';
 // One status per stage, in the same order as `stages` below. 'active' is the current focus.
-export const stageStatus: StageStatus[] = ['open', 'review', 'active', 'started', 'planned'];
+export const stageStatus: StageStatus[] = ['defined', 'review', 'active', 'started', 'started'];
 export const projectCopy = {
   en: {
-    week: 'Week 3', focus: 'Expert-reviewed knowledge base · First Prolog/Drools prototype',
-    now: 'Current focus', nowText: 'Prof. João Soares reviewed our rule logic. The first rule (R001) runs end to end in both SWI-Prolog and Drools.',
-    next: 'Next proposed output', nextText: 'A revised knowledge base with the grid’s Demand Response event, target and progress, for a follow-up expert review.',
-    journal: 'Latest report', journalText: 'Week 3 · Expert review of the knowledge base and first working prototype.',
-    read: 'Read the week 3 report', stageTitle: 'From a question to an explained decision',
-    stageIntro: 'We are in week 3. The expert has reviewed the rule structure and a first rule runs in both inference engines. The Demand Response event logic is being added. Later stages are proposed, with no confirmed dates.',
-    status: { open: 'Open questions', review: 'Expert-reviewed', active: 'In progress', started: 'Started', planned: 'Planned' },
+    week: 'Week 4', focus: 'Rule engine prototype · Knowledge base implementation',
+    now: 'Current focus', nowText: 'The two-level knowledge base (A01–A12, D01–D09) runs in SWI-Prolog and Drools, deciding START_NOW or DEFER with an explanation for each request.',
+    next: 'Next proposed output', nextText: 'A follow-up review of the rules, thresholds and test scenarios with Prof. João Soares.',
+    journal: 'Latest report', journalText: 'Week 4 · Rule engine prototype, decision explanations and test scenarios.',
+    read: 'Read the week 4 report', stageTitle: 'From a question to an explained decision',
+    stageIntro: 'We are in week 4. The knowledge base, including the Demand Response event, runs in both inference engines and passes eight reference scenarios. The rules are ready for a follow-up expert review. Later stages are proposed, with no confirmed dates.',
+    status: { open: 'Open questions', defined: 'Defined', review: 'Expert-reviewed', active: 'In progress', started: 'Started', planned: 'Planned' },
     stages: [
-      ['Problem & scope', 'Frame the decision question and define the case study: residential customer, flexible appliances and Demand Response program.'],
+      ['Problem & scope', 'Case study defined: one CoSSMic household with rooftop PV, three flexible appliances and a SHIFTING Demand Response event, over 48 hours in 15-minute steps.'],
       ['Knowledge acquisition', 'Identify sources and record what each source contributes to the decision problem.'],
       ['Decision rules', 'Choose a representation and document the assumptions behind candidate rules.'],
       ['Advisory prototype', 'Connect agreed inputs to recommendations and readable explanations.'],
@@ -24,15 +24,15 @@ export const projectCopy = {
     ],
   },
   pt: {
-    week: 'Semana 3', focus: 'Base de conhecimento revista pelo especialista · Primeiro protótipo em Prolog/Drools',
-    now: 'Foco atual', nowText: 'O Prof. João Soares reviu a nossa lógica de regras. A primeira regra (R001) funciona de ponta a ponta em SWI-Prolog e em Drools.',
-    next: 'Próximo resultado proposto', nextText: 'Uma base de conhecimento revista, com o evento, o objetivo e o progresso de Demand Response pedidos pela rede, para nova revisão do especialista.',
-    journal: 'Relatório mais recente', journalText: 'Semana 3 · Revisão da base de conhecimento pelo especialista e primeiro protótipo funcional.',
-    read: 'Ler o relatório da semana 3', stageTitle: 'De uma questão a uma decisão explicada',
-    stageIntro: 'Estamos na semana 3. O especialista reviu a estrutura das regras e uma primeira regra funciona em ambos os motores de inferência. A lógica do evento de Demand Response está a ser acrescentada. As fases seguintes são propostas, sem datas confirmadas.',
-    status: { open: 'Questões em aberto', review: 'Revisto pelo especialista', active: 'Em curso', started: 'Iniciado', planned: 'Planeada' },
+    week: 'Semana 4', focus: 'Protótipo do motor de regras · Implementação da base de conhecimento',
+    now: 'Foco atual', nowText: 'A base de conhecimento em dois níveis (A01–A12, D01–D09) funciona em SWI-Prolog e em Drools, decidindo START_NOW ou DEFER com uma explicação para cada pedido.',
+    next: 'Próximo resultado proposto', nextText: 'Uma nova revisão das regras, dos limiares e dos cenários de teste com o Prof. João Soares.',
+    journal: 'Relatório mais recente', journalText: 'Semana 4 · Protótipo do motor de regras, explicações das decisões e cenários de teste.',
+    read: 'Ler o relatório da semana 4', stageTitle: 'De uma questão a uma decisão explicada',
+    stageIntro: 'Estamos na semana 4. A base de conhecimento, incluindo o evento de Demand Response, funciona em ambos os motores de inferência e passa oito cenários de referência. As regras estão prontas para nova revisão do especialista. As fases seguintes são propostas, sem datas confirmadas.',
+    status: { open: 'Questões em aberto', defined: 'Definido', review: 'Revisto pelo especialista', active: 'Em curso', started: 'Iniciado', planned: 'Planeada' },
     stages: [
-      ['Problema e âmbito', 'Enquadrar a questão de decisão e definir o caso de estudo: cliente residencial, equipamentos flexíveis e programa de Demand Response.'],
+      ['Problema e âmbito', 'Caso de estudo definido: uma habitação CoSSMic com FV no telhado, três equipamentos flexíveis e um evento de Demand Response do tipo SHIFTING, em 48 horas com passos de 15 minutos.'],
       ['Aquisição de conhecimento', 'Identificar fontes e registar o contributo de cada uma para o problema de decisão.'],
       ['Regras de decisão', 'Escolher uma representação e documentar os pressupostos das regras candidatas.'],
       ['Protótipo de aconselhamento', 'Ligar os dados acordados a recomendações e explicações compreensíveis.'],

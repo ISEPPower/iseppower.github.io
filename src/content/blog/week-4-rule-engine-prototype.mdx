@@ -1,0 +1,192 @@
+---
+title: 'Week 4: rule engine prototype and knowledge base implementation'
+description: 'The two-level knowledge base now runs in SWI-Prolog and Drools: twelve assessment rules, nine decision rules, START_NOW / DEFER with explanations, and eight reference scenarios.'
+pubDate: '2026-10-07'
+category: 'Knowledge Representation'
+lang: 'en'
+translationKey: 'week-4-rule-engine-prototype'
+week: 4
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+heroVideo: { src: 'videos/week-4/week-4-short.mp4', title: 'Week 4 short video' }
+---
+
+import PostFigure from '../../components/PostFigure.astro';
+import PostVideo from '../../components/PostVideo.astro';
+
+## Goal for this week
+
+Implement and validate the first executable version of the **Demand Response Advisor** knowledge base and its inference logic. For every pending appliance request, the system answers one question, **START_NOW or DEFER**, and explains why.
+
+## From expert feedback to decision logic
+
+Last week, Prof. João Soares reviewed our rules. This week, each point of his feedback was turned into part of the knowledge base:
+
+| Expert insight | Where it is now |
+| --- | --- |
+| Define the case study clearly | Household `residential4` of the CoSSMic dataset, with a SHIFTING DR event |
+| Characterise each flexible appliance | Comfort window, start and end time and duration per appliance |
+| Use the household net balance | Net balance = flexible loads + non-flexible loads − PV, which feeds A05 |
+| Solar surplus is not a percentage flag | A05 requires the PV surplus to cover the whole load (grid shortfall ≤ 0.1 kW) |
+| The DR event is missing | Assessment rules A09–A12 and decision rules D08–D09 |
+| Track DR fulfilment | The remaining DR energy (A09, A10); once the target is met, appliances are no longer shifted for it |
+| Keep the model manageable | Three flexible appliances: dishwasher, washing machine, electric vehicle |
+| Use a simple time resolution | 15-minute steps over 48 hours |
+
+**Case study.** A single home with rooftop PV produces 68.3 kWh over 48 hours, with a peak of 8.1 kW around midday, while its non-shiftable consumption is 40.3 kWh. One cycle each of the dishwasher, washing machine and EV uses about 8.1 kWh, and none of them needs to start at a specific minute, only to finish by the time the user set.
+
+## Architecture
+
+The architecture keeps data, knowledge, reasoning and output separate. Input files are parsed and validated, turned into context facts for each appliance request, and passed through the two rule levels to one decision with its explanation. There is no database; decisions are written to a log.
+
+<PostFigure src="images/blog/week-4/architecture.png" width={1552} height={122} alt="Pipeline: dataset and inputs, parser and validation, context facts (loads, PV, tariff, DR event), Level 1 assessment, Level 2 decision, decision with explanation and log." caption="Figure 1 - Global system architecture." />
+
+## Prolog knowledge base
+
+Each appliance request is described by evidence facts, one set per request at one time step. The representation is kept deliberately simple:
+
+| Evidence | Meaning | Used by |
+| --- | --- | --- |
+| `flexible(R)` | The user allows the start to be delayed (absent = not flexible) | A01 |
+| `slack_steps(R, N)` | 15-minute steps left before the latest feasible start | A02 |
+| `in_comfort_window(R)` | A cycle started now fits inside the allowed hours | A03, A04 |
+| `grid_shortfall_kw(R, Kw)` | Load power the current PV surplus cannot cover | A05 |
+| `best_future_solar_share(R, F)` | Best PV fraction over the feasible later starts | A08 |
+| `solar_gain_if_waiting(R, F)` | Best future PV fraction minus the PV fraction now | A06, A08 |
+| `tariff_saving_if_waiting(R, F)` | Relative cost reduction from a cheaper later tariff | A07 |
+| `dr_target_kwh(R, E)` | Energy requested by the grid's DR event | A10 |
+| `dr_remaining_kwh(R, E)` | Part of the DR target not yet delivered | A09, A10 |
+| `dr_contribution_now_kwh(R, E)` | What starting now contributes to the DR request (negative if it works against it) | A12 |
+| `dr_benefit_if_waiting_kwh(R, E)` | How much better a later start serves the DR request | A11, A12 |
+
+The knowledge base is split into small files, so later levels can be added without rewriting Level 1:
+
+- `assessment_rules.pl`: Level 1, `assessment(Request, Finding, RuleId)` for A01–A12.
+- `decision_rules.pl`: Level 2, `decision_rule(RuleId, Request, Action)` for D01–D09, with priorities and conflict resolution.
+- `why_not.pl`: explanations and *why not*.
+- `facts.pl` and `examples.pl`: the reference scenarios and the program that checks them.
+
+## Level 1: assessment rules
+
+Level 1 decides nothing. It turns the numeric evidence of a request into qualitative findings, which Level 2 then uses. All Level 1 rules have the same priority, so every finding is available before any decision is taken.
+
+<PostFigure src="images/blog/week-4/level-1-assessment.png" width={1778} height={1006} alt="Level 1 flowchart: from the request evidence, each test derives a finding such as not flexible, deadline reached, comfort window open or closed, solar surplus sufficient, better solar later, cheaper tariff later, and the grid request findings." caption="Figure 2 - Level 1 flowchart: assessment of a load request." />
+
+| Rule | Condition | Finding |
+| --- | --- | --- |
+| A01 | The request is not flexible | NOT_FLEXIBLE |
+| A02 | `slackSteps ≤ 0` | DEADLINE_REACHED |
+| A03 | Inside the comfort window | COMFORT_WINDOW_OPEN |
+| A04 | Outside the comfort window | COMFORT_WINDOW_CLOSED |
+| A05 | `gridShortfallKw ≤ 0.1` (PV covers the whole load) | SOLAR_SURPLUS_SUFFICIENT |
+| A06 | `solarGainIfWaiting ≥ 0.1` | BETTER_SOLAR_LATER |
+| A07 | `tariffSavingIfWaiting ≥ 0.1` | CHEAPER_TARIFF_LATER |
+| A08 | `bestFutureSolarShare ≥ 0.5` and `0 < solarGainIfWaiting < 0.1` | BETTER_SOLAR_LATER |
+| A09 | `drRemainingKWh > 0` | DR_TARGET_UNMET |
+| A10 | `drTargetKWh > 0` and `drRemainingKWh ≤ 0` | DR_TARGET_MET |
+| A11 | DR_TARGET_UNMET and `drBenefitIfWaitingKWh ≥ 0.01` | DR_DEFER_HELPS |
+| A12 | DR_TARGET_UNMET, `drContributionNowKWh ≥ 0.05` and `drBenefitIfWaitingKWh < 0.01` | DR_START_HELPS |
+
+In Prolog, a rule reads almost like its definition. For example, A05:
+
+```prolog
+% The PV surplus must cover the load's power, not just part of it (0.1 kW tolerance).
+assessment(R, solar_surplus_sufficient, a05) :-
+    check(R, grid_shortfall_kw =< 0.1).
+```
+
+## Level 2: START_NOW / DEFER decision rules
+
+Level 2 combines the findings into exactly one decision. Each rule that recommends deferring explicitly excludes the cases that must start (deadline reached, not flexible), so a request never receives two conflicting decisions.
+
+<PostFigure src="images/blog/week-4/level-2-decision.png" width={1592} height={813} alt="Level 2 decision flowchart: checks flexibility, deadline, comfort window, the grid request, PV surplus, future PV and cheaper tariff, ending in START NOW or DEFER with a reason." caption="Figure 3 - Level 2 decision flowchart (START_NOW vs DEFER)." />
+
+| Rule | Priority | Conditions | Decision |
+| --- | --- | --- | --- |
+| D01 | 6 – appliance constraint | NOT_FLEXIBLE | START_NOW |
+| D02 | 6 – appliance constraint | DEADLINE_REACHED | START_NOW |
+| D03 | 6 – appliance constraint | COMFORT_WINDOW_CLOSED, not deadline, not inflexible | DEFER |
+| D08 | 5 – DR request | DR_DEFER_HELPS, not deadline, not inflexible | DEFER |
+| D09 | 5 – DR request | DR_START_HELPS and COMFORT_WINDOW_OPEN | START_NOW |
+| D04 | 0 – household | SOLAR_SURPLUS_SUFFICIENT, COMFORT_WINDOW_OPEN, not DR_DEFER_HELPS | START_NOW |
+| D05 | 0 – household | BETTER_SOLAR_LATER, no sufficient surplus now, not DR_START_HELPS, not deadline, not inflexible | DEFER |
+| D06 | 0 – household | CHEAPER_TARIFF_LATER, window open, no PV reason, not DR_START_HELPS, not deadline, not inflexible | DEFER |
+| D07 | 0 – household | Window open and nothing to gain by waiting (fallback) | START_NOW |
+
+The priority order follows the expert's guidance: appliance constraints first, then the grid's DR request while it is still unmet, then normal household logic (solar, tariff, fallback). When several rules apply, the one with the highest priority fires, so each request receives exactly one decision.
+
+## Decisions and explanations
+
+The processing order is: **input → knowledge base → inference rules → decision → explanation**. Each decision reports the findings that were derived, the rule that fired and, using *why not*, why the other decision was not taken. The explanation is derived from the rules themselves by inspecting their conditions, not written by hand.
+
+Example: scenario **s2**, a flexible appliance with 20% PV coverage now and 70% expected later.
+
+```text
+Request: s2
+Assessments:
+  a03 comfort_window_open
+  a06 better_solar_later
+Decision rule: d05
+Decision: defer
+Why not start_now?
+  d01: blocked – the request is flexible
+  d02: blocked – slack_steps = 4, not ≤ 0
+  d04: blocked – grid_shortfall_kw = 1.8, not ≤ 0.1
+  d07: blocked – better_solar_later was derived (a06)
+```
+
+In plain words: *the appliance is flexible and enough slack remains; the current PV surplus does not cover the load, and waiting gives much better solar coverage, so DEFER.*
+
+## Test scenarios
+
+Eight reference scenarios cover the main situations and the interactions between conditions. The same evidence is used by the backend tests, which check that Drools reaches the same findings and decision as Prolog.
+
+| Scenario | Situation | Decision | Rule |
+| --- | --- | --- | --- |
+| s1 | Deadline reached (slack = 0) | START_NOW | D02 |
+| s2 | Flexible, much better PV later (20% → 70%) | DEFER | D05 |
+| s3 | Flexible, no PV benefit, 45% cheaper tariff later | DEFER | D06 |
+| s4 | DR REDUCTION event; a later start avoids 1.2 kWh in the window | DEFER | D08 |
+| s5 | DR INCREASE event; starting now helps, although the tariff is cheaper later | START_NOW | D09 |
+| s6 | Nothing to gain by waiting | START_NOW | D07 |
+| s7 | Not flexible during a DR SHIFTING event: the user constraint wins | START_NOW | D01 |
+| s8 | Flexible, but outside the comfort window | DEFER | D03 |
+
+Scenarios s5 and s7 show interacting conditions: in s5 the DR request takes priority over tariff savings, and in s7 the user's constraint takes priority over the DR request.
+
+**Validation:** all eight scenarios produce their expected decision in SWI-Prolog:
+
+```sh
+swipl knowledge-base/prolog/examples.pl
+# ... All scenarios produce the expected decision.
+```
+
+## First simulation result
+
+Over the 48-hour case study, the advisor was compared with *no control* (each appliance starting as soon as it is available). PV, non-shiftable load and appliance uses are identical; only the start times differ.
+
+| Reference run (48 h) | No control | Advisor |
+| --- | --- | --- |
+| Grid import | 31.68 kWh | 24.70 kWh (−22%) |
+| Peak grid import | 7.28 kW | 4.20 kW (−42%) |
+| Net electricity cost | 2.62 € | 1.58 € (−39%) |
+| DR SHIFTING event | – | 6.02 of 5.00 kWh delivered |
+
+These are simulated results for one household dataset and one reference run, not measured savings.
+
+## Full video
+
+The full video presents the week 4 work in more detail.
+
+<PostVideo src="videos/week-4/week-4-full.mp4" title="Week 4 full video" caption="Week 4 full video (about 10 minutes)." />
+
+## Proposed next steps
+
+- Review the revised rules, thresholds and scenarios with Prof. João Soares.
+- Add a scenario where the current PV surplus covers the load (D04) and one with negative slack.
+- Continue comparing the Prolog and Drools implementations and complete the frontend engine toggle.
+- Agree on the evaluation scenarios and document the limitations.
+
+This report will be updated as the work progresses.
