@@ -1,0 +1,35 @@
+---
+import { LIVE_APP_URL } from '../consts';
+import { sitePath } from '../utils/paths';
+import { localizedPath, type Locale } from '../utils/i18n';
+interface Props { locale?: Locale; }
+const { locale = 'en' } = Astro.props;
+const pt = locale === 'pt';
+---
+<section class="section live-demo" aria-labelledby="live-demo-heading"><div class="container live-grid">
+  <div>
+    <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>{pt ? 'Online · Desafio 1' : 'Live · Challenge 1'}</p>
+    <h2 id="live-demo-heading">{pt ? 'Experimente o Demand Response Advisor.' : 'Try the Demand Response Advisor.'}</h2>
+    <p>{pt ? 'O sistema está instalado num servidor do DEI. Escolha o caso de referência ou quaisquer 1 a 4 dias de uma habitação real, um pedido da rede e o motor (Drools ou Prolog), e veja cada decisão START_NOW / DEFER com a sua explicação.' : 'The advisor runs on a DEI server. Pick the reference case or any 1 to 4 days of a real household, a grid request and the engine (Drools or Prolog), and follow every START_NOW / DEFER decision with its explanation.'}</p>
+    <div class="actions">
+      <a class="button" href={LIVE_APP_URL}>{pt ? 'Abrir a aplicação' : 'Open the live app'} ↗</a>
+      <a class="text-link" href={localizedPath(locale, 'blog/week-5-deployment-expert-session/')}>{pt ? 'Como funciona' : 'How it works'} →</a>
+    </div>
+  </div>
+  <a class="live-shot" href={LIVE_APP_URL} aria-label={pt ? 'Abrir o Demand Response Advisor' : 'Open the Demand Response Advisor'}>
+    <img src={sitePath('images/blog/week-5/simulation.webp')} width="1600" height="1000" loading="lazy"
+      alt={pt ? 'Gráfico de potência do Demand Response Advisor: FV, carga base e equipamentos deslocados do pico da noite para o FV do meio-dia, com o evento de Demand Response cumprido.' : 'Demand Response Advisor power chart: PV, base load and appliances moved from the evening peak into the midday PV, with the Demand Response event met.'} />
+  </a>
+</div></section>
+<style>
+  .live-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); align-items: center; gap: 3rem; }
+  .live-dot { display: inline-block; width: .55rem; height: .55rem; margin-right: .5rem; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px #4caf5033; vertical-align: middle; }
+  h2 { margin-bottom: 1rem; }
+  p { color: var(--muted); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; margin-top: 1.5rem; }
+  .live-shot { display: block; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: 0 18px 40px #102b401a; transition: transform .2s ease; }
+  .live-shot:hover { transform: translateY(-3px); }
+  .live-shot img { display: block; width: 100%; height: auto; }
+  @media (max-width: 850px) { .live-grid { grid-template-columns: 1fr; gap: 2rem; } }
+  @media (prefers-reduced-motion: reduce) { .live-shot { transition: none; } .live-shot:hover { transform: none; } }
+</style>

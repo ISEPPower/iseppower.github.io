@@ -1,0 +1,79 @@
+---
+title: 'Semana 5: o sistema está online, intervalos de datas e a segunda sessão com o especialista'
+description: 'O Demand Response Advisor está publicamente disponível num servidor do DEI, pode simular quaisquer 1 a 4 dias do conjunto de dados completo da habitação e foi revisto pelo Prof. João Soares numa segunda sessão.'
+pubDate: '2026-10-16'
+category: 'Prototype'
+lang: 'pt'
+translationKey: 'week-5-deployment-expert-session'
+week: 5
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+---
+
+import PostFigure from '../../../components/PostFigure.astro';
+import { LIVE_APP_URL } from '../../../consts';
+
+## Objetivo desta semana
+
+Tornar o sistema utilizável fora das nossas máquinas, testar as regras com dados para os quais não foram concebidas e rever o resultado com o nosso especialista em energia.
+
+## O sistema está online
+
+O Demand Response Advisor está instalado num servidor virtual do DEI e está publicamente disponível:
+
+<p><a class="button" href={LIVE_APP_URL}>Abrir o Demand Response Advisor ↗</a></p>
+
+<PostFigure src="images/blog/week-5/simulation.webp" width={1600} height={1000} alt="Página de simulação do sistema instalado: gráfico de potência em 48 horas com FV, carga base e o carregador do VE, a máquina de lavar roupa e a máquina de lavar loiça, as janelas de Demand Response e painéis laterais com o passo atual, os totais da execução e um evento de Demand Response com 6,02 de 5,00 kWh entregues." caption="A página Simulation após uma execução completa do caso de referência. O pedido de deslocação moveu 6,02 dos 5,00 kWh pedidos do pico da noite para o FV do meio-dia seguinte." />
+
+- **Instalação contínua.** Cada alteração ao ramo principal que passa as verificações automáticas é instalada. O backend, o frontend e a base de conhecimento em Prolog são copiados para o servidor, a nova versão é verificada e, se a verificação falhar, a versão anterior é reposta.
+- **Os dois motores online.** Cada consulta é executada em Drools e verificada com SWI-Prolog; a interface permite alternar entre ambos.
+- **Tutorial na primeira visita.** Um guia curto, em seis passos, explica os dados, o pedido da rede, a reprodução, o gráfico, as decisões e a página Insights.
+
+## Novidade: escolher um intervalo de datas
+
+Até agora, todas as execuções usavam o mesmo caso de referência de 48 horas. Para verificar que as regras não estão ajustadas a esses dois dias, uma execução pode agora abranger **quaisquer 1 a 4 dias completos** do conjunto de dados `residential4`, de **14 de outubro de 2015 a 6 de março de 2017**, em passos de 15 minutos.
+
+<PostFigure src="images/blog/week-5/date-range.webp" width={1600} height={436} alt="Painel de intervalo de datas: um seletor de datas de 12 a 15 de janeiro de 2016, um pequeno gráfico da carga base e do FV desses quatro dias e um resumo das utilizações dos equipamentos encontradas." caption="O painel Date range mostra a carga base e o FV dos dias escolhidos e as utilizações dos equipamentos registadas, antes de a execução começar." />
+
+- Os dias com dados em falta ou com mudança de hora são ignorados.
+- Cada ciclo de equipamento registado nos dados torna-se um pedido, pelo que a referência *sem controlo* corresponde ao que a habitação realmente fez.
+- Os pedidos da rede podem ser **gerados a partir dos dados da própria execução**: por exemplo, uma redução à noite no pico da habitação e um aumento ao meio-dia no seu excedente FV, dimensionados ao que os equipamentos conseguem realmente deslocar.
+- Novos tipos de pedido: **limite de capacidade**, **corte de emergência** e **preço de pico crítico**, com horas de anúncio e incentivos. Chegam à base de conhecimento através da evidência existente, pelo que **as regras não mudaram**.
+
+Isto resultou num pequeno *estudo de transferência*: noutros períodos, a maioria dos pedidos da rede é cumprida e as regras comportam-se de forma consistente. Nem todos os pedidos podem ser cumpridos, o que é esperado quando os equipamentos não têm flexibilidade suficiente nessa janela.
+
+## Insights
+
+A página Insights compara três execuções dos mesmos dias: **sem controlo**, **as regras sem o pedido da rede** e **o sistema completo**. No caso de referência, o sistema reduz a importação da rede em 22%, o pico de importação em 42% e o custo líquido em 39%, e cumpre o pedido de deslocação. Trata-se de resultados simulados para uma habitação, e não de poupanças medidas.
+
+<PostFigure src="images/blog/week-5/insights.webp" width={1600} height={1000} alt="Página Insights: 93 consultas, 3 arranques imediatos e 90 adiamentos, Drools e Prolog concordam em 93 de 93, objetivo de deslocação cumprido com 6,0 de 5,0 kWh; barras de importação da rede, pico de importação e custo líquido para as três execuções; e um gráfico do balanço com a rede com as janelas de saída e de entrada." caption="Insights do caso de referência: Drools e Prolog concordam nas 93 consultas, e o balanço com a rede mostra o consumo retirado do pico da noite e deslocado para o FV do meio-dia." />
+
+## Segunda sessão com o especialista
+
+A 15 de outubro voltámos a reunir online com o Prof. João Soares e demonstrámos o sistema instalado.
+
+### O que mostrámos
+
+- O caso de referência e como ler o gráfico: carga base, consumo de cada equipamento, FV e as janelas de Demand Response.
+- Porque é que as decisões são as que são. As regras funcionam em três camadas: **primeiro as restrições dos equipamentos**, depois **o pedido da rede** enquanto não estiver cumprido e, por fim, **a otimização da habitação** (FV e tarifa). No caso de referência, os equipamentos foram adiados até à janela pedida; depois de cumprido o objetivo de 5 kWh, as regras da habitação passaram a decidir e esperaram por mais FV.
+- A página Insights, a lista de decisões e as explicações do Drools e do Prolog, incluindo o *porque não* da outra decisão.
+- Os intervalos de datas e os pedidos gerados a partir dos dados. Num exemplo, foram gerados quatro pedidos e dois só foram cumpridos em parte.
+
+### Observações do especialista
+
+- **Do ponto de vista da energia, a abordagem faz sentido e é suficiente para o projeto.** O foco eram as regras em torno do Demand Response, e não a otimização, e os eventos de Demand Response fazem agora parte delas.
+- **Nem todos os pedidos têm de ser cumpridos.** É normal que alguns eventos sejam apenas parcialmente entregues.
+- **Podia ser mais complexo, mas esse não é o objetivo.** Por exemplo, equipamentos com vários programas (um ciclo económico de 4 horas ou um rápido de 2 horas) ou um VE com potência de carregamento ajustável dariam mais flexibilidade para o Demand Response. Um modelo de otimização matemática teria provavelmente melhor desempenho do que as regras, mas o objetivo do projeto é um sistema baseado em regras.
+- **A previsão não é o essencial.** Uma previsão por aprendizagem automática seria apenas mais um valor de entrada para as regras.
+- **Relacionar o trabalho com um contexto real.** Como exemplo de um sinal de preço real, o especialista indicou o **PVPC** espanhol (*Precio Voluntario para el Pequeño Consumidor*), um preço horário publicado para pequenos consumidores. Alguns dias destes preços podem ser descarregados e reproduzidos como se fossem em tempo real, e a regra tarifária (*tarifa mais barata mais tarde*) pode usar um preço horário em vez de apenas dois períodos tarifários.
+- **Enquadramento empresarial no relatório.** Caracterizar os intervenientes: os clientes (habitações, ou empresas com equipamentos flexíveis semelhantes que possam ser agregados) e o lado da rede que envia os eventos de Demand Response. O especialista ofereceu-se para rever essa secção.
+
+## Próximos passos propostos
+
+- Escrever o relatório final, incluindo a secção sobre o enquadramento empresarial e organizacional, e enviá-lo ao Prof. Soares para revisão.
+- Opcionalmente, acrescentar alguns dias de preços horários do PVPC como sinal de preço real e usá-los na regra tarifária.
+- Preparar a entrega final e a demonstração.
+
+Este relatório será atualizado à medida que o trabalho avançar.

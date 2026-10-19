@@ -59,7 +59,7 @@ Add one object per confirmed person in `src/data/team.ts`. Use an array of parag
 
 ## Remaining content
 
-The project is in week 4. João André Pinto Soares, the Challenge 1 expert, reviewed the knowledge base in week 3. The week 4 report documents the two-level rule base, its Prolog/Drools implementation (developed in a separate repository), the test scenarios and the week 4 videos. His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
+The project is in week 5. The Demand Response Advisor (developed in a separate repository) is live at https://vs-gate.dei.isep.ipp.pt:10867/; the URL is `LIVE_APP_URL` in `src/consts.ts`, linked from the header banner, the home page (`LiveDemo.astro`) and the challenges page. João André Pinto Soares, the Challenge 1 expert, reviewed the knowledge base in week 3 and the deployed advisor in week 5; the week 5 report summarises that second session. His bilingual profile is under `/challenges/1/expert/` and `/pt/challenges/1/expert/`, based on the biography supplied by the team. Confirm responsibilities, scope, scenarios and session outcomes before recording them as facts. Later stages are proposed and have no dates. The opening report retains its original publication date and status.
 
 ## Weekly reporting and project documentation
 

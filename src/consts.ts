@@ -7,3 +7,5 @@ export const SITE_DESCRIPTION =
 	'An intelligent advisory system for demand response in smart grids.';
 export const REPOSITORY_URL = 'https://github.com/ISEPPower/iseppower.github.io';
 export const BLOG_CATEGORIES = ['Project Updates', 'Knowledge Acquisition', 'Knowledge Representation', 'Prototype', 'Research', 'Results'] as const;
+// Deployed Demand Response Advisor (DEI virtual server), linked from the header, home page and reports.
+export const LIVE_APP_URL = 'https://vs-gate.dei.isep.ipp.pt:10867/';

@@ -1,0 +1,79 @@
+---
+title: 'Week 5: the advisor is live, date ranges and the second expert session'
+description: 'The Demand Response Advisor now runs publicly on a DEI server, can simulate any 1 to 4 days of the full household dataset, and was reviewed by Prof. João Soares in a second session.'
+pubDate: '2026-10-16'
+category: 'Prototype'
+lang: 'en'
+translationKey: 'week-5-deployment-expert-session'
+week: 5
+challenge: 1
+reportStatus: 'in-progress'
+authors: ['ISEPower']
+contributions: []
+---
+
+import PostFigure from '../../components/PostFigure.astro';
+import { LIVE_APP_URL } from '../../consts';
+
+## Goal for this week
+
+Make the advisor usable outside our machines, test the rules on data they were not designed for, and review the result with our energy expert.
+
+## The advisor is live
+
+The Demand Response Advisor is deployed on a DEI virtual server and is publicly available:
+
+<p><a class="button" href={LIVE_APP_URL}>Open the Demand Response Advisor ↗</a></p>
+
+<PostFigure src="images/blog/week-5/simulation.webp" width={1600} height={1000} alt="Simulation page of the deployed advisor: power chart over 48 hours with PV, base load and the EV charger, washing machine and dishwasher, the Demand Response windows, and side panels with the current step, the run totals and a Demand Response event delivered 6.02 of 5.00 kWh." caption="The Simulation page after a full run of the reference case. The shifting request moved 6.02 of the 5.00 kWh requested out of the evening peak into the next day’s midday PV." />
+
+- **Continuous deployment.** Every change to the main branch that passes the automated checks is deployed. The backend, the frontend build and the Prolog knowledge base are copied to the server, the new version is health-checked, and the previous version is restored if the check fails.
+- **Both engines online.** Each consultation runs in Drools and is cross-checked with SWI-Prolog; the interface can switch between them.
+- **First-visit tutorial.** A short six-step guide explains the data, the grid request, playback, the chart, the decisions and the Insights page.
+
+## New: choose a date range
+
+Until now, every run used the same 48-hour reference case. To check that the rules are not tuned to those two days, a run can now cover **any 1 to 4 whole days** of the full `residential4` household dataset, from **14 October 2015 to 6 March 2017**, in 15-minute steps.
+
+<PostFigure src="images/blog/week-5/date-range.webp" width={1600} height={436} alt="Date range panel: a date picker set to 12 to 15 January 2016, a small chart of base load and PV for those four days, and a summary of the appliance uses found." caption="The Date range panel previews the base load and PV of the chosen days and the appliance uses recorded in them before the run starts." />
+
+- Days with missing data or a daylight-saving change are skipped.
+- Every appliance cycle recorded in the data becomes one appliance request, so the *no control* baseline is what the household actually did.
+- Grid requests can be **generated from the run’s own data**: for example, an evening reduction at the household’s peak and a midday increase at its PV surplus, sized to what the appliances can really move.
+- New request types: **capacity limit**, **emergency curtailment** and **critical peak price**, with announcement times and incentives. They reach the knowledge base through the existing evidence, so **the rules did not change**.
+
+This turned into a small *transfer study*: on other periods, most grid requests are met and the rules behave consistently. Not every request can be met, which is expected when the appliances do not have enough flexibility in that window.
+
+## Insights
+
+The Insights page compares three runs of the same days: **no control**, **the rules without the grid request**, and **the full advisor**. For the reference case, the advisor reduces grid import by 22%, peak import by 42% and net cost by 39%, and meets the shifting request. These are simulated results for one household, not measured savings.
+
+<PostFigure src="images/blog/week-5/insights.webp" width={1600} height={1000} alt="Insights page: 93 consultations, 3 start now and 90 defer, Drools and Prolog agree on 93 of 93, the shifting target met with 6.0 of 5.0 kWh; bars for grid import, peak import and net cost for the three runs; and a grid balance chart with the move-out and move-into windows." caption="Insights for the reference case: Drools and Prolog agree on all 93 consultations, and the grid balance shows consumption moved out of the evening peak and into the midday PV." />
+
+## Second session with the expert
+
+On 15 October we met Prof. João Soares again, online, and demonstrated the deployed advisor.
+
+### What we showed
+
+- The reference case and how to read the chart: base load, each appliance’s consumption, PV, and the Demand Response windows.
+- Why the decisions look the way they do. The rules work in three layers: **appliance constraints first**, then **the grid’s request** while it is unmet, then **household optimisation** (PV and tariff). In the reference case, the appliances were deferred until the requested window; once the 5 kWh target was met, the household rules took over and waited for more PV.
+- The Insights page, the list of decisions, and the Drools and Prolog explanations, including *why not* the other decision.
+- Date ranges and requests generated from the data. In one example, four requests were generated and two were only partly met.
+
+### Expert feedback
+
+- **From the energy perspective, the approach makes sense and is sufficient for the project.** The focus was the rules around Demand Response, not optimisation, and the Demand Response events are now part of them.
+- **Not every request has to be met.** It is normal for some events to be only partly delivered.
+- **It could be more complex, but that is not the goal.** For example, appliances with several programmes (a 4-hour eco cycle or a 2-hour fast one) or an EV with adjustable charging power would add flexibility for Demand Response. A mathematical optimisation model would probably perform better than rules, but the aim of the project is a rule-based system.
+- **Forecasting is not the core.** A machine-learning forecast would only be another input number for the rules.
+- **Relate the work to a real setting.** As an example of a real price signal, the expert pointed to the Spanish **PVPC** (*Precio Voluntario para el Pequeño Consumidor*), a published hourly price for small consumers. A few days of these prices could be downloaded and replayed as if in real time, and the tariff rule (*cheaper tariff later*) could use an hourly price instead of only two tariff periods.
+- **Business context in the report.** Characterise the actors: the customers (households, or companies with similar flexible equipment that can be aggregated) and the grid side that sends the Demand Response events. The expert offered to review that section.
+
+## Proposed next steps
+
+- Write the final report, including the section on the business and organisational context, and send it to Prof. Soares for review.
+- Optionally, add a few days of PVPC hourly prices as a real price signal and use them in the tariff rule.
+- Prepare the final delivery and demonstration.
+
+This report will be updated as the work progresses.
