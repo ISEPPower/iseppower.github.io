@@ -1,19 +1,19 @@
 import type { Locale } from '../utils/i18n';
 
 // Update only when the team confirms a change. Stages are not dated commitments.
-export const currentWeek = 4;
-export const latestReport = 'blog/week-4-rule-engine-prototype/';
+export const currentWeek = 5;
+export const latestReport = 'blog/week-5-deployment-expert-session/';
 export type StageStatus = 'open' | 'defined' | 'review' | 'active' | 'started' | 'planned';
 // One status per stage, in the same order as `stages` below. 'active' is the current focus.
-export const stageStatus: StageStatus[] = ['defined', 'review', 'active', 'started', 'started'];
+export const stageStatus: StageStatus[] = ['defined', 'review', 'review', 'review', 'active'];
 export const projectCopy = {
   en: {
-    week: 'Week 4', focus: 'Rule engine prototype · Knowledge base implementation',
-    now: 'Current focus', nowText: 'The two-level knowledge base (A01–A12, D01–D09) runs in SWI-Prolog and Drools, deciding START_NOW or DEFER with an explanation for each request.',
-    next: 'Next proposed output', nextText: 'A follow-up review of the rules, thresholds and test scenarios with Prof. João Soares.',
-    journal: 'Latest report', journalText: 'Week 4 · Rule engine prototype, decision explanations and test scenarios.',
-    read: 'Read the week 4 report', stageTitle: 'From a question to an explained decision',
-    stageIntro: 'We are in week 4. The knowledge base, including the Demand Response event, runs in both inference engines and passes eight reference scenarios. The rules are ready for a follow-up expert review. Later stages are proposed, with no confirmed dates.',
+    week: 'Week 5', focus: 'Advisor live on a DEI server · Second expert session',
+    now: 'Current focus', nowText: 'The advisor is deployed and public. Runs can cover any 1 to 4 days of the full household dataset, and Prof. João Soares reviewed the result in a second session.',
+    next: 'Next proposed output', nextText: 'The final report, including the business and organisational context, reviewed by Prof. João Soares.',
+    journal: 'Latest report', journalText: 'Week 5 · Deployment, date ranges and the second expert session.',
+    read: 'Read the week 5 report', stageTitle: 'From a question to an explained decision',
+    stageIntro: 'We are in week 5. The advisor is deployed, and the expert reviewed the rules and the prototype in a second session. The rules were tested on other periods of the dataset, and the final report is being written.',
     status: { open: 'Open questions', defined: 'Defined', review: 'Expert-reviewed', active: 'In progress', started: 'Started', planned: 'Planned' },
     stages: [
       ['Problem & scope', 'Case study defined: one CoSSMic household with rooftop PV, three flexible appliances and a SHIFTING Demand Response event, over 48 hours in 15-minute steps.'],
@@ -24,12 +24,12 @@ export const projectCopy = {
     ],
   },
   pt: {
-    week: 'Semana 4', focus: 'Protótipo do motor de regras · Implementação da base de conhecimento',
-    now: 'Foco atual', nowText: 'A base de conhecimento em dois níveis (A01–A12, D01–D09) funciona em SWI-Prolog e em Drools, decidindo START_NOW ou DEFER com uma explicação para cada pedido.',
-    next: 'Próximo resultado proposto', nextText: 'Uma nova revisão das regras, dos limiares e dos cenários de teste com o Prof. João Soares.',
-    journal: 'Relatório mais recente', journalText: 'Semana 4 · Protótipo do motor de regras, explicações das decisões e cenários de teste.',
-    read: 'Ler o relatório da semana 4', stageTitle: 'De uma questão a uma decisão explicada',
-    stageIntro: 'Estamos na semana 4. A base de conhecimento, incluindo o evento de Demand Response, funciona em ambos os motores de inferência e passa oito cenários de referência. As regras estão prontas para nova revisão do especialista. As fases seguintes são propostas, sem datas confirmadas.',
+    week: 'Semana 5', focus: 'Sistema online num servidor do DEI · Segunda sessão com o especialista',
+    now: 'Foco atual', nowText: 'O sistema está instalado e é público. As execuções podem abranger quaisquer 1 a 4 dias do conjunto de dados completo da habitação, e o Prof. João Soares reviu o resultado numa segunda sessão.',
+    next: 'Próximo resultado proposto', nextText: 'O relatório final, incluindo o enquadramento empresarial e organizacional, revisto pelo Prof. João Soares.',
+    journal: 'Relatório mais recente', journalText: 'Semana 5 · Instalação, intervalos de datas e segunda sessão com o especialista.',
+    read: 'Ler o relatório da semana 5', stageTitle: 'De uma questão a uma decisão explicada',
+    stageIntro: 'Estamos na semana 5. O sistema está instalado, e o especialista reviu as regras e o protótipo numa segunda sessão. As regras foram testadas noutros períodos do conjunto de dados, e o relatório final está a ser escrito.',
     status: { open: 'Questões em aberto', defined: 'Definido', review: 'Revisto pelo especialista', active: 'Em curso', started: 'Iniciado', planned: 'Planeada' },
     stages: [
       ['Problema e âmbito', 'Caso de estudo definido: uma habitação CoSSMic com FV no telhado, três equipamentos flexíveis e um evento de Demand Response do tipo SHIFTING, em 48 horas com passos de 15 minutos.'],

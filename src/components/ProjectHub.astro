@@ -4,7 +4,7 @@ import Hero from './Hero.astro';
 import ProjectStatus from './ProjectStatus.astro';
 import SystemConcept from './SystemConcept.astro';
 import ChallengeTabs from './ChallengeTabs.astro';
-import { REPOSITORY_URL } from '../consts';
+import { REPOSITORY_URL, LIVE_APP_URL } from '../consts';
 import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
@@ -25,10 +25,11 @@ const sections = [
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
   <div>
     <section id="overview" class="document-section">
-      <span class="badge">{pt ? 'Semana 4 · Em curso' : 'Week 4 · In progress'}</span>
+      <span class="badge">{pt ? 'Semana 5 · Em curso' : 'Week 5 · In progress'}</span>
       <h2>{sections[0][1]}</h2>
       <p>{pt ? 'Como pode um sistema recomendar uma alteração do consumo de eletricidade e explicar essa decisão, respeitando as necessidades do utilizador?' : 'How can a system recommend a change in electricity use and explain that decision while respecting the user’s needs?'}</p>
-      <p>{pt ? 'Este projeto da Equipa 10, no MEIA do ISEP, tem uma base de conhecimento em dois níveis, incluindo o evento de Demand Response, que funciona em Prolog e em Drools e explica cada decisão. As regras aguardam nova revisão do especialista e o método de avaliação ainda está a ser definido.' : 'This Equipa 10 project, within MEIA at ISEP, has a two-level knowledge base, including the Demand Response event, that runs in Prolog and Drools and explains each decision. The rules await a follow-up expert review, and the evaluation method is still being defined.'}</p>
+      <p>{pt ? 'Este projeto da Equipa 10, no MEIA do ISEP, tem uma base de conhecimento em dois níveis, incluindo o evento de Demand Response, que funciona em Prolog e em Drools e explica cada decisão. O sistema está online e foi revisto pelo especialista numa segunda sessão.' : 'This Equipa 10 project, within MEIA at ISEP, has a two-level knowledge base, including the Demand Response event, that runs in Prolog and Drools and explains each decision. The advisor is live and was reviewed by the expert in a second session.'}</p>
+      <p><a class="button" href={LIVE_APP_URL}>{pt ? 'Abrir a aplicação online' : 'Open the live app'} ↗</a></p>
       <SystemConcept locale={locale} />
     </section>
     <section id="stages" class="document-section"><h2>{sections[1][1]}</h2><ProjectStatus locale={locale} /><a href={url('knowledge-engineering/')}>{pt ? 'Consultar as questões de engenharia do conhecimento' : 'Explore the knowledge engineering questions'} →</a></section>
@@ -36,6 +37,8 @@ const sections = [
       <h2>{sections[2][1]}</h2>
       <p>{pt ? 'Materiais disponíveis agora. As apresentações, o relatório técnico e o vídeo de demonstração serão acrescentados quando estiverem prontos.' : 'Materials available now. Presentations, the technical report and a demonstration video will be added when they are ready.'}</p>
       <ul class="resource-list">
+        <li><a href={LIVE_APP_URL}>{pt ? 'Aplicação online: Demand Response Advisor' : 'Live app: Demand Response Advisor'} ↗</a><span>{pt ? 'Servidor do DEI · Inglês' : 'DEI server · English'}</span></li>
+        <li><a href={url('blog/week-5-deployment-expert-session/')}>{pt ? 'Relatório da semana 5' : 'Week 5 report'} →</a><span>{pt ? 'Instalação, intervalos de datas e segunda sessão com o especialista · Português' : 'Deployment, date ranges and second expert session · English'}</span></li>
         <li><a href={url('blog/week-4-rule-engine-prototype/')}>{pt ? 'Relatório da semana 4' : 'Week 4 report'} →</a><span>{pt ? 'Motor de regras, explicações, cenários de teste e vídeos · Português' : 'Rule engine, explanations, test scenarios and videos · English'}</span></li>
         <li><a href={url('blog/week-3-first-prototype/')}>{pt ? 'Relatório da semana 3' : 'Week 3 report'} →</a><span>{pt ? 'Revisão do especialista e primeiro protótipo · Português' : 'Expert review and first prototype · English'}</span></li>
         <li><a href={url('blog/week-2-expert-selection/')}>{pt ? 'Relatório da semana 2' : 'Week 2 report'} →</a><span>{pt ? 'Aquisição de conhecimento em curso · Português' : 'Knowledge acquisition in progress · English'}</span></li>
@@ -48,10 +51,10 @@ const sections = [
     </section>
     <section id="team-notes" class="document-section">
       <h2>{sections[3][1]}</h2>
-      <p>{pt ? 'João André Pinto Soares é o especialista do Desafio 1. Na semana 3, reviu a base de conhecimento e as regras de decisão.' : 'João André Pinto Soares is the expert for Challenge 1. In week 3 he reviewed the knowledge base and decision rules.'}</p>
+      <p>{pt ? 'João André Pinto Soares é o especialista do Desafio 1. Na semana 3, reviu a base de conhecimento e as regras de decisão; na semana 5, reviu o sistema instalado.' : 'João André Pinto Soares is the expert for Challenge 1. In week 3 he reviewed the knowledge base and decision rules; in week 5 he reviewed the deployed advisor.'}</p>
       <a href={url('challenges/1/expert/')}>{pt ? 'Conhecer o especialista do Desafio 1' : 'Meet the Challenge 1 expert'} →</a>
       <p>{pt ? 'Cada relatório pode identificar os autores e os contributos individuais. A distribuição de tarefas da semana 1 ainda não está registada.' : 'Each report can identify its authors and individual contributions. The week 1 task allocation has not yet been recorded.'}</p>
-      <p>{pt ? 'O resumo da primeira sessão com o especialista (o que foi validado, as observações e as alterações acordadas) está no relatório da semana 3. Está prevista uma reunião online de acompanhamento para analisar as regras revistas.' : 'The summary of the first expert session (what was validated, the feedback and the agreed changes) is in the week 3 report. A follow-up online meeting is planned to review the revised rules.'}</p>
+      <p>{pt ? 'O resumo da primeira sessão com o especialista está no relatório da semana 3, e o da segunda sessão (15 de outubro) está no relatório da semana 5.' : 'The summary of the first expert session is in the week 3 report, and the second session (15 October) is summarised in the week 5 report.'}</p>
       <a href={url('team/')}>{pt ? 'Conhecer a equipa' : 'Meet the team'} →</a>
     </section>
   </div>
