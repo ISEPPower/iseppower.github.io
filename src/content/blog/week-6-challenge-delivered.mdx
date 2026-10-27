@@ -1,0 +1,132 @@
+---
+title: 'Week 6: Challenge 1 delivered'
+description: 'The Demand Response Advisor is finished: 14 assessment and 9 decision rules in Prolog and Drools, a live web app, two final reports and a short film. A look back at six weeks, and what comes next.'
+pubDate: '2026-10-26'
+category: 'Results'
+lang: 'en'
+translationKey: 'week-6-challenge-delivered'
+week: 6
+challenge: 1
+reportStatus: 'complete'
+authors: ['ISEPower']
+contributions:
+  - { name: 'Bernardo Cardoso', task: 'Inference engine (with Vitor Gonçalo Jesus)' }
+  - { name: 'Francisco Lousada', task: 'Decision rules (Level 2)' }
+  - { name: 'Laura Múrias', task: 'Why-not explanation module' }
+  - { name: 'Sepehr Shojaee', task: 'Assessment rules (Level 1)' }
+  - { name: 'Sofia Cardoso', task: 'How explanation module' }
+  - { name: 'Vitor Gonçalo Jesus', task: 'Inference engine (with Bernardo Cardoso)' }
+heroVideo: { src: 'videos/week-6/final-demo.mp4', title: 'Demand Response Advisor: the final film' }
+---
+
+import { localizedPath } from '../../utils/i18n';
+import { LIVE_APP_URL } from '../../consts';
+
+## In one paragraph
+
+Rooftop solar produces most at noon, while homes use most in the evening, the moment the grid is under the most pressure. Our **Demand Response Advisor** decides every 15 minutes, for each flexible appliance in a home (an EV charger, a washing machine and a dishwasher), whether to **start now or defer**, and explains why in plain words. It follows the grid’s Demand Response request first, and then uses the household’s own solar and the cheaper tariff. The knowledge was validated with an energy expert, Prof. João Soares, and runs in two independent inference engines, **Drools** and **Prolog**, which agree on every decision.
+
+<p><a class="button" href={LIVE_APP_URL}>Open the Demand Response Advisor ↗</a></p>
+
+The film above, made for the final presentation, tells the story in under five minutes.
+
+## This week
+
+- **Two final reports delivered on 25 October.** The ENGCIA report covers the knowledge engineering: acquisition, the knowledge base, the case study, results, limitations and the application in a real context. The PROGIA report covers the Prolog implementation in the course’s expert system shell and its validation against Drools.
+- **The business and organisational context**, which the expert asked us to describe in week 5, is now a full section of the report (see below).
+- **A final film**, used in today’s presentation and on Demo Day.
+- **A new visual identity** for the app (logo and icons) and documentation that matches the final code.
+- **Today, 26 October**, we present the work, and on **Wednesday, 28 October**, we take part in the **Pitch / Demo Day**.
+
+## What changed since week 5
+
+Week 5 was mostly about deployment. The last stretch went into the knowledge base and its validation:
+
+- **Fourteen assessment rules instead of twelve.** The new rules, **A13 and A14**, stop a later start from undoing a Demand Response target that was already met. In the Saturday morning reduction scenario, the advisor delivered only 1.33 of 1.5 kWh without them, and 1.66 kWh with them.
+- **An exhaustive equivalence test.** Drools and Prolog reach the same findings, conflict set and decision in **all 6,912 combinations** of the evidence, as well as in the 93 consultations of the reference run.
+- **A faster Prolog engine.** Keeping one SWI-Prolog process alive reduced a consultation from about 143 ms to under 1 ms.
+- **More ways to test the rules in the app:** upload your own CSV files, preview the effect of a grid request before running it, see energy flows as Sankey diagrams, and print the Insights page as a report.
+
+## From the expert’s feedback to the final system
+
+The most valuable part of the challenge was the dialogue with Prof. Soares. His first review changed what the system is:
+
+| In week 3, the rules… | In the final system… |
+| --- | --- |
+| Optimised one household’s cost and solar use | Treat the grid’s **Demand Response request** as an explicit priority |
+| Checked only whether *some* solar surplus existed | Check whether the surplus **covers the whole load** (A05) |
+| Had no notion of how much the grid asked for | Track the **target, the energy still requested and the progress** (A09–A12) |
+| Could keep shifting loads indefinitely | **Stop shifting once the target is met**, and do not undo it (A10, A13–A14) |
+| Worked with hourly sample data | Use **15-minute steps** on a real household dataset (CoSSMic) |
+
+In the second session, after a demonstration of the live advisor, his verdict was that, from the energy perspective, *the approach makes sense and is sufficient for the project*.
+
+## Final knowledge base
+
+- **Level 1, assessment (A01–A14):** turns the numeric evidence of each request into findings such as *deadline reached*, *solar surplus sufficient*, *better solar later*, *cheaper tariff later* or *DR target unmet*.
+- **Level 2, decision (D01–D09):** combines the findings into exactly one decision, START_NOW or DEFER, in three priority levels: **user and appliance constraints → the grid’s request → household savings**.
+- **Explanations:** every decision comes with a *How* trace (which rules fired, on which evidence) and a *Why not* (why the other decision was rejected). Both are generated from the rules themselves, not written by hand.
+
+## Results
+
+Reference run: one household, 48 hours in 15-minute steps, a request to shift 5 kWh from the Friday evening peak to Saturday midday.
+
+| Indicator | No control | Advisor | Change |
+| --- | --- | --- | --- |
+| Grid import | 31.68 kWh | 24.70 kWh | −22.0% |
+| Peak grid import | 7.28 kW | 4.20 kW | −42.3% |
+| Net electricity cost | 2.62 € | 1.58 € | −39.7% |
+| Self-consumption | 24.5% | 34.8% | +10.3 pp |
+| Demand Response delivered | – | 6.02 of 5.00 kWh | met |
+
+Every appliance finished before its deadline. Across **nine Demand Response scenarios** (reductions, increases, shifts and an overnight wind surplus), every target was met except one, which was designed to fail because it asks for more energy than the appliances use in that window.
+
+One honest finding: **most of the savings come from the household rules**. Without any grid request, they already bring import down to 24.89 kWh. What the Demand Response rules add is the energy moved out of the evening peak and into the window the grid asked for.
+
+These are simulated results for one household, not measured savings.
+
+## Where it would fit in the real world
+
+The final report places the advisor in the Portuguese energy system:
+
+| Actor | Relation to the advisor |
+| --- | --- |
+| Grid operator (E-REDES) | Origin of the Demand Response request; already buys local flexibility through the FIRMe pilot |
+| Aggregator / energy community manager | Splits the request among households, sends the DR events and receives the delivery log |
+| Household | Sets comfort windows and deadlines; receives START_NOW / DEFER decisions with explanations |
+| Technology provider | Hosts the knowledge base and the inference engine, for example on an edge device in each home |
+
+Almost every low-voltage installation in mainland Portugal already has a smart meter reading in 15-minute periods, the same time step the advisor uses. In a learning-based energy platform, the advisor could serve as the **validated rule-based fallback** and as the **explanation layer** that tells a family, in one sentence, why their EV is waiting until 11:00.
+
+## Limitations and future work
+
+- **No Why module.** The advisor never asks the user a question during inference, so there is nothing to ask *why* about. Making some facts interactive (for example, “when do you need the car?”) would make one meaningful.
+- **One programme per appliance.** Prices can change *when* an appliance runs, but not *how*. Eco and quick programmes, or adjustable EV charging power, would add flexibility, as the expert also suggested.
+- **Real price signals.** The tariff has two periods. An hourly price such as the Spanish PVPC, which the expert pointed us to, is the natural next input.
+- **Crisp thresholds and a single household.** Fuzzy assessments, per-user thresholds and coordination between the members of an energy community are the next steps towards a real deployment.
+
+## Six weeks in one line each
+
+1. **<a href={localizedPath('en', 'blog/project-kickoff/')}>Week 1</a>:** the challenge, the website and the first questions.
+2. **<a href={localizedPath('en', 'blog/week-2-expert-selection/')}>Week 2</a>:** Prof. João Soares joins as our energy expert.
+3. **<a href={localizedPath('en', 'blog/week-3-first-prototype/')}>Week 3</a>:** first expert review, and the first rule running in both Prolog and Drools.
+4. **<a href={localizedPath('en', 'blog/week-4-rule-engine-prototype/')}>Week 4</a>:** the two-level knowledge base, with the Demand Response event, explanations and eight reference scenarios.
+5. **<a href={localizedPath('en', 'blog/week-5-deployment-expert-session/')}>Week 5</a>:** the advisor goes live, is tested on other periods of the data and is reviewed again by the expert.
+6. **Week 6:** the final rules, the exhaustive test, two reports and the film.
+
+## What we take away
+
+- **Talk to the expert early.** One meeting in week 3 showed that the Demand Response request itself was missing, and that changed the whole design.
+- **One source of truth, two engines.** Writing the rules first in a technology-independent document, and then checking that Drools and Prolog agree on every case, caught mistakes neither engine would have shown on its own.
+- **Test on data the rules were not written for.** Running other periods of the dataset showed where the rules hold and where a target simply cannot be met.
+- **Explanations need to be seen.** The interface turned the rule traces into something a non-expert can follow, step by step.
+
+## Thank you
+
+To **Prof. João Soares** (GECAD, ISEP/P.Porto), for two sessions that shaped the knowledge base, and to the MEIA professors for their guidance.
+
+Challenge 1 was built by Team 10, **ISEPower**: Bernardo Cardoso, Francisco Lousada, Laura Múrias, Sepehr Shojaee, Sofia Cardoso and Vitor Gonçalo Jesus.
+
+Each of us led one part of the system: Sofia the *How* module, Laura the *Why not* module, Sepehr the assessment rules, Francisco the decision rules, and Gonçalo and Bernardo the inference engine. Beyond that, everyone worked a bit on everything (frontend, backend, the reports and this blog), so no part of the project belongs to just one person.
+
+<a href={localizedPath('en', 'team/')}>Meet the team →</a>

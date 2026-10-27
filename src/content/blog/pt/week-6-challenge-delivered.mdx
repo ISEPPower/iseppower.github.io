@@ -1,0 +1,132 @@
+---
+title: 'Semana 6: Desafio 1 entregue'
+description: 'O Demand Response Advisor está concluído: 14 regras de avaliação e 9 de decisão em Prolog e Drools, uma aplicação online, dois relatórios finais e um filme curto. Um olhar sobre as seis semanas e sobre o que vem a seguir.'
+pubDate: '2026-10-26'
+category: 'Results'
+lang: 'pt'
+translationKey: 'week-6-challenge-delivered'
+week: 6
+challenge: 1
+reportStatus: 'complete'
+authors: ['ISEPower']
+contributions:
+  - { name: 'Bernardo Cardoso', task: 'Motor de inferência (com Vitor Gonçalo Jesus)' }
+  - { name: 'Francisco Lousada', task: 'Regras de decisão (Nível 2)' }
+  - { name: 'Laura Múrias', task: 'Módulo de explicação Porque não' }
+  - { name: 'Sepehr Shojaee', task: 'Regras de avaliação (Nível 1)' }
+  - { name: 'Sofia Cardoso', task: 'Módulo de explicação Como' }
+  - { name: 'Vitor Gonçalo Jesus', task: 'Motor de inferência (com Bernardo Cardoso)' }
+heroVideo: { src: 'videos/week-6/final-demo.mp4', title: 'Demand Response Advisor: o filme final' }
+---
+
+import { localizedPath } from '../../../utils/i18n';
+import { LIVE_APP_URL } from '../../../consts';
+
+## Num parágrafo
+
+Os painéis solares produzem mais ao meio-dia, mas as casas consomem mais ao fim do dia, precisamente quando a rede está sob maior pressão. O nosso **Demand Response Advisor** decide, a cada 15 minutos e para cada equipamento flexível da casa (o carregador do VE, a máquina de lavar roupa e a máquina de lavar loiça), se deve **começar agora ou adiar**, e explica porquê em linguagem simples. Segue primeiro o pedido de Demand Response da rede e depois aproveita o FV da própria casa e a tarifa mais barata. O conhecimento foi validado com um especialista em energia, o Prof. João Soares, e funciona em dois motores de inferência independentes, **Drools** e **Prolog**, que concordam em todas as decisões.
+
+<p><a class="button" href={LIVE_APP_URL}>Abrir o Demand Response Advisor ↗</a></p>
+
+O filme acima, feito para a apresentação final, conta a história em menos de cinco minutos.
+
+## Esta semana
+
+- **Dois relatórios finais entregues a 25 de outubro.** O relatório de ENGCIA trata da engenharia do conhecimento: aquisição, base de conhecimento, caso de estudo, resultados, limitações e aplicação num contexto real. O relatório de PROGIA trata da implementação em Prolog na shell de sistemas periciais da unidade curricular e da sua validação face ao Drools.
+- **O enquadramento empresarial e organizacional**, que o especialista nos pediu na semana 5, é agora uma secção completa do relatório (ver abaixo).
+- **Um filme final**, usado na apresentação de hoje e no Demo Day.
+- **Uma nova identidade visual** da aplicação (logótipo e ícones) e documentação alinhada com o código final.
+- **Hoje, 26 de outubro**, apresentamos o trabalho e, **na quarta-feira, 28 de outubro**, participamos no **Pitch / Demo Day**.
+
+## O que mudou desde a semana 5
+
+A semana 5 foi sobretudo dedicada à instalação. A reta final foi para a base de conhecimento e a sua validação:
+
+- **Catorze regras de avaliação em vez de doze.** As novas regras, **A13 e A14**, impedem que um arranque posterior anule um objetivo de Demand Response já cumprido. No cenário de redução de sábado de manhã, sem elas o sistema entregava apenas 1,33 dos 1,5 kWh; com elas entrega 1,66 kWh.
+- **Um teste exaustivo de equivalência.** O Drools e o Prolog chegam às mesmas conclusões, ao mesmo conjunto de conflito e à mesma decisão em **todas as 6 912 combinações** da evidência, bem como nas 93 consultas da execução de referência.
+- **Um motor Prolog mais rápido.** Manter um único processo SWI-Prolog ativo reduziu o tempo de uma consulta de cerca de 143 ms para menos de 1 ms.
+- **Mais formas de testar as regras na aplicação:** carregar os próprios ficheiros CSV, pré-visualizar o efeito de um pedido da rede antes de o executar, ver os fluxos de energia em diagramas de Sankey e imprimir a página Insights como relatório.
+
+## Do feedback do especialista ao sistema final
+
+A parte mais valiosa do desafio foi o diálogo com o Prof. Soares. A sua primeira revisão mudou aquilo que o sistema é:
+
+| Na semana 3, as regras… | No sistema final… |
+| --- | --- |
+| Otimizavam o custo e o FV de uma habitação | Tratam o **pedido de Demand Response** da rede como prioridade explícita |
+| Verificavam apenas se existia *algum* excedente solar | Verificam se o excedente **cobre toda a carga** (A05) |
+| Não sabiam quanto a rede pedia | Acompanham o **objetivo, a energia ainda em falta e o progresso** (A09–A12) |
+| Podiam continuar a deslocar cargas indefinidamente | **Deixam de deslocar quando o objetivo é cumprido** e não o anulam (A10, A13–A14) |
+| Usavam dados de exemplo horários | Usam **passos de 15 minutos** num conjunto de dados real de uma habitação (CoSSMic) |
+
+Na segunda sessão, depois de uma demonstração do sistema online, a avaliação dele foi que, do ponto de vista da energia, *a abordagem faz sentido e é suficiente para o projeto*.
+
+## Base de conhecimento final
+
+- **Nível 1, avaliação (A01–A14):** transforma a evidência numérica de cada pedido em conclusões como *prazo atingido*, *excedente solar suficiente*, *mais FV mais tarde*, *tarifa mais barata mais tarde* ou *objetivo de DR por cumprir*.
+- **Nível 2, decisão (D01–D09):** combina as conclusões numa única decisão, START_NOW ou DEFER, em três níveis de prioridade: **restrições do utilizador e do equipamento → pedido da rede → poupança da casa**.
+- **Explicações:** cada decisão vem com um traço *Como* (que regras dispararam e com que evidência) e um *Porque não* (porque foi rejeitada a outra decisão). Ambos são gerados a partir das próprias regras, e não escritos à mão.
+
+## Resultados
+
+Execução de referência: uma habitação, 48 horas em passos de 15 minutos, um pedido para deslocar 5 kWh do pico de sexta à noite para o meio-dia de sábado.
+
+| Indicador | Sem controlo | Advisor | Variação |
+| --- | --- | --- | --- |
+| Importação da rede | 31,68 kWh | 24,70 kWh | −22,0% |
+| Pico de importação | 7,28 kW | 4,20 kW | −42,3% |
+| Custo líquido da eletricidade | 2,62 € | 1,58 € | −39,7% |
+| Autoconsumo | 24,5% | 34,8% | +10,3 p.p. |
+| Demand Response entregue | – | 6,02 de 5,00 kWh | cumprido |
+
+Todos os equipamentos terminaram antes do prazo. Em **nove cenários de Demand Response** (reduções, aumentos, deslocações e um excedente eólico noturno), todos os objetivos foram cumpridos exceto um, concebido para falhar, porque pede mais energia do que os equipamentos consomem nessa janela.
+
+Uma conclusão honesta: **a maior parte da poupança vem das regras da casa**. Sem qualquer pedido da rede, essas regras já reduzem a importação para 24,89 kWh. O que as regras de Demand Response acrescentam é a energia retirada do pico da noite e colocada na janela pedida pela rede.
+
+São resultados simulados para uma habitação, não poupanças medidas.
+
+## Onde se encaixaria no mundo real
+
+O relatório final enquadra o sistema no setor elétrico português:
+
+| Ator | Relação com o sistema |
+| --- | --- |
+| Operador da rede (E-REDES) | Origem do pedido de Demand Response; já compra flexibilidade local através do piloto FIRMe |
+| Agregador / gestor da comunidade de energia | Divide o pedido pelas habitações, envia os eventos de DR e recebe o registo da entrega |
+| Habitação | Define janelas de conforto e prazos; recebe as decisões START_NOW / DEFER com explicações |
+| Fornecedor de tecnologia | Aloja a base de conhecimento e o motor de inferência, por exemplo num equipamento local em cada casa |
+
+Quase todas as instalações de baixa tensão em Portugal continental já têm um contador inteligente com leituras de 15 minutos, o mesmo passo usado pelo sistema. Numa plataforma de energia baseada em aprendizagem, o sistema poderia servir de **alternativa segura baseada em regras validadas** e de **camada de explicação** que diz a uma família, numa frase, porque é que o VE está à espera até às 11:00.
+
+## Limitações e trabalho futuro
+
+- **Sem módulo Porquê.** O sistema nunca faz perguntas ao utilizador durante a inferência, por isso não há perguntas a justificar. Tornar alguns factos interativos (por exemplo, «quando precisa do carro?») daria sentido a esse módulo.
+- **Um programa por equipamento.** O preço pode mudar *quando* um equipamento funciona, mas não *como*. Programas eco e rápido, ou uma potência de carregamento do VE ajustável, dariam mais flexibilidade, como o especialista também sugeriu.
+- **Sinais de preço reais.** A tarifa tem dois períodos. Um preço horário como o PVPC espanhol, indicado pelo especialista, é a próxima entrada natural.
+- **Limiares rígidos e uma única habitação.** Avaliações difusas, limiares por utilizador e coordenação entre os membros de uma comunidade de energia são os próximos passos para uma utilização real.
+
+## Seis semanas, uma linha cada
+
+1. **<a href={localizedPath('pt', 'blog/project-kickoff/')}>Semana 1</a>:** o desafio, o site e as primeiras questões.
+2. **<a href={localizedPath('pt', 'blog/week-2-expert-selection/')}>Semana 2</a>:** o Prof. João Soares junta-se como especialista em energia.
+3. **<a href={localizedPath('pt', 'blog/week-3-first-prototype/')}>Semana 3</a>:** primeira revisão do especialista e a primeira regra a funcionar em Prolog e Drools.
+4. **<a href={localizedPath('pt', 'blog/week-4-rule-engine-prototype/')}>Semana 4</a>:** a base de conhecimento em dois níveis, com o evento de Demand Response, explicações e oito cenários de referência.
+5. **<a href={localizedPath('pt', 'blog/week-5-deployment-expert-session/')}>Semana 5</a>:** o sistema fica online, é testado noutros períodos dos dados e é revisto de novo pelo especialista.
+6. **Semana 6:** as regras finais, o teste exaustivo, dois relatórios e o filme.
+
+## O que levamos connosco
+
+- **Falar cedo com o especialista.** Uma reunião na semana 3 mostrou que faltava o próprio pedido de Demand Response, e isso mudou todo o desenho.
+- **Uma fonte de verdade, dois motores.** Escrever primeiro as regras num documento independente da tecnologia e depois verificar que o Drools e o Prolog concordam em todos os casos revelou erros que nenhum dos motores mostraria sozinho.
+- **Testar com dados para os quais as regras não foram escritas.** Executar outros períodos do conjunto de dados mostrou onde as regras se aguentam e onde um objetivo simplesmente não pode ser cumprido.
+- **As explicações precisam de ser vistas.** A interface transformou os traços das regras em algo que um não especialista consegue seguir, passo a passo.
+
+## Obrigado
+
+Ao **Prof. João Soares** (GECAD, ISEP/P.Porto), pelas duas sessões que moldaram a base de conhecimento, e aos professores do MEIA pela orientação.
+
+O Desafio 1 foi construído pela Equipa 10, **ISEPower**: Bernardo Cardoso, Francisco Lousada, Laura Múrias, Sepehr Shojaee, Sofia Cardoso e Vitor Gonçalo Jesus.
+
+Cada um de nós liderou uma parte do sistema: a Sofia o módulo *Como*, a Laura o módulo *Porque não*, o Sepehr as regras de avaliação, o Francisco as regras de decisão, e o Gonçalo e o Bernardo o motor de inferência. Para além disso, todos trabalhámos um pouco em tudo (frontend, backend, relatórios e este blog), por isso nenhuma parte do projeto pertence a uma só pessoa.
+
+<a href={localizedPath('pt', 'team/')}>Conhecer a equipa →</a>
