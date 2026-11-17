@@ -4,7 +4,12 @@ import Hero from './Hero.astro';
 import ProjectStatus from './ProjectStatus.astro';
 import SystemConcept from './SystemConcept.astro';
 import ChallengeTabs from './ChallengeTabs.astro';
+import PostVideo from './PostVideo.astro';
 import { REPOSITORY_URL, LIVE_APP_URL } from '../consts';
+import { team } from '../data/team';
+const challenge2Team = team.filter(member => member.challenges.includes(2));
+const newMembers = challenge2Team.filter(member => !member.challenges.includes(1));
+const names = (members: typeof team) => new Intl.ListFormat(pt ? 'pt-PT' : 'en', { type: 'conjunction' }).format(members.map(member => member.name));
 import { localizedPath, type Locale } from '../utils/i18n';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
@@ -17,10 +22,28 @@ const sections = [
   ['team-notes', pt ? 'Contributos e especialistas' : 'Contributions & experts'],
 ];
 ---
-<SiteLayout locale={locale} title={pt ? 'Desafios' : 'Challenges'} description={pt ? 'Os desafios de mestrado da ISEPower. Desafio ativo: Demand Response Advisor for Smart Grids.' : 'ISEPower’s master’s challenges. Active challenge: Demand Response Advisor for Smart Grids.'}>
+<SiteLayout locale={locale} title={pt ? 'Desafios' : 'Challenges'} description={pt ? 'Os desafios de mestrado da ISEPower. Desafio 1 concluído: Demand Response Advisor for Smart Grids. Desafio 2 em preparação.' : 'ISEPower’s master’s challenges. Challenge 1 completed: Demand Response Advisor for Smart Grids. Challenge 2 is getting started.'}>
 <Hero eyebrow="ISEPower / MEIA" title={pt ? 'Os nossos desafios.' : 'Our challenges.'} description={pt ? 'Um espaço para acompanhar cada desafio do mestrado, as suas decisões e os seus resultados.' : 'A shared space to follow each master’s challenge, its decisions and its outcomes.'} />
 <div class="container"><ChallengeTabs locale={locale}>
-<div class="challenge-heading"><p class="eyebrow">{pt ? 'Desafio ativo / Desafio 1' : 'Active Challenge / Challenge 1'}</p><h2>Demand Response Advisor for Smart Grids</h2></div>
+<div slot="challenge-2">
+  <div class="challenge-heading"><p class="eyebrow">{pt ? 'Desafio ativo / Desafio 2' : 'Active Challenge / Challenge 2'}</p><h2>{pt ? 'Tema em escolha' : 'Topic to be chosen'}</h2></div>
+  <div class="section editorial">
+    <div></div>
+    <div>
+      <section id="challenge-2-overview" class="document-section">
+        <span class="badge">{pt ? 'Semana 1 · Escolha do tema' : 'Week 1 · Topic selection'}</span>
+        <h2>{pt ? 'Um novo desafio, uma equipa maior' : 'A new challenge, a larger team'}</h2>
+        <p>{pt ? 'Depois de entregar o Desafio 1, a equipa está a analisar os temas propostos para o Desafio 2. O tema escolhido, a questão do projeto e as fases serão publicados aqui e no blog.' : 'After delivering Challenge 1, the team is reviewing the topics proposed for Challenge 2. The chosen topic, the project question and the stages will be published here and in the blog.'}</p>
+        <p>{pt ? `${names(newMembers)} juntam-se à equipa neste desafio. O Vitor Gonçalo Jesus participou no Desafio 1.` : `${names(newMembers)} join the team for this challenge. Vitor Gonçalo Jesus took part in Challenge 1.`}</p>
+        <p>{pt ? 'Equipa do Desafio 2' : 'Challenge 2 team'}: {names(challenge2Team)}.</p>
+        <a href={url('team/')}>{pt ? 'Conhecer a equipa' : 'Meet the team'} →</a>
+      </section>
+    </div>
+  </div>
+</div>
+<div slot="challenge-1">
+<div class="challenge-heading"><p class="eyebrow">{pt ? 'Desafio concluído / Desafio 1' : 'Completed Challenge / Challenge 1'}</p><h2>Demand Response Advisor for Smart Grids</h2></div>
+<div class="challenge-film"><PostVideo src="videos/week-6/final-demo.mp4" title={pt ? 'Demand Response Advisor: o filme final' : 'Demand Response Advisor: the final film'} caption={pt ? 'O filme final do Desafio 1.' : 'The final film of Challenge 1.'} /></div>
 <div class="section editorial">
   <aside class="contents" aria-label={pt ? 'Nesta página' : 'On this page'}><p>{pt ? 'Nesta página' : 'On this page'}</p>{sections.map(([id, label]) => <a href={'#' + id}>{label}</a>)}</aside>
   <div>
@@ -35,7 +58,7 @@ const sections = [
     <section id="stages" class="document-section"><h2>{sections[1][1]}</h2><ProjectStatus locale={locale} /><a href={url('knowledge-engineering/')}>{pt ? 'Consultar as questões de engenharia do conhecimento' : 'Explore the knowledge engineering questions'} →</a></section>
     <section id="resources" class="document-section">
       <h2>{sections[2][1]}</h2>
-      <p>{pt ? 'Materiais disponíveis. O filme final está no relatório da semana 6.' : 'Available materials. The final film is in the week 6 report.'}</p>
+      <p>{pt ? 'Materiais disponíveis. O filme final está no topo desta página e no relatório da semana 6.' : 'Available materials. The final film is at the top of this page and in the week 6 report.'}</p>
       <ul class="resource-list">
         <li><a href={LIVE_APP_URL}>{pt ? 'Aplicação online: Demand Response Advisor' : 'Live app: Demand Response Advisor'} ↗</a><span>{pt ? 'Servidor do DEI · Inglês' : 'DEI server · English'}</span></li>
         <li><a href={url('blog/week-6-challenge-delivered/')}>{pt ? 'Relatório da semana 6' : 'Week 6 report'} →</a><span>{pt ? 'Desafio entregue: resultados, contexto real e filme final · Português' : 'Challenge delivered: results, real-world context and final film · English'}</span></li>
@@ -60,10 +83,13 @@ const sections = [
     </section>
   </div>
 </div>
+</div>
 </ChallengeTabs></div>
 </SiteLayout>
 <style>
   .challenge-heading { padding-top: 3rem; max-width: 850px; }
+  .challenge-film { max-width: 960px; padding-top: 1.5rem; }
+  .challenge-film :global(.post-video) { margin-bottom: 0; }
   .document-section > .badge { margin-bottom: 1rem; }
   .resource-list { list-style: none; padding: 0; }
   .resource-list li { padding: 1rem 0; border-bottom: 1px solid var(--line); }

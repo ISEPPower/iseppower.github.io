@@ -1,11 +1,16 @@
 ---
 import type { TeamMember } from '../data/team';
+import BioText from './BioText.astro';
+import TeamLinks from './TeamLinks.astro';
 import { sitePath } from '../utils/paths';
 import type { Locale } from '../utils/i18n';
 interface Props { member: TeamMember; locale?: Locale; }
 const { member, locale = 'en' } = Astro.props;
-const linkedInLabel = locale === 'pt' ? member.name + ' no LinkedIn' : member.name + ' on LinkedIn';
-const emailLabel = locale === 'pt' ? 'Enviar email a ' + member.name : 'Email ' + member.name;
+const pt = locale === 'pt';
+const slug = member.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+const dialogId = 'bio-' + slug;
+// The card shows the first paragraph; the full biography opens in a dialog.
+const hasMore = member.bio.length > 1 || member.bio[0].length > 260;
 ---
 <article class="team-card">
   <div class="avatar">
@@ -13,27 +18,48 @@ const emailLabel = locale === 'pt' ? 'Enviar email a ' + member.name : 'Email ' 
   </div>
   <h3>{member.name}</h3>
   {member.role && <p><strong>{member.role}</strong></p>}
-  {member.bio.map(paragraph => <p>{paragraph.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map(part =>
-    part.startsWith('**') && part.endsWith('**')
-      ? <strong>{part.slice(2, -2)}</strong>
-      : part.startsWith('*') && part.endsWith('*')
-        ? <em>{part.slice(1, -1)}</em>
-        : part
-  )}</p>)}
-  {member.sources?.length && <p class="team-sources">{locale === 'pt' ? 'Fontes:' : 'Sources:'} {member.sources.map((source, index) => <><span>{index > 0 ? ' · ' : ''}</span><a href={source.url}>{source.label}</a></>)}</p>}
-  <div class="team-links">
-    {member.linkedin && <a class="contact-icon" href={member.linkedin} aria-label={linkedInLabel} title={linkedInLabel}>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.46 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.29 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.51V9.2h2.83v1.3h.04c.39-.74 1.36-1.53 2.8-1.53 2.99 0 3.57 1.97 3.57 4.53v5.25Z" /></svg>
-    </a>}
-    {member.github && <a href={member.github} aria-label={member.name + (locale === 'pt' ? ' no GitHub' : ' on GitHub')}>GitHub ↗</a>}
-    {member.email && <a class="contact-icon" href={'mailto:' + member.email} aria-label={emailLabel + ': ' + member.email} title={member.email}>
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg>
-    </a>}
-    {!member.linkedin && !member.github && !member.email && <span>{locale === 'pt' ? 'Ligações de perfil a adicionar' : 'Profile links to be added'}</span>}
-  </div>
+  <p class="challenge-tags">{member.challenges.map(number => <span>{pt ? 'Desafio' : 'Challenge'} {number}</span>)}</p>
+  <div class:list={['bio-preview', { clamped: hasMore }]}><BioText paragraphs={member.bio.slice(0, 1)} /></div>
+  {hasMore && <button type="button" class="show-more" data-open-bio={dialogId} aria-haspopup="dialog">{pt ? 'Ver mais' : 'Show more'}</button>}
+  {member.sources?.length && <p class="team-sources">{pt ? 'Fontes:' : 'Sources:'} {member.sources.map((source, index) => <><span>{index > 0 ? ' · ' : ''}</span><a href={source.url}>{source.label}</a></>)}</p>}
+  <TeamLinks member={member} locale={locale} />
+  {hasMore && <dialog id={dialogId} class="bio-dialog" aria-labelledby={dialogId + '-title'}>
+    <div class="bio-dialog-head">
+      {member.image && <img src={sitePath(member.image)} alt="" width="56" height="56" loading="lazy" />}
+      <div>
+        <h3 id={dialogId + '-title'}>{member.name}</h3>
+        {member.role && <p><strong>{member.role}</strong></p>}
+      </div>
+      <button type="button" class="bio-close" data-close-bio aria-label={pt ? 'Fechar' : 'Close'}>×</button>
+    </div>
+    <div class="bio-dialog-body"><BioText paragraphs={member.bio} /></div>
+    <div class="bio-dialog-foot"><TeamLinks member={member} locale={locale} /></div>
+  </dialog>}
 </article>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-open-bio]').forEach(button => {
+    const dialog = document.getElementById(button.dataset.openBio ?? '') as HTMLDialogElement | null;
+    if (!dialog) return;
+    button.addEventListener('click', () => dialog.showModal());
+    dialog.querySelector('[data-close-bio]')?.addEventListener('click', () => dialog.close());
+    // Close when the backdrop (outside the dialog box) is clicked.
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+  });
+</script>
 <style>
-  .contact-icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--blue); text-decoration: none; }
-  .contact-icon:hover { background: var(--blue); border-color: var(--blue); color: white; }
-  .team-links { align-items: center; gap: .65rem; }
+  .challenge-tags { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .challenge-tags span { font-size: .72rem; font-weight: 700; color: var(--blue); background: #eaf3ff; border-radius: 999px; padding: .15rem .6rem; }
+  .bio-preview.clamped :global(p) { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+  .show-more { font: inherit; font-weight: 700; font-size: .85rem; color: var(--blue); background: none; border: 0; padding: 0; margin-bottom: 1.25rem; cursor: pointer; }
+  .show-more:hover { text-decoration: underline; }
+  .bio-dialog { width: min(640px, calc(100vw - 32px)); max-height: min(80vh, 760px); padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: white; color: inherit; }
+  .bio-dialog::backdrop { background: rgb(10 25 40 / .55); }
+  .bio-dialog-head { position: sticky; top: 0; display: flex; align-items: center; gap: 1rem; padding: 1.25rem 1.5rem; background: white; border-bottom: 1px solid var(--line); }
+  .bio-dialog-head img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; }
+  .bio-dialog-head h3 { margin: 0; }
+  .bio-dialog-head p { margin: .2rem 0 0; color: var(--muted); }
+  .bio-close { margin-left: auto; align-self: flex-start; width: 40px; height: 40px; flex: none; font-size: 1.6rem; line-height: 1; color: var(--navy); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+  .bio-dialog-body { padding: 1.25rem 1.5rem .5rem; }
+  .bio-dialog-body :global(p) { color: var(--muted); }
+  .bio-dialog-foot { position: sticky; bottom: 0; padding: 1rem 1.5rem; background: white; border-top: 1px solid var(--line); }
 </style>

@@ -1,0 +1,12 @@
+---
+// Renders biography paragraphs, turning **bold** and *italic* markers into elements.
+interface Props { paragraphs: string[]; }
+const { paragraphs } = Astro.props;
+---
+{paragraphs.map(paragraph => <p>{paragraph.split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g).map(part =>
+  part.startsWith('**') && part.endsWith('**')
+    ? <strong>{part.slice(2, -2)}</strong>
+    : part.startsWith('*') && part.endsWith('*')
+      ? <em>{part.slice(1, -1)}</em>
+      : part
+)}</p>)}

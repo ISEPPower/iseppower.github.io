@@ -2,10 +2,29 @@ import { team, type TeamMember } from './team';
 
 // Contact details and photos stay in team.ts; only role and biography are translated.
 const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
+  '1200571@ISEP.IPP.PT': {
+    role: 'Estudante de Doutoramento em Engenharia Eletrotécnica',
+    bio: [
+      'Beatriz Gonçalves Rodrigues é licenciada e mestre em Engenharia Mecânica, com especialização em Materiais e Processos Tecnológicos, pela Faculdade de Engenharia da Universidade do Porto.',
+      'O seu percurso académico e científico tem-se centrado na área do fabrico avançado, com particular foco no processamento de materiais e maquinagem de ligas de alto desempenho. Durante o mestrado, desenvolveu trabalho experimental e numérico na maquinagem de superligas de níquel, com foco na utilização de ferramentas cerâmicas, análise de desgaste, complementado com uma abordagem de análise de ciclo de vida.',
+    ],
+  },
+  '1160552@ISEP.IPP.PT': {
+    role: 'Doutoramento e Investigação · GECAD',
+    bio: [
+      'Rúben Barreto frequenta o Doutoramento em Engenharia Eletrotécnica e de Computadores no ISEP e integra o GECAD (Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento Avançados), com sete anos de experiência em investigação.',
+      'O doutoramento, iniciado em 2024, desenvolve o projeto “NEXUS – An intra- and inter-community collaboration model for synergetic interactions and intelligent green energy management”, financiado pela Fundação para a Ciência e a Tecnologia (FCT).',
+      'Concluiu a licenciatura em Engenharia Eletrotécnica e de Computadores em 2019 (classificação final de 15 valores) e o mestrado em Engenharia Eletrotécnica – Sistemas Elétricos de Energia em 2023 (classificação final de 18 valores, com distinção), no Instituto Superior de Engenharia do Porto (ISEP), Politécnico do Porto.',
+      'Participou em vários projetos nacionais e internacionais, entre os quais SPEAR, TIoCPS, F4Itech, NGS, PRECISE e EnergyP2P. Este trabalho resultou em 18 publicações científicas, incluindo artigos em revistas da Elsevier, artigos em conferências e capítulos de livros publicados pela Elsevier, Springer e IEEE, bem como num conjunto de dados disponível publicamente.',
+      'O seu trabalho científico centra-se em modelos de gestão de energia para comunidades de energia, em particular através de programas de resposta da procura que promovem a participação ativa dos membros da comunidade com base na sua flexibilidade, incluindo a flexibilidade energética ao nível dos edifícios.',
+      'Atualmente, a sua investigação centra-se no projeto EnergyP2P, onde desenvolve modelos de otimização matemática (por exemplo, baseados em MILP) para a gestão de energia em comunidades de energia, com especial ênfase em mecanismos de transação peer-to-peer. Estes modelos procuram melhorar a gestão dos recursos energéticos distribuídos, aumentando a eficiência e a sustentabilidade do sistema e reduzindo as emissões de CO2.',
+      'Fez revisão de artigos científicos, apresentou o seu trabalho em conferências internacionais e participou ativamente em vários seminários e workshops científicos.',
+    ],
+  },
   '1220822@ISEP.IPP.PT': {
     role: 'Estudante e Bolseiro de Investigação · GECAD',
     bio: [
-      'Gonçalo Jesus é estudante e investigador no Instituto Superior de Engenharia do Porto (ISEP), onde frequenta o Mestrado em Engenharia de Inteligência Artificial.',
+      'Vitor Gonçalo Jesus é estudante e investigador no Instituto Superior de Engenharia do Porto (ISEP), onde frequenta o Mestrado em Engenharia de Inteligência Artificial.',
       'Trabalha como bolseiro de investigação no GECAD (Grupo de Investigação em Engenharia e Computação Inteligente para a Inovação e o Desenvolvimento Avançados), uma unidade de investigação e desenvolvimento integrada no ISEP.',
     ],
   },

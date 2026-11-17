@@ -3,13 +3,24 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import Hero from '../../components/Hero.astro';
 import TeamMemberCard from '../../components/TeamMemberCard.astro';
 import { portugueseTeam } from '../../data/team-pt';
-import { REPOSITORY_URL } from '../../consts';
+import { currentChallenge } from '../../data/project';
+const current = portugueseTeam.filter(member => member.challenges.includes(currentChallenge));
+const former = portugueseTeam.filter(member => !member.challenges.includes(currentChallenge));
+import { GITHUB_URL } from '../../consts';
 ---
 <SiteLayout locale="pt" title="Equipa" description="A Equipa 10, o grupo de estudantes do MEIA responsável pelo projeto Demand Response Advisor no ISEP.">
   <Hero eyebrow="A Equipa / MEIA · ISEP" title="Equipa 10" description="Um projeto de grupo do Mestrado em Inteligência Artificial no ISEP." />
   <section class="container section">
-    <div class="section-title"><h2>As pessoas por trás do projeto</h2><p>Conheça os membros da Equipa 10, os seus percursos e interesses.</p></div>
-    <div class="grid-2">{portugueseTeam.map(member => <TeamMemberCard member={member} locale="pt" />)}</div>
-    <div class="callout"><h3>Acompanhe o nosso trabalho</h3><p>O repositório do projeto reúne o site e o histórico do seu desenvolvimento.</p><a class="text-link" href={REPOSITORY_URL}>Visitar o repositório no GitHub ↗</a></div>
+    <div class="section-title"><h2>As pessoas por trás do projeto</h2><p>Conheça os membros da Equipa 10 que trabalham no Desafio {currentChallenge}, os seus percursos e interesses.</p></div>
+    <div class="grid-2">{current.map(member => <TeamMemberCard member={member} locale="pt" />)}</div>
+    {former.length > 0 && <>
+      <div class="section-title former-title"><h2>Antigos membros</h2><p>Participaram em desafios anteriores e continuam a fazer parte da história da equipa.</p></div>
+      <div class="grid-2">{former.map(member => <TeamMemberCard member={member} locale="pt" />)}</div>
+    </>}
+    <div class="callout"><h3>Acompanhe o nosso trabalho</h3><p>A nossa organização no GitHub reúne o site e o código de cada desafio.</p><a class="text-link" href={GITHUB_URL}>Visitar a ISEPower no GitHub ↗</a></div>
   </section>
 </SiteLayout>
+
+<style>
+  .former-title { margin-top: 4rem; }
+</style>
