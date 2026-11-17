@@ -8,9 +8,22 @@ export interface TeamMember {
   sources?: { label: string; url: string }[];
   /** A site-relative public image path, for example images/member.jpg. */
   image?: string;
+  /** The challenges this person took part in. Members of the current challenge appear first on the team page. */
+  challenges: number[];
 }
 // Add one entry per confirmed team member as their details become available.
 export const team: TeamMember[] = [{
+  name: 'Beatriz Gonçalves',
+  role: 'PhD Student in Electrical Engineering',
+  bio: [
+    'Beatriz Gonçalves Rodrigues holds a bachelor’s and a master’s degree in Mechanical Engineering, specialising in Materials and Technological Processes, from the Faculty of Engineering of the University of Porto (FEUP).',
+    'Beatriz’s academic and scientific work has centred on advanced manufacturing, with a particular focus on materials processing and the machining of high-performance alloys. During the master’s degree, Beatriz carried out experimental and numerical work on machining nickel superalloys, focusing on ceramic tools and wear analysis, complemented by a life cycle assessment.',
+  ],
+  linkedin: 'https://www.linkedin.com/in/beatriz-pgoncalves/',
+  email: '1200571@ISEP.IPP.PT',
+  image: 'images/team/beatriz-goncalves.png',
+  challenges: [2],
+}, {
   name: 'Bernardo Cardoso',
   role: 'Researcher · SoftCPS',
   bio: [
@@ -20,6 +33,7 @@ export const team: TeamMember[] = [{
   ],
   linkedin: 'https://www.linkedin.com/in/bernardo-granja-cardoso/',
   email: '1231090@ISEP.IPP.PT',
+  challenges: [1, 2],
   image: 'images/team/bernardo-cardoso.jpg',
 }, {
   name: 'Francisco Lousada',
@@ -31,6 +45,7 @@ export const team: TeamMember[] = [{
   ],
   linkedin: 'https://www.linkedin.com/in/francisco-lousada/',
   email: '1231092@ISEP.IPP.PT',
+  challenges: [1, 2],
   image: 'images/team/francisco-lousada.png',
 }, {
   name: 'Laura Branco Múrias',
@@ -42,8 +57,24 @@ export const team: TeamMember[] = [{
     'Research Role: Her contracted research position at the institute officially began on December 5, 2025.',
   ],
   email: '1220717@ISEP.IPP.PT',
+  challenges: [1, 2],
   linkedin: 'https://www.linkedin.com/in/laura-m%C3%BArias/',
   image: 'images/team/laura-branco-murias.jpg',
+}, {
+  name: 'Rúben Barreto',
+  role: 'PhD Student & Researcher · GECAD',
+  bio: [
+    'Rúben Barreto is a PhD student in Electrical and Computer Engineering at ISEP and a researcher at GECAD (Research Group on Intelligent Engineering and Computing for Advanced Innovation and Development), with seven years of research experience.',
+    'The PhD, started in 2024, develops the project “NEXUS – An intra- and inter-community collaboration model for synergetic interactions and intelligent green energy management”, funded by the Fundação para a Ciência e a Tecnologia (FCT).',
+    'Rúben holds a bachelor’s degree in Electrical and Computer Engineering (2019, final grade 15/20) and a master’s degree in Electrical Engineering – Power Systems (2023, final grade 18/20, with distinction) from the School of Engineering of the Polytechnic Institute of Porto (ISEP).',
+    'This research has included national and international projects such as SPEAR, TIoCPS, F4Itech, NGS, PRECISE and EnergyP2P, and has led to 18 scientific publications, including journal articles in Elsevier journals, conference papers and book chapters published by Elsevier, Springer and IEEE, as well as a publicly available dataset.',
+    'Rúben’s scientific work focuses on energy management models for energy communities, particularly demand response programmes that promote the active participation of community members based on their flexibility, including building-level energy flexibility.',
+    'The current focus is the EnergyP2P project: mathematical optimisation models (for example, MILP-based) for energy management in energy communities, with particular emphasis on peer-to-peer trading mechanisms. These models aim to improve the management of distributed energy resources, increasing system efficiency and sustainability while reducing CO2 emissions.',
+    'Rúben has also reviewed scientific papers, presented at international conferences and taken part in several scientific seminars and workshops.',
+  ],
+  linkedin: 'https://www.linkedin.com/in/r%C3%BAben-barreto/',
+  email: '1160552@ISEP.IPP.PT',
+  challenges: [2],
 }, {
   name: 'Sepehr Shojaee',
   role: 'Software Engineer & Researcher · GECAD',
@@ -54,6 +85,7 @@ export const team: TeamMember[] = [{
   ],
   linkedin: 'https://www.linkedin.com/in/sepehrshojaee/',
   email: '1260448@ISEP.IPP.PT',
+  challenges: [1, 2],
   image: 'images/team/sepehr-shojaee.png',
 }, {
   name: 'Sofia Moreira Cardoso',
@@ -62,16 +94,18 @@ export const team: TeamMember[] = [{
     'Sofia Moreira Cardoso is a contracted researcher at GECAD (Research Group on Intelligent Engineering and Computing for Innovation and Development), which is based at the ISEP (Instituto Superior de Engenharia do Porto) / Polytechnic of Porto.',
   ],
   email: '1221174@ISEP.IPP.PT',
+  challenges: [1, 2],
   linkedin: 'https://www.linkedin.com/in/sofia-cardoso-b7354432b/',
   image: 'images/team/sofia-cardoso.png',
 }, {
-  name: 'Gonçalo Jesus',
+  name: 'Vitor Gonçalo Jesus',
   role: 'Student & Grant Researcher · GECAD',
   bio: [
-    'Gonçalo Jesus is a student and researcher at the Instituto Superior de Engenharia do Porto (ISEP). He is pursuing a Master’s Degree in Artificial Intelligence Engineering at ISEP.',
+    'Vitor Gonçalo Jesus is a student and researcher at the Instituto Superior de Engenharia do Porto (ISEP). He is pursuing a Master’s Degree in Artificial Intelligence Engineering at ISEP.',
     'He works as a Grant Researcher at GECAD (Research Group on Intelligent Engineering and Computing for Advanced Innovation and Development), an R&D unit integrated within ISEP.',
   ],
   email: '1220822@ISEP.IPP.PT',
+  challenges: [1],
   linkedin: 'https://pt.linkedin.com/in/gon%C3%A7alo-jesus-4865402b5',
   image: 'images/team/goncalo-jesus.jpg',
 }];

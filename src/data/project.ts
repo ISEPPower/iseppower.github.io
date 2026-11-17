@@ -1,6 +1,9 @@
 import type { Locale } from '../utils/i18n';
 
-// Update only when the team confirms a change. Stages are not dated commitments.
+/** The challenge the team is working on now. Challenge 1 was delivered on 25 October 2026. */
+export const currentChallenge = 2;
+
+// Challenge 1 status. Update only when the team confirms a change. Stages are not dated commitments.
 export const currentWeek = 6;
 export const latestReport = 'blog/week-6-challenge-delivered/';
 export type StageStatus = 'open' | 'defined' | 'review' | 'active' | 'started' | 'planned' | 'complete';
@@ -9,7 +12,7 @@ export const stageStatus: StageStatus[] = ['complete', 'complete', 'complete', '
 export const projectCopy = {
   en: {
     week: 'Week 6', focus: 'Challenge 1 delivered · Final presentation and Demo Day',
-    now: 'Current focus', nowText: 'The two final reports were delivered on 25 October. We present the work on 26 October and take part in the Pitch / Demo Day on 28 October.',
+    now: 'Final delivery', nowText: 'The two final reports were delivered on 25 October. We presented the work on 26 October and took part in the Pitch / Demo Day on 28 October.',
     next: 'After the challenge', nextText: 'Possible next steps: real hourly prices (PVPC), several programmes per appliance and coordination across an energy community.',
     journal: 'Latest report', journalText: 'Week 6 · Challenge delivered: final rules, results, real-world context and the final film.',
     read: 'Read the week 6 report', stageTitle: 'From a question to an explained decision',
@@ -25,7 +28,7 @@ export const projectCopy = {
   },
   pt: {
     week: 'Semana 6', focus: 'Desafio 1 entregue · Apresentação final e Demo Day',
-    now: 'Foco atual', nowText: 'Os dois relatórios finais foram entregues a 25 de outubro. Apresentamos o trabalho a 26 de outubro e participamos no Pitch / Demo Day a 28 de outubro.',
+    now: 'Entrega final', nowText: 'Os dois relatórios finais foram entregues a 25 de outubro. Apresentámos o trabalho a 26 de outubro e participámos no Pitch / Demo Day a 28 de outubro.',
     next: 'Depois do desafio', nextText: 'Próximos passos possíveis: preços horários reais (PVPC), vários programas por equipamento e coordenação numa comunidade de energia.',
     journal: 'Relatório mais recente', journalText: 'Semana 6 · Desafio entregue: regras finais, resultados, contexto real e o filme final.',
     read: 'Ler o relatório da semana 6', stageTitle: 'De uma questão a uma decisão explicada',

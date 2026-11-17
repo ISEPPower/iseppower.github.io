@@ -1,17 +1,62 @@
 ---
 import type { Locale } from '../utils/i18n';
+import { currentChallenge } from '../data/project';
 interface Props { locale: Locale; }
 const { locale } = Astro.props;
 const pt = locale === 'pt';
+// Challenges with a panel on the page. The others stay disabled until they start.
+const available = [1, 2];
+const label = (number: number) => number < currentChallenge
+  ? (pt ? 'Concluído' : 'Completed')
+  : number === currentChallenge
+    ? (pt ? 'Ativo' : 'Active')
+    : (pt ? 'Em breve' : 'Coming soon');
 ---
 <div class="challenge-tabs" role="tablist" aria-label={pt ? 'Desafios do mestrado' : 'Master’s challenges'}>
-  <button type="button" role="tab" id="challenge-1-tab" aria-selected="true" aria-controls="challenge-1">{pt ? 'Desafio 1' : 'Challenge 1'}<span>{pt ? 'Ativo' : 'Active'}</span></button>
-  {[2, 3, 4].map(number => <button type="button" role="tab" aria-selected="false" disabled>{pt ? 'Desafio' : 'Challenge'} {number}<span>{pt ? 'Em breve' : 'Coming soon'}</span></button>)}
+  {[1, 2, 3, 4].map(number => available.includes(number)
+    ? <button type="button" role="tab" id={`challenge-${number}-tab`} aria-selected={String(number === currentChallenge)} aria-controls={`challenge-${number}`} tabindex={number === currentChallenge ? 0 : -1}>{pt ? 'Desafio' : 'Challenge'} {number}<span>{label(number)}</span></button>
+    : <button type="button" role="tab" aria-selected="false" disabled>{pt ? 'Desafio' : 'Challenge'} {number}<span>{label(number)}</span></button>)}
 </div>
-<section id="challenge-1" role="tabpanel" aria-labelledby="challenge-1-tab" tabindex="0"><slot /></section>
+<section id="challenge-1" role="tabpanel" aria-labelledby="challenge-1-tab" tabindex="0" hidden={currentChallenge !== 1}><slot name="challenge-1" /></section>
+<section id="challenge-2" role="tabpanel" aria-labelledby="challenge-2-tab" tabindex="0" hidden={currentChallenge !== 2}><slot name="challenge-2" /></section>
+<script>
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.challenge-tabs [role=tab]:not([disabled])')];
+  const select = (tab: HTMLButtonElement) => tabs.forEach(other => {
+    const selected = other === tab;
+    other.setAttribute('aria-selected', String(selected));
+    other.tabIndex = selected ? 0 : -1;
+    const panel = document.getElementById(other.getAttribute('aria-controls') ?? '');
+    if (panel) panel.hidden = !selected;
+    if (panel && !selected) panel.querySelectorAll('video').forEach(video => video.pause());
+  });
+  tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+      select(tab);
+      history.replaceState(null, '', '#' + tab.getAttribute('aria-controls'));
+    });
+    tab.addEventListener('keydown', event => {
+      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+      if (!step) return;
+      const next = tabs[(index + step + tabs.length) % tabs.length];
+      next.focus();
+      next.click();
+    });
+  });
+  // Open the tab that holds the linked section, for example #challenge-1 or #stages.
+  const openFromHash = () => {
+    const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const panel = target?.closest('[role=tabpanel]');
+    const tab = panel && tabs.find(tab => tab.getAttribute('aria-controls') === panel.id);
+    if (!tab) return;
+    select(tab);
+    target.scrollIntoView();
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
+</script>
 <style>
   .challenge-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; border-bottom: 1px solid var(--line); padding-top: 2rem; }
-  button { font: inherit; font-weight: 700; color: var(--navy); padding: 1rem; background: white; border: 1px solid var(--line); border-bottom: 3px solid transparent; border-radius: 8px 8px 0 0; }
+  button { font: inherit; font-weight: 700; color: var(--navy); padding: 1rem; background: white; border: 1px solid var(--line); border-bottom: 3px solid transparent; border-radius: 8px 8px 0 0; cursor: pointer; }
   button[aria-selected=true] { border-bottom-color: var(--blue); background: #eaf3ff; }
   button:disabled { color: #687984; background: var(--surface); cursor: not-allowed; }
   span { display: block; font-size: .7rem; font-weight: 400; margin-top: .3rem; }
