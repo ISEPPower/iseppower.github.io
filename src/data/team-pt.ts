@@ -3,10 +3,10 @@ import { team, type TeamMember } from './team';
 // Contact details and photos stay in team.ts; only role and biography are translated.
 const translations: Record<string, Pick<TeamMember, 'role' | 'bio'>> = {
   '1200571@ISEP.IPP.PT': {
-    role: 'Estudante de Doutoramento em Engenharia Eletrotécnica',
+    role: 'Doutoranda em Engenharia Eletrotécnica e de Computadores · Docente Convidada no ISEP',
     bio: [
-      'Beatriz Gonçalves Rodrigues é licenciada e mestre em Engenharia Mecânica, com especialização em Materiais e Processos Tecnológicos, pela Faculdade de Engenharia da Universidade do Porto.',
-      'O seu percurso académico e científico tem-se centrado na área do fabrico avançado, com particular foco no processamento de materiais e maquinagem de ligas de alto desempenho. Durante o mestrado, desenvolveu trabalho experimental e numérico na maquinagem de superligas de níquel, com foco na utilização de ferramentas cerâmicas, análise de desgaste, complementado com uma abordagem de análise de ciclo de vida.',
+      'Sou estudante do Programa Doutoral em Engenharia Eletrotécnica e de Computadores (PDEESC) e docente convidada no Instituto Superior de Engenharia do Porto (ISEP), Politécnico do Porto. Sou licenciada em Engenharia Eletrotécnica e de Computadores e mestre em Engenharia Eletrotécnica – Sistemas Elétricos de Energia. Antes de iniciar o doutoramento, trabalhei em vários projetos na indústria centrados em sistemas inteligentes para edifícios e infraestruturas.',
+      'Atualmente, dedico-me inteiramente à minha investigação de doutoramento, que combina energias renováveis e inteligência artificial.',
     ],
   },
   '1160552@ISEP.IPP.PT': {

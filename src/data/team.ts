@@ -14,10 +14,10 @@ export interface TeamMember {
 // Add one entry per confirmed team member as their details become available.
 export const team: TeamMember[] = [{
   name: 'Beatriz Gonçalves',
-  role: 'PhD Student in Electrical Engineering',
+  role: 'PhD Student in Electrical and Computer Engineering · Invited Lecturer at ISEP',
   bio: [
-    'Beatriz Gonçalves Rodrigues holds a bachelor’s and a master’s degree in Mechanical Engineering, specialising in Materials and Technological Processes, from the Faculty of Engineering of the University of Porto (FEUP).',
-    'Beatriz’s academic and scientific work has centred on advanced manufacturing, with a particular focus on materials processing and the machining of high-performance alloys. During the master’s degree, Beatriz carried out experimental and numerical work on machining nickel superalloys, focusing on ceramic tools and wear analysis, complemented by a life cycle assessment.',
+    'I am a PhD student in the Doctoral Program in Electrical and Computer Engineering (PDEESC) and an Invited Lecturer at the Instituto Superior de Engenharia do Porto (ISEP), Polytechnic of Porto. I hold a Bachelor’s degree in Electrical and Computer Engineering and a Master’s degree in Electrical Engineering – Electrical Power Systems. Before starting my PhD, I worked on a range of industry projects focused on intelligent building and infrastructure systems.',
+    'I now dedicate myself fully to my doctoral research, which combines renewable energy and artificial intelligence.',
   ],
   linkedin: 'https://www.linkedin.com/in/beatriz-pgoncalves/',
   email: '1200571@ISEP.IPP.PT',
